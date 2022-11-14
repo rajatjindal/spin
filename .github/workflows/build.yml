@@ -3,11 +3,11 @@
 name: Rust
 on:
   push:
-    branches: [main]
+    branches: [rjindal-859-extract]
     # Also run on tag pushes, as the release.yml doesn't currently run tests
     tags: ["v*"]
   pull_request:
-    branches: [main]
+    branches: [rjindal-859-extract]
     paths-ignore:
       - "docs/**"
       - "README.md"
@@ -37,32 +37,11 @@ jobs:
               pathInWasmtimeArchive: "wasmtime-v0.36.0-x86_64-linux/wasmtime",
               platformAgnosticChecks: true,
             }
-          - {
-              os: "macos-latest",
-              extension: "",
-              extraArgs: "",
-              bindleUrl: "https://bindle.blob.core.windows.net/releases/bindle-v0.8.0-macos-amd64.tar.gz",
-              bindleBinary: "bindle-server",
-              pathInBindleArchive: "bindle-server",
-              nomadUrl: "https://releases.hashicorp.com/nomad/1.3.1/nomad_1.3.1_darwin_amd64.zip",
-              nomadBinary: "nomad",
-              pathInNomadArchive: "nomad",
-              hippoUrl: "https://github.com/deislabs/hippo/releases/download/v0.19.0/hippo-server-osx-x64.tar.gz",
-            }
-          - {
-              os: "windows-latest",
-              extension: ".exe",
-              extraArgs: "",
-              bindleUrl: "https://bindle.blob.core.windows.net/releases/bindle-v0.8.0-windows-amd64.tar.gz",
-              bindleBinary: "bindle-server.exe",
-              pathInBindleArchive: "bindle-server.exe",
-              nomadUrl: "https://releases.hashicorp.com/nomad/1.3.1/nomad_1.3.1_windows_amd64.zip",
-              nomadBinary: "nomad.exe",
-              pathInNomadArchive: "nomad.exe",
-              hippoUrl: "https://github.com/deislabs/hippo/releases/download/v0.19.0/hippo-server-win-x64.zip",
-            }
     steps:
       - uses: actions/checkout@v2
+
+      - name: Check diskspace
+        run: df -h
 
       - name: Install latest Rust stable toolchain
         uses: actions-rs/toolchain@v1
