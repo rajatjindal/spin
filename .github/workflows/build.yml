@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: Install latest Rust stable toolchain
         uses: actions-rs/toolchain@v1
@@ -51,13 +51,13 @@ jobs:
           components: clippy, rustfmt
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: "Install Wasm Rust target"
         run: rustup target add wasm32-wasi
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: Install bindle
         uses: engineerd/configurator@v0.0.8
@@ -67,7 +67,7 @@ jobs:
           pathInArchive: ${{ matrix.config.pathInBindleArchive }}
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: Install nomad
         uses: engineerd/configurator@v0.0.8
@@ -77,7 +77,7 @@ jobs:
           pathInArchive: ${{ matrix.config.pathInNomadArchive }}
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: Install hippo
         if: ${{ fromJSON(matrix.config.os != 'windows-latest') }}
@@ -89,7 +89,7 @@ jobs:
           chmod +x ~/configurator/bin/Hippo.Web
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: Install hippo on Windows
         if: ${{ fromJSON(matrix.config.os == 'windows-latest') }}
@@ -101,12 +101,12 @@ jobs:
           echo "$((Get-Item .\hippo-server-output).FullName)\win-x64" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append;
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - uses: Swatinem/rust-cache@v2
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: Cargo Format
         if: ${{ matrix.config.platformAgnosticChecks }}
@@ -114,7 +114,7 @@ jobs:
           cargo fmt --all -- --check
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: Cargo Clippy
         if: ${{ matrix.config.platformAgnosticChecks }}
@@ -122,13 +122,13 @@ jobs:
           cargo clippy --workspace --all-targets --all-features -- -D warnings
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: Cargo Build
         run: cargo build --workspace --all-targets --all-features ${{ matrix.config.extraArgs }}
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: Cargo Test
         run: |
@@ -138,7 +138,7 @@ jobs:
           RUST_LOG: spin=trace
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: "Install Go"
         if: ${{ matrix.config.platformAgnosticChecks }}
@@ -147,7 +147,7 @@ jobs:
           go-version: '1.17'
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: "Install TinyGo"
         if: ${{ matrix.config.platformAgnosticChecks }}
@@ -157,7 +157,7 @@ jobs:
           tinygo env
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: "Install Wasmtime"
         uses: engineerd/configurator@v0.0.8
@@ -168,14 +168,14 @@ jobs:
           pathInArchive: ${{ matrix.config.pathInWasmtimeArchive }}
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: "Test Go SDK"
         if: ${{ matrix.config.platformAgnosticChecks }}
         run: make test-sdk-go
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
 
       - name: "Archive executable artifact"
         uses: actions/upload-artifact@v3
@@ -184,4 +184,4 @@ jobs:
           path: target/debug/spin${{ matrix.config.extension }}
 
       - name: Check diskspace
-        run: df -h
+        run: df -h .
