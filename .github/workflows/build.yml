@@ -116,6 +116,9 @@ jobs:
       - name: Check diskspace
         run: du -kh -d 1
 
+      - name: cleanup diskspace
+        run: rm -rf target
+
       - name: Cargo Clippy
         if: ${{ matrix.config.platformAgnosticChecks }}
         run:
@@ -124,11 +127,17 @@ jobs:
       - name: Check diskspace
         run: du -kh -d 1
 
+      - name: cleanup diskspace
+        run: rm -rf target
+
       - name: Cargo Build
         run: cargo build --workspace --all-targets --all-features ${{ matrix.config.extraArgs }}
 
       - name: Check diskspace
         run: du -kh -d 1
+
+      - name: cleanup diskspace
+        run: rm -rf target
 
       - name: Cargo Test
         run: |
@@ -139,6 +148,9 @@ jobs:
 
       - name: Check diskspace
         run: du -kh -d 1
+
+      - name: cleanup diskspace
+        run: rm -rf target
 
       - name: "Install Go"
         if: ${{ matrix.config.platformAgnosticChecks }}
