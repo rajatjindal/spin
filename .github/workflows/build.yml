@@ -141,8 +141,6 @@ jobs:
           mkdir bin
           cp target/debug/spin bin/spin
           rm -rf target
-          mkdir -p target/debug/
-          cp bin/spin target/debug/spin
 
       - name: Cargo Test
         run: |
@@ -155,7 +153,10 @@ jobs:
         run: du -kh -d 1
 
       - name: cleanup diskspace
-        run: rm -rf target
+        run: |
+          rm -rf target
+          mkdir -p target/debug/
+          cp bin/spin target/debug/spin
 
       - name: "Install Go"
         if: ${{ matrix.config.platformAgnosticChecks }}
