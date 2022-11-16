@@ -3,11 +3,11 @@
 name: Rust
 on:
   push:
-    branches: [main]
+    branches: [cicd-disk]
     # Also run on tag pushes, as the release.yml doesn't currently run tests
     tags: ["v*"]
   pull_request:
-    branches: [main]
+    branches: [cicd-disk]
     paths-ignore:
       - "docs/**"
       - "README.md"
