@@ -7,7 +7,6 @@ use std::{
 
 use cargo_target_dep::build_target_dep;
 
-const RUST_HTTP_INTEGRATION_ENV_TEST: &str = "tests/http/headers-env-routes-test";
 const RUST_HTTP_VAULT_CONFIG_TEST: &str = "tests/http/vault-config-test";
 const RUST_OUTBOUND_REDIS_INTEGRATION_TEST: &str = "tests/outbound-redis/http-rust-outbound-redis";
 const RUST_OUTBOUND_PG_INTEGRATION_TEST: &str = "tests/outbound-pg/http-rust-outbound-pg";
@@ -68,7 +67,6 @@ error: the `wasm32-wasi` target is not installed
     build_wasm_test_program("wagi-benchmark.wasm", "crates/http/benches/wagi-benchmark");
     build_wasm_test_program("echo.wasm", "examples/spin-timer/example");
 
-    cargo_build(RUST_HTTP_INTEGRATION_ENV_TEST);
     cargo_build(RUST_HTTP_VAULT_CONFIG_TEST);
     cargo_build(RUST_OUTBOUND_REDIS_INTEGRATION_TEST);
     cargo_build(RUST_OUTBOUND_PG_INTEGRATION_TEST);
