@@ -70,7 +70,7 @@ func (o *usespinup) Deploy(name string, additionalArgs []string, metadataFetcher
 	o.Unlock()
 
 	// TODO(rajat): make this dynamic instead of static sleep
-	time.Sleep(10 * time.Second)
+	time.Sleep(20 * time.Second)
 	return metadataFetcher(name, stdout.String())
 }
 
