@@ -12,4 +12,5 @@ type Controller interface {
 	Deploy(name string, args []string, metadataFetcher func(appname, logs string) (*Metadata, error)) (*Metadata, error)
 	PollForLatestVersion(ctx context.Context, metadata *Metadata) error
 	StopApp(appname string) error
+	Teardown() error
 }

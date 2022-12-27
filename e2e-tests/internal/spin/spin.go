@@ -146,3 +146,15 @@ func runCmd(cmd *exec.Cmd) error {
 
 	return nil
 }
+
+func startBackgroundProcess(cmd *exec.Cmd) error {
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+
+	err := cmd.Start()
+	if err != nil {
+		return fmt.Errorf("running: %s: %w", cmd.String(), err)
+	}
+
+	return nil
+}

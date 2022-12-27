@@ -11,8 +11,16 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestSpinTemplatesUsingSpinUp(t *testing.T) {
-	controller := spin.WithSpinUp()
+// func TestSpinTemplatesUsingSpinUp(t *testing.T) {
+// 	controller := spin.WithSpinUp()
+// 	testSpinTemplates(t, controller)
+// }
+
+func TestSpinTemplatesUsingLocalCloud(t *testing.T) {
+	controller, err := spin.WithLocalCloud()
+	require.Nil(t, err)
+
+	defer controller.Teardown()
 	testSpinTemplates(t, controller)
 }
 
@@ -37,16 +45,16 @@ func testSpinTemplates(t *testing.T, controller spin.Controller) {
 
 	for _, testcase := range []framework.Testcase{
 		httpGoTestcase(),
-		httpRustTestcase(),
-		httpCTestcase(),
-		httpZigTestcase(),
-		httpGrainTestcase(),
-		httpTSTestcase(),
-		httpJSTestcase(),
-		assetsTestcase(),
-		simpleSpinRustTestcase(),
-		headersEnvRoutesTestcase(),
-		headersDynamicEnvRoutesTestcase(),
+		// httpRustTestcase(),
+		// httpCTestcase(),
+		// httpZigTestcase(),
+		// httpGrainTestcase(),
+		// httpTSTestcase(),
+		// httpJSTestcase(),
+		// assetsTestcase(),
+		// simpleSpinRustTestcase(),
+		// headersEnvRoutesTestcase(),
+		// headersDynamicEnvRoutesTestcase(),
 	} {
 		func(testcase framework.Testcase, t *testing.T) {
 			t.Run(testcase.Name, func(t *testing.T) {

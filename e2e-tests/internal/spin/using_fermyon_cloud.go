@@ -129,3 +129,7 @@ func GetMetadata(approute string) (*Metadata, error) {
 func (o *onFermyonCloud) InstallPlugins(plugins []string) error {
 	return installPlugins(plugins...)
 }
+
+func (o *onFermyonCloud) Teardown() error {
+	return nil
+}

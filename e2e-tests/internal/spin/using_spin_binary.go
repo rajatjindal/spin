@@ -85,26 +85,7 @@ func (o *usespinup) StopApp(appname string) error {
 		o.Unlock()
 	}(o, appname)
 
-	if cmd.Process == nil {
-		return nil
-	}
-
-	err := cmd.Process.Signal(os.Interrupt)
-	if err != nil {
-		return err
-	}
-
-	status, err := cmd.Process.Wait()
-	if err != nil {
-		return err
-	}
-
-	if status.Exited() {
-		return nil
-	}
-
-	// last option to kill
-	return cmd.Process.Kill()
+	return stopProcess(cmd)
 }
 
 // with spin up, we always get latest version
@@ -128,4 +109,31 @@ func getFreePort() (int, error) {
 
 func (o *usespinup) InstallPlugins(plugins []string) error {
 	return installPlugins(plugins...)
+}
+
+func (o *usespinup) Teardown() error {
+	return nil
+}
+
+func stopProcess(cmd *exec.Cmd) error {
+	if cmd.Process == nil {
+		return nil
+	}
+
+	err := cmd.Process.Signal(os.Interrupt)
+	if err != nil {
+		return err
+	}
+
+	status, err := cmd.Process.Wait()
+	if err != nil {
+		return err
+	}
+
+	if status.Exited() {
+		return nil
+	}
+
+	// last option to kill
+	return cmd.Process.Kill()
 }
