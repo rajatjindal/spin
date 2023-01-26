@@ -1,4 +1,5 @@
-use crate::controller::{AppInstance, Controller};
+use crate::controller::Controller;
+use crate::metadata_extractor::AppMetadata;
 use crate::spin;
 use crate::utils;
 use anyhow::{Context, Result};
@@ -53,7 +54,7 @@ pub struct TestCase {
     pub pre_build_hooks: Option<Vec<Vec<String>>>,
 
     /// assertions to run once the app is running
-    pub assertions: fn(app: &AppInstance) -> Result<()>,
+    pub assertions: fn(app: &AppMetadata) -> Result<()>,
 }
 
 impl TestCase {
@@ -117,11 +118,23 @@ impl TestCase {
             .await
             .context("deploying app")?;
 
+        let metadata = app.metadata;
+
         // run test specific assertions
         let assert_fn = self.assertions;
 
-        return task::spawn_blocking(move || assert_fn(&app))
+        task::spawn_blocking(move || assert_fn(&metadata))
             .await
-            .context("running testcase specific assertions")?;
+            .context("running testcase specific assertions")
+            .unwrap()?;
+
+        let mut process = app.process.unwrap();
+        // stop the app at the end of testcase
+        let _ = &process.kill().await.map_err(anyhow::Error::msg);
+
+        match process.wait().await {
+            Ok(_) => Ok(()),
+            Err(e) => Err(anyhow::Error::msg(e)),
+        }
     }
 }
