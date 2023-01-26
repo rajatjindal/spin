@@ -129,6 +129,8 @@ pub fn run_async<S: Into<String> + AsRef<OsStr>>(
         }
     }
 
+    // https://docs.rs/tokio/latest/tokio/process/struct.Command.html#method.kill_on_drop
+    // cmd.kill_on_drop(true);
     cmd.spawn().expect("failed to spawn command")
 }
 
