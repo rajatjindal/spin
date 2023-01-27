@@ -5,8 +5,19 @@ use crate::utils;
 use anyhow::Result;
 use async_trait::async_trait;
 use std::process::Output;
+use std::sync::Mutex;
 
-pub struct SpinUp {}
+pub struct SpinUp {
+    mutex: Mutex<u16>,
+}
+
+impl SpinUp {
+    pub fn new() -> SpinUp {
+        SpinUp {
+            mutex: Mutex::new(0),
+        }
+    }
+}
 
 /// implements crate::controller::Controller trait
 /// to run apps using `spin up`
@@ -21,7 +32,11 @@ impl Controller for SpinUp {
     }
 
     fn template_install(&self, args: Vec<&str>) -> Result<Output> {
-        spin::template_install(args)
+        let mut c = self.mutex.lock().unwrap();
+        let result = spin::template_install(args);
+        *c += 1;
+
+        result
     }
 
     fn new_app(&self, template_name: &str, app_name: &str) -> Result<Output> {

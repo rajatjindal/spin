@@ -13,26 +13,11 @@ use {
 };
 
 const INSTALLING_PLUGINS_LOCK: &str = "/tmp/installing-plugins.lock";
-const INSTALLING_TEMPLATES_LOCK: &str = "/tmp/installing-templates.lock";
 
 pub fn template_install(mut args: Vec<&str>) -> Result<Output> {
-    wait_for::<_, _, ()>(Duration::from_secs(30), Duration::from_secs(1), || {
-        if Path::new(INSTALLING_TEMPLATES_LOCK).exists() {
-            Ok(None)
-        } else {
-            Ok(Some("install templates not running"))
-        }
-    })
-    .unwrap();
-
-    let lockfile = Lockfile::create(INSTALLING_TEMPLATES_LOCK).unwrap();
-
     let mut cmd = vec!["spin", "templates", "install"];
     cmd.append(&mut args);
-    let output = utils::run(cmd, None, None);
-
-    lockfile.release()?;
-    output
+    utils::run(cmd, None, None)
 }
 
 pub fn new_app(template_name: &str, app_name: &str) -> Result<Output> {

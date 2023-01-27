@@ -1,9 +1,11 @@
 mod testcases;
-use e2e_testing::cloud_controller::FermyonCloud;
-use e2e_testing::controller::Controller;
+#[cfg(feature = "new-e2e-tests")]
+use {e2e_testing::cloud_controller::FermyonCloud, e2e_testing::controller::Controller};
 
+#[cfg(feature = "new-e2e-tests")]
 const CONTROLLER: &dyn Controller = &FermyonCloud {};
 
+#[cfg(feature = "new-e2e-tests")]
 mod cloud_tests {
     use super::testcases;
     use super::CONTROLLER;
