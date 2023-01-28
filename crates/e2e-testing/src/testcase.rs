@@ -4,12 +4,15 @@ use crate::spin;
 use crate::utils;
 use anyhow::{Context, Result};
 use std::fs;
+use std::sync::Mutex;
 use tokio::task;
 
 pub struct SkipCondition {
     pub env: String,
     pub reason: String,
 }
+
+static RUNNING: Mutex<i32> = Mutex::new(0);
 
 impl SkipCondition {
     pub fn skip(&self, controller: &dyn Controller) -> bool {
@@ -58,18 +61,7 @@ pub struct TestCase {
 }
 
 impl TestCase {
-    pub async fn run(&self, controller: &dyn Controller) -> Result<()> {
-        controller.name();
-
-        // evaluate the skip conditions specified in testcase config.
-        if let Some(skip_conditions) = &self.skip_conditions {
-            for skip_condition in skip_conditions {
-                if skip_condition.skip(controller) {
-                    return Ok(());
-                }
-            }
-        }
-
+    pub async fn run(&self) -> Result<()> {
         // install spin templates from git repo.
         // if template_install_args is provided uses that
         // defaults to spin repo
@@ -78,14 +70,15 @@ impl TestCase {
             None => vec!["--git", "https://github.com/fermyon/spin"],
         };
 
-        controller
-            .template_install(template_install_args)
-            .context("installing templates")?;
+        {
+            let mut x = RUNNING.lock().unwrap();
+            spin::template_install(template_install_args).context("installing templates")?;
+            *x += 1;
+        }
 
         // install spin plugins if requested in testcase config
         if let Some(plugins) = &self.plugins {
-            controller
-                .install_plugins(plugins.iter().map(|s| s as &str).collect())
+            spin::install_plugins(plugins.iter().map(|s| s as &str).collect())
                 .context("installing plugins")?;
         }
 
@@ -95,8 +88,7 @@ impl TestCase {
         if self.template.is_some() {
             if fs::remove_dir_all(&appdir).is_err() {};
 
-            controller
-                .new_app(self.template.as_ref().unwrap(), &self.appname)
+            spin::new_app(self.template.as_ref().unwrap(), &self.appname)
                 .context("creating new app")?;
         }
 
@@ -109,12 +101,11 @@ impl TestCase {
         }
 
         // run spin build
-        controller.build_app(&self.appname).context("builing app")?;
+        spin::build_app(&self.appname).context("builing app")?;
 
         // run `spin up` (or `spin deploy` for cloud).
         // `AppInstance` has some basic info about the running app like base url, routes (only for cloud) etc.
-        let app = controller
-            .run_app(&self.appname)
+        let app = spin::run_app(&self.appname)
             .await
             .context("deploying app")?;
 

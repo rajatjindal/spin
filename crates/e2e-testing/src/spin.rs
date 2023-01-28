@@ -1,3 +1,6 @@
+use crate::controller::AppInstance;
+use crate::metadata_extractor::extract_app_metadata_from_logs;
+use crate::metadata_extractor::AppMetadata;
 use crate::utils;
 use anyhow::Result;
 use lockfile::Lockfile;
@@ -86,4 +89,62 @@ pub async fn stop_app(process: &mut tokio::process::Child) -> Result<(), anyhow:
         Ok(_) => Ok(()),
         Err(e) => Err(anyhow::Error::msg(e)),
     }
+}
+
+pub async fn run_app(app_name: &str) -> Result<AppInstance> {
+    if cfg!(feature = "fermyon-cloud") {
+        deploy(app_name).await
+    } else {
+        spinup(app_name).await
+    }
+}
+
+async fn deploy(app_name: &str) -> Result<AppInstance> {
+    let appdir: PathBuf = [env!("CARGO_MANIFEST_DIR"), "tests", "testcases", app_name]
+        .iter()
+        .collect();
+
+    match utils::run(vec!["spin", "deploy"], appdir.to_str(), None) {
+        Err(error) => panic!("problem deploying app {:?}", error),
+        Ok(result) => {
+            let logs = match std::str::from_utf8(&result.stdout) {
+                Ok(logs) => logs,
+                Err(error) => panic!("problem fetching deploy logs for app {:?}", error),
+            };
+
+            let metadata = extract_app_metadata_from_logs(app_name, logs);
+            return Ok(AppInstance::new(metadata));
+        }
+    };
+}
+
+async fn spinup(app_name: &str) -> Result<AppInstance> {
+    let appdir = appdir(app_name);
+
+    let port = utils::get_random_port()?;
+    let address = format!("127.0.0.1:{}", port);
+
+    let mut child = utils::run_async(
+        vec!["spin", "up", "--listen", &address],
+        Some(&appdir),
+        None,
+    );
+
+    // ensure the server is accepting requests before continuing.
+    utils::wait_tcp(&address, &mut child, "spin").await?;
+
+    match utils::get_output(&mut child).await {
+        Ok(output) => print!("this output is {:?} until here", output),
+        Err(error) => panic!("problem deploying app {:?}", error),
+    };
+
+    Ok(AppInstance::new_with_process(
+        AppMetadata {
+            name: app_name.to_string(),
+            base: format!("http://{}", address),
+            app_routes: vec![],
+            version: "".to_string(),
+        },
+        Some(child),
+    ))
 }
