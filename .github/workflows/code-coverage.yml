@@ -4,49 +4,48 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 jobs:
-  build-rust:
-    name: Build Spin
-    runs-on: ${{ matrix.config.os }}
-    if: ${{ github.repository_owner == 'fermyon' }} || ${{ github.event_name == 'workflow_dispatch' }}
-    strategy:
-      matrix:
-        config:
-          - {
-              os: "ubuntu-latest",
-              extension: "",
-              # We have this enabled for releases, so we should test it.
-              extraArgs: "--features openssl/vendored",
-            }
-    steps:
-      - uses: actions/checkout@v2
+  # build-rust:
+  #   name: Build Spin
+  #   runs-on: ${{ matrix.config.os }}
+  #   if: ${{ github.repository_owner == 'fermyon' }} || ${{ github.event_name == 'workflow_dispatch' }}
+  #   strategy:
+  #     matrix:
+  #       config:
+  #         - {
+  #             os: "ubuntu-latest",
+  #             extension: "",
+  #             # We have this enabled for releases, so we should test it.
+  #             extraArgs: "--features openssl/vendored",
+  #           }
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: 1.66
-          default: true
+  #     - name: Install Rust toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: 1.66
+  #         default: true
 
-      - name: "Install Wasm Rust target"
-        run: rustup target add wasm32-wasi
+  #     - name: "Install Wasm Rust target"
+  #       run: rustup target add wasm32-wasi
 
-      - uses: Swatinem/rust-cache@v2
-        with:
-          shared-key: "${{ runner.os }}-full-${{ hashFiles('./Cargo.lock') }}"
+  #     - uses: Swatinem/rust-cache@v2
+  #       with:
+  #         shared-key: "${{ runner.os }}-full-${{ hashFiles('./Cargo.lock') }}"
 
-      - name: Cargo Build
-        run: cargo build --workspace --all-targets --all-features ${{ matrix.config.extraArgs }}
+  #     - name: Cargo Build
+  #       run: cargo build --workspace --all-targets --all-features ${{ matrix.config.extraArgs }}
 
-      - name: "Archive executable artifact"
-        uses: actions/upload-artifact@v3
-        with:
-          name: spin-${{ matrix.config.os }}
-          path: target/debug/spin${{ matrix.config.extension }}
+  #     - name: "Archive executable artifact"
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: spin-${{ matrix.config.os }}
+  #         path: target/debug/spin${{ matrix.config.extension }}
 
   code-coverage:
     name: Run code coverage
     runs-on: ${{ matrix.config.os }}
     if: ${{ github.repository_owner == 'fermyon' }} || ${{ github.event_name == 'workflow_dispatch' }}
-    needs: build-rust
     strategy:
       matrix:
         config:
@@ -62,6 +61,7 @@ jobs:
               nomadBinary: "nomad",
               pathInNomadArchive: "nomad",
               hippoUrl: "https://github.com/deislabs/hippo/releases/download/v0.19.0/hippo-server-linux-x64.tar.gz",
+              spin: "https://github.com/fermyon/spin/releases/download/v0.7.1/spin-v0.7.1-linux-amd64.tar.gz",
             }
     steps:
       - uses: actions/checkout@v2
@@ -81,6 +81,13 @@ jobs:
           name: ${{ matrix.config.bindleBinary }}
           url: ${{ matrix.config.bindleUrl }}
           pathInArchive: ${{ matrix.config.pathInBindleArchive }}
+
+      - name: Install spin
+        uses: engineerd/configurator@v0.0.8
+        with:
+          name: spin
+          url: ${{ matrix.config.spin }}
+          pathInArchive: spin
 
       - name: Install nomad
         uses: engineerd/configurator@v0.0.8
