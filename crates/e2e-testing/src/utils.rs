@@ -10,6 +10,7 @@ use std::{
 };
 
 use tokio::io::{AsyncBufReadExt, BufReader};
+use tokio::process::ChildStdout;
 use tokio::process::Command as TokioCommand;
 use tokio::time::timeout;
 use tokio::{net::TcpStream, time::sleep};
@@ -157,6 +158,39 @@ pub async fn get_output(child: &mut tokio::process::Child) -> Result<Vec<String>
     loop {
         let nextline = reader.next_line();
         match timeout(Duration::from_secs(5), nextline).await {
+            Err(_) => break,
+            Ok(result) => match result {
+                Err(_) => break,
+                Ok(line) => output.push(line.unwrap()),
+            },
+        }
+    }
+
+    Ok(output)
+}
+
+pub async fn get_output_from_reader(
+    reader: Option<BufReader<ChildStdout>>,
+    max_wait: Duration,
+) -> Result<Vec<String>> {
+    if reader.is_none() {
+        let output: Result<Vec<String>, anyhow::Error> = Ok(vec![]);
+        return output;
+    }
+
+    let mut lines = reader.unwrap().lines();
+
+    //get firstline in a blocking way to ensure we account for `spin up` delay
+    let firstline_future = lines.next_line();
+    let firstline = timeout(Duration::from_secs(20), firstline_future)
+        .await?
+        .unwrap()
+        .unwrap();
+    let mut output = vec![firstline];
+
+    loop {
+        let nextline = lines.next_line();
+        match timeout(max_wait, nextline).await {
             Err(_) => break,
             Ok(result) => match result {
                 Err(_) => break,
