@@ -3,10 +3,12 @@ use crate::metadata_extractor::AppMetadata;
 use crate::spin;
 use crate::utils;
 use anyhow::{Context, Result};
+use derive_builder::Builder;
 use std::fs;
 use tokio::task;
 
 /// Represents a testcase
+#[derive(Builder)]
 pub struct TestCase {
     /// name of the testcase
     pub name: String,

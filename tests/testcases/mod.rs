@@ -5,6 +5,7 @@ pub mod all {
     use e2e_testing::controller::Controller;
     use e2e_testing::metadata_extractor::AppMetadata;
     use e2e_testing::testcase::TestCase;
+    use e2e_testing::testcase::TestCaseBuilder;
 
     fn get_url(base: &str, path: &str) -> String {
         format!("{}{}", base, path)
@@ -20,16 +21,11 @@ pub mod all {
             );
         }
 
-        let tc = TestCase {
-            name: "http-go template".to_string(),
-            appname: None,
-            template: Some("http-go".to_string()),
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("http-go template".to_string())
+            .template(Some("http-go".to_string()))
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap();
     }
