@@ -11,8 +11,8 @@ mod spinup_tests {
     use super::CONTROLLER;
 
     #[tokio::test]
-    async fn http_go_works() {
-        testcases::all::http_go_works(CONTROLLER).await
+    async fn redis_go_works() {
+        testcases::all::redis_go_works(CONTROLLER).await
     }
 
     // #[tokio::test]

@@ -29,7 +29,7 @@ pub trait Controller {
 pub struct AppInstance {
     pub metadata: AppMetadata,
     pub process: Option<tokio::process::Child>,
-    pub reader: Option<BufReader<ChildStdout>>,
+    pub logs_stream: Option<BufReader<ChildStdout>>,
 }
 
 impl AppInstance {
@@ -37,19 +37,19 @@ impl AppInstance {
         AppInstance {
             metadata,
             process: None,
-            reader: None,
+            logs_stream: None,
         }
     }
 
     pub fn new_with_process(
         metadata: AppMetadata,
         process: Option<tokio::process::Child>,
-        reader: Option<BufReader<ChildStdout>>,
+        logs_stream: Option<BufReader<ChildStdout>>,
     ) -> AppInstance {
         AppInstance {
             metadata,
             process,
-            reader,
+            logs_stream,
         }
     }
 }

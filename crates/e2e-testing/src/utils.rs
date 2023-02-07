@@ -178,15 +178,8 @@ pub async fn get_output_from_reader(
         return output;
     }
 
+    let mut output: Vec<String> = vec![];
     let mut lines = reader.unwrap().lines();
-
-    //get firstline in a blocking way to ensure we account for `spin up` delay
-    let firstline_future = lines.next_line();
-    let firstline = timeout(Duration::from_secs(20), firstline_future)
-        .await?
-        .unwrap()
-        .unwrap();
-    let mut output = vec![firstline];
 
     loop {
         let nextline = lines.next_line();

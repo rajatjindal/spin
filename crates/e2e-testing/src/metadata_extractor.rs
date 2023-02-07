@@ -10,6 +10,11 @@ pub struct AppRoute {
 }
 
 #[derive(Clone)]
+pub struct AppMetadata1 {
+    pub name: String,
+}
+
+#[derive(Clone)]
 pub struct AppMetadata {
     pub name: String,
     pub base: String,
