@@ -104,7 +104,7 @@ impl TestCase {
             .unwrap();
 
         match controller
-            .stop_app(Some(app.metadata.clone().name.as_str()), None)
+            .stop_app(Some(app.metadata.clone().name.as_str()), app.process)
             .await
         {
             Ok(_) => (),
