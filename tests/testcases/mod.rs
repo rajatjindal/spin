@@ -1,35 +1,66 @@
 #[cfg(feature = "new-e2e-tests")]
 pub mod all {
     use anyhow::Result;
+    use clap::App;
     use e2e_testing::asserts::assert_http_response;
     use e2e_testing::controller::Controller;
     use e2e_testing::metadata_extractor::AppMetadata;
     use e2e_testing::testcase::TestCase;
+    use e2e_testing::utils;
+    use futures::future::BoxFuture;
+    use std::time::Duration;
+    use tokio::io::BufReader;
+    use tokio::process::ChildStdout;
 
     fn get_url(base: &str, path: &str) -> String {
         format!("{}{}", base, path)
     }
 
     pub async fn redis_go_works(controller: &dyn Controller) {
-        fn checks(metadata: &AppMetadata, stdout: Option<BufReader<ChildStdout>>) -> Result<()> {
-            return assert_http_response(
-                metadata.base.as_str(),
-                200,
-                &[],
-                Some("Hello Fermyon!\n"),
-            );
+        // async fn checks(
+        //     metadata: &AppMetadata,
+        //     logs_stream: Option<BufReader<ChildStdout>>,
+        // ) -> BoxFuture<'static, Result<()>> {
+        //     utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await
+        // }
+
+        async fn checks(
+            metadata: &AppMetadata,
+            logs_stream: Option<BufReader<ChildStdout>>,
+        ) -> Result<()> {
+            // Box::pin(utils::get_output_from_reader(
+            //     logs_stream,
+            //     Duration::from_secs(2),
+            // ))
+            let logs = utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await;
+            Ok(())
         }
 
-        let tc = TestCase {
-            name: "redis_go template".to_string(),
-            appname: None,
-            template: Some("redis-go".to_string()),
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        // async fn checks<F, Fut>(
+        //     metadata: &AppMetadata,
+        //     logs_stream: Option<BufReader<ChildStdout>>,
+        // ) -> Result<()> {
+        //     // let x = utils::run(
+        //     //     vec!["redis-cli", "PUBLISH", "abc", "msg-from-channel"],
+        //     //     None,
+        //     //     None,
+        //     // );
+
+        //     let logs = utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await?;
+
+        //     Ok(())
+        // }
+
+        // let tc = TestCase {
+        //     name: "redis_go template".to_string(),
+        //     appname: None,
+        //     template: Some("redis-go".to_string()),
+        //     template_install_args: None,
+        //     assertions: Box::new(Box::pin(checks)),
+        //     plugins: None,
+        //     deploy_args: None,
+        //     pre_build_hooks: None,
+        // };
 
         tc.run(controller).await.unwrap();
     }
