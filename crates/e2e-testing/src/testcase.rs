@@ -4,8 +4,10 @@ use crate::spin;
 use crate::utils;
 use anyhow::{Context, Result};
 use std::fs;
-use tokio::task;
+use tokio::io::BufReader;
+use tokio::process::ChildStdout;
 
+use tokio::task;
 /// Represents a testcase
 pub struct TestCase {
     /// name of the testcase
@@ -38,7 +40,7 @@ pub struct TestCase {
     pub pre_build_hooks: Option<Vec<Vec<String>>>,
 
     /// assertions to run once the app is running
-    pub assertions: fn(app: &AppMetadata) -> Result<()>,
+    pub assertions: fn(app: &AppMetadata, stdout: Option<BufReader<ChildStdout>>) -> Result<()>,
 }
 
 impl TestCase {
@@ -98,7 +100,7 @@ impl TestCase {
         let metadata = app.metadata.clone();
         let assert_fn = self.assertions;
 
-        let result = task::spawn_blocking(move || assert_fn(&metadata))
+        let result = task::spawn_blocking(move || assert_fn(&metadata, app.reader))
             .await
             .context("running testcase specific assertions")
             .unwrap();

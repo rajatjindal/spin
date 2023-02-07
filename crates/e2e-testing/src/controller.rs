@@ -2,6 +2,8 @@ use crate::metadata_extractor::AppMetadata;
 use anyhow::Result;
 use async_trait::async_trait;
 use std::process::Output;
+use tokio::io::BufReader;
+use tokio::process::ChildStdout;
 
 /// defines crate::controller::Controller trait
 /// this is to enable running same set of tests
@@ -27,6 +29,7 @@ pub trait Controller {
 pub struct AppInstance {
     pub metadata: AppMetadata,
     pub process: Option<tokio::process::Child>,
+    pub reader: Option<BufReader<ChildStdout>>,
 }
 
 impl AppInstance {
@@ -34,13 +37,19 @@ impl AppInstance {
         AppInstance {
             metadata,
             process: None,
+            reader: None,
         }
     }
 
     pub fn new_with_process(
         metadata: AppMetadata,
         process: Option<tokio::process::Child>,
+        reader: Option<BufReader<ChildStdout>>,
     ) -> AppInstance {
-        AppInstance { metadata, process }
+        AppInstance {
+            metadata,
+            process,
+            reader,
+        }
     }
 }
