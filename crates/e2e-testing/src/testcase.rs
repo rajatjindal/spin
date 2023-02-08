@@ -42,30 +42,10 @@ pub struct TestCase {
     /// e.g. `npm install` before running `spin build` for `js/ts` tests
     pub pre_build_hooks: Option<Vec<Vec<String>>>,
 
-    assertions:
-        Box<dyn FnOnce(&AppMetadata) -> Pin<Box<dyn Future<Output = Result<()>> + Send>> + Send>,
-    // assertions to run once the app is running
-    // pub assertions: fn(app: &AppMetadata, stdout: Option<BufReader<ChildStdout>>) -> Result<()>,
+    pub assertions: fn(String) -> Pin<Box<dyn Future<Output = Result<()>>>>,
 }
 
 impl TestCase {
-    pub async fn run_assertions(self, mt: &AppMetadata) -> Result<()> {
-        // (self.assertions)(&AppMetadata1 {
-        //     name: "x".to_string(),
-        // })
-        // .await;
-
-        (self.assertions)(mt).await
-    }
-
-    pub fn set_assertions<Func, Fut>(&mut self, func: Func)
-    where
-        Func: Send + 'static + FnOnce(&AppMetadata) -> Fut,
-        Fut: Send + 'static + Future<Output = Result<()>>,
-    {
-        self.assertions = Box::new(move |metadata: &AppMetadata| Box::pin(func(metadata)));
-    }
-
     pub async fn run(self, controller: &dyn Controller) -> Result<()> {
         controller.name();
 
@@ -121,7 +101,7 @@ impl TestCase {
         // run test specific assertions
         let mut metadata = app.metadata.clone();
 
-        let result = self.run_assertions(&metadata.clone()).await;
+        let result = (self.assertions)("someinput".to_string()).await;
 
         match controller
             .stop_app(Some(app.metadata.clone().name.as_str()), app.process)

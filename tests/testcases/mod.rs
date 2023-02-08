@@ -24,17 +24,17 @@ pub mod all {
         //     utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await
         // }
 
-        async fn checks(
-            metadata: &AppMetadata,
-            logs_stream: Option<BufReader<ChildStdout>>,
-        ) -> Result<()> {
-            // Box::pin(utils::get_output_from_reader(
-            //     logs_stream,
-            //     Duration::from_secs(2),
-            // ))
-            let logs = utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await;
-            Ok(())
-        }
+        // async fn checks(
+        //     metadata: &AppMetadata,
+        //     logs_stream: Option<BufReader<ChildStdout>>,
+        // ) -> Result<()> {
+        //     // Box::pin(utils::get_output_from_reader(
+        //     //     logs_stream,
+        //     //     Duration::from_secs(2),
+        //     // ))
+        //     let logs = utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await;
+        //     Ok(())
+        // }
 
         // async fn checks<F, Fut>(
         //     metadata: &AppMetadata,
@@ -51,16 +51,20 @@ pub mod all {
         //     Ok(())
         // }
 
-        // let tc = TestCase {
-        //     name: "redis_go template".to_string(),
-        //     appname: None,
-        //     template: Some("redis-go".to_string()),
-        //     template_install_args: None,
-        //     assertions: Box::new(Box::pin(checks)),
-        //     plugins: None,
-        //     deploy_args: None,
-        //     pre_build_hooks: None,
-        // };
+        async fn checks(input: String) -> Result<()> {
+            Ok(())
+        }
+
+        let tc = TestCase {
+            name: "redis_go template".to_string(),
+            appname: None,
+            template: Some("redis-go".to_string()),
+            template_install_args: None,
+            assertions: |input| Box::pin(checks(input)),
+            plugins: None,
+            deploy_args: None,
+            pre_build_hooks: None,
+        };
 
         tc.run(controller).await.unwrap();
     }
