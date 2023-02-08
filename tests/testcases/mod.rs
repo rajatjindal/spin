@@ -51,7 +51,7 @@ pub mod all {
         //     Ok(())
         // }
 
-        async fn checks<'a>(_: AppMetadata) -> Result<()> {
+        async fn checks<'a>(_: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
             Ok(())
         }
 
@@ -60,7 +60,9 @@ pub mod all {
             appname: None,
             template: Some("redis-go".to_string()),
             template_install_args: None,
-            assertions: |input| Box::pin(checks(input)),
+            assertions: |input, logs_stream: Option<BufReader<ChildStdout>>| {
+                Box::pin(checks(input, logs_stream))
+            },
             plugins: None,
             deploy_args: None,
             pre_build_hooks: None,

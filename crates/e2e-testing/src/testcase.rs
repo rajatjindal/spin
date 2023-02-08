@@ -12,7 +12,7 @@ use tokio::io::BufReader;
 use tokio::process::ChildStdout;
 
 /// Represents a testcase
-pub struct TestCase<'a> {
+pub struct TestCase {
     /// name of the testcase
     pub name: String,
 
@@ -42,10 +42,13 @@ pub struct TestCase<'a> {
     /// e.g. `npm install` before running `spin build` for `js/ts` tests
     pub pre_build_hooks: Option<Vec<Vec<String>>>,
 
-    pub assertions: fn(AppMetadata) -> Pin<Box<dyn Future<Output = Result<()>> + 'a>>,
+    pub assertions: fn(
+        AppMetadata,
+        Option<BufReader<ChildStdout>>,
+    ) -> Pin<Box<dyn Future<Output = Result<()>>>>,
 }
 
-impl<'a> TestCase<'a> {
+impl TestCase {
     pub async fn run(self, controller: &dyn Controller) -> Result<()> {
         controller.name();
 
@@ -101,7 +104,7 @@ impl<'a> TestCase<'a> {
         // run test specific assertions
         let metadata = app.metadata;
 
-        let result = (self.assertions)(metadata).await;
+        let result = (self.assertions)(metadata, app.logs_stream).await;
 
         // match controller
         //     .stop_app(Some(app.metadata.clone().name.as_str()), app.process)
