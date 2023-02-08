@@ -51,7 +51,7 @@ pub mod all {
         //     Ok(())
         // }
 
-        async fn checks(input: String) -> Result<()> {
+        async fn checks<'a>(_: AppMetadata) -> Result<()> {
             Ok(())
         }
 

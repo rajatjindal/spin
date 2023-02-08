@@ -12,7 +12,7 @@ use tokio::io::BufReader;
 use tokio::process::ChildStdout;
 
 /// Represents a testcase
-pub struct TestCase {
+pub struct TestCase<'a> {
     /// name of the testcase
     pub name: String,
 
@@ -42,10 +42,10 @@ pub struct TestCase {
     /// e.g. `npm install` before running `spin build` for `js/ts` tests
     pub pre_build_hooks: Option<Vec<Vec<String>>>,
 
-    pub assertions: fn(String) -> Pin<Box<dyn Future<Output = Result<()>>>>,
+    pub assertions: fn(AppMetadata) -> Pin<Box<dyn Future<Output = Result<()>> + 'a>>,
 }
 
-impl TestCase {
+impl<'a> TestCase<'a> {
     pub async fn run(self, controller: &dyn Controller) -> Result<()> {
         controller.name();
 
@@ -99,21 +99,21 @@ impl TestCase {
         let app = controller.run_app(&appname).await.context("running app")?;
 
         // run test specific assertions
-        let mut metadata = app.metadata.clone();
+        let metadata = app.metadata;
 
-        let result = (self.assertions)("someinput".to_string()).await;
+        let result = (self.assertions)(metadata).await;
 
-        match controller
-            .stop_app(Some(app.metadata.clone().name.as_str()), app.process)
-            .await
-        {
-            Ok(_) => (),
-            Err(e) => println!(
-                "warn: failed to stop app {} with error {:?}",
-                app.metadata.clone().name.as_str(),
-                e
-            ),
-        }
+        // match controller
+        //     .stop_app(Some(app.metadata.clone().name.as_str()), app.process)
+        //     .await
+        // {
+        //     Ok(_) => (),
+        //     Err(e) => println!(
+        //         "warn: failed to stop app {} with error {:?}",
+        //         app.metadata.clone().name.as_str(),
+        //         e
+        //     ),
+        // }
 
         result
     }
