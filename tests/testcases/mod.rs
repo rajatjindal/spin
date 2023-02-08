@@ -6,8 +6,11 @@ pub mod all {
     use e2e_testing::controller::Controller;
     use e2e_testing::metadata_extractor::AppMetadata;
     use e2e_testing::testcase::TestCase;
+    use e2e_testing::testcase::TestCaseBuilder;
     use e2e_testing::utils;
     use futures::future::BoxFuture;
+    use futures::Future;
+    use std::pin::Pin;
     use std::time::Duration;
     use tokio::io::BufReader;
     use tokio::process::ChildStdout;
@@ -24,17 +27,15 @@ pub mod all {
         //     utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await
         // }
 
-        async fn checks(
+        async fn checks<Fut>(
             metadata: &AppMetadata,
             logs_stream: Option<BufReader<ChildStdout>>,
-        ) -> Result<()> {
-            // Box::pin(utils::get_output_from_reader(
-            //     logs_stream,
-            //     Duration::from_secs(2),
-            // ))
-            let logs = utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await;
-            Ok(())
+        ) -> Future<Output = Result<()>> {
+            // let logs = utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await;
+            async { Ok(()) }
         }
+
+        // let checks2 = Box::new(move |metadata: &AppMetadata| Box::pin(checks(metadata)));
 
         // async fn checks<F, Fut>(
         //     metadata: &AppMetadata,
@@ -62,6 +63,12 @@ pub mod all {
         //     pre_build_hooks: None,
         // };
 
+        // expected `impl futures::Future<Output = Pin<Box<(dyn futures::Future<Output = Result<(), anyhow::Error>> + 'static)>>>` to be a future that resolves to
+        // `Result<(), anyhow::Error>`, but it resolves to
+        // `Pin<Box<(dyn futures::Future<Output = Result<(), anyhow::Error>> + 'static)>>`
+        let mut tc = TestCaseBuilder::default().build().unwrap();
+
+        tc.set_assertions(checks);
         tc.run(controller).await.unwrap();
     }
 

@@ -169,6 +169,10 @@ pub async fn get_output(child: &mut tokio::process::Child) -> Result<Vec<String>
     Ok(output)
 }
 
+pub async fn print_something() -> Result<()> {
+    Ok(())
+}
+
 pub async fn get_output_from_reader(
     reader: Option<BufReader<ChildStdout>>,
     max_wait: Duration,
