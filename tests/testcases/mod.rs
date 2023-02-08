@@ -1,6 +1,6 @@
 #[cfg(feature = "new-e2e-tests")]
 pub mod all {
-    use anyhow::Result;
+    use anyhow::{Context, Result};
     use clap::App;
     use e2e_testing::asserts::assert_http_response;
     use e2e_testing::controller::Controller;
@@ -51,7 +51,20 @@ pub mod all {
         //     Ok(())
         // }
 
-        async fn checks<'a>(_: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks<'a>(
+            _: AppMetadata,
+            logs_stream: Option<BufReader<ChildStdout>>,
+        ) -> Result<()> {
+            utils::run(
+                vec!["redis-cli", "PUBLISH", "abc", "msg-from-channel"],
+                None,
+                None,
+            )
+            .context("publishing redis msg")?;
+
+            let logs = utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await;
+
+            println!("logs inside checks {:?}", logs);
             Ok(())
         }
 

@@ -49,9 +49,6 @@ impl Controller for SpinUp {
             None,
         );
 
-        // ensure the server is accepting requests before continuing.
-        utils::wait_tcp(&address, &mut child, "spin").await?;
-
         let stdout = child
             .stdout
             .take()
@@ -59,10 +56,13 @@ impl Controller for SpinUp {
 
         let reader = BufReader::new(stdout);
 
-        // match utils::get_output(&mut child).await {
-        //     Ok(output) => print!("this output is {:?} until here", output),
-        //     Err(error) => panic!("problem running app {:?}", error),
-        // };
+        match utils::get_output(&mut child).await {
+            Ok(output) => print!("this output is {:?} until here", output),
+            Err(error) => panic!("problem running app {:?}", error),
+        };
+
+        // ensure the server is accepting requests before continuing.
+        utils::wait_tcp(&address, &mut child, "spin").await?;
 
         Ok(AppInstance::new_with_process(
             AppMetadata {

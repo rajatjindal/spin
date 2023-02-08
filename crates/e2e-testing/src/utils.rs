@@ -36,6 +36,10 @@ pub fn run<S: Into<String> + AsRef<OsStr>>(
             .collect::<Vec<String>>()
             .join(" "),
     );
+    cmd.env(
+        "RUST_LOG",
+        "spin=trace,spin_loader=trace,spin_core=trace,spin_http=trace",
+    );
     if let Some(envs) = envs {
         for (k, v) in envs {
             cmd.env(k, v);
@@ -110,8 +114,8 @@ pub fn run_async<S: Into<String> + AsRef<OsStr>>(
     envs: Option<HashMap<&str, &str>>,
 ) -> tokio::process::Child {
     let mut cmd = TokioCommand::new(get_os_process());
-    cmd.stdout(process::Stdio::piped());
-    cmd.stderr(process::Stdio::piped());
+    // cmd.stdout(process::Stdio::piped());
+    // cmd.stderr(process::Stdio::piped());
 
     if let Some(dir) = dir {
         cmd.current_dir(dir.into());
@@ -129,7 +133,11 @@ pub fn run_async<S: Into<String> + AsRef<OsStr>>(
             cmd.env(k, v);
         }
     }
-
+    cmd.env(
+        "RUST_LOG",
+        "spin=trace,spin_loader=trace,spin_core=trace,spin_http=trace",
+    );
+    cmd.env("RUST_BACKTRACE", "1");
     cmd.spawn().expect("failed to spawn command")
 }
 
@@ -148,12 +156,12 @@ pub async fn get_output(child: &mut tokio::process::Child) -> Result<Vec<String>
     let mut reader = BufReader::new(stdout).lines();
 
     //get firstline in a blocking way to ensure we account for `spin up` delay
-    let firstline_future = reader.next_line();
-    let firstline = timeout(Duration::from_secs(20), firstline_future)
-        .await?
-        .unwrap()
-        .unwrap();
-    let mut output = vec![firstline];
+    // let firstline_future = reader.next_line();
+    // let firstline = timeout(Duration::from_secs(20), firstline_future)
+    //     .await?
+    //     .unwrap()
+    //     .unwrap();
+    let mut output = vec![];
 
     loop {
         let nextline = reader.next_line();
@@ -161,7 +169,11 @@ pub async fn get_output(child: &mut tokio::process::Child) -> Result<Vec<String>
             Err(_) => break,
             Ok(result) => match result {
                 Err(_) => break,
-                Ok(line) => output.push(line.unwrap()),
+                Ok(line) => {
+                    let l = line.unwrap();
+                    println!("{}", l);
+                    output.push(l)
+                }
             },
         }
     }

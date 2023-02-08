@@ -30,7 +30,15 @@ pub fn new_app(template_name: &str, app_name: &str) -> Result<Output> {
     let basedir = utils::testcases_base_dir();
 
     return utils::run(
-        vec!["spin", "new", template_name, app_name, "--accept-defaults"],
+        vec![
+            "spin",
+            "new",
+            template_name,
+            app_name,
+            "--accept-defaults",
+            "--value",
+            "redis-channel=abc",
+        ],
         Some(basedir.as_str()),
         None,
     );
