@@ -40,11 +40,12 @@ impl Controller for SpinUp {
     async fn run_app(&self, app_name: &str) -> Result<AppInstance> {
         let appdir = spin::appdir(app_name);
 
-        let port = utils::get_random_port()?;
-        let address = format!("127.0.0.1:{}", port);
+        // let port = utils::get_random_port()?;
+        // let address = format!("127.0.0.1:{}", port);
 
         let mut child = utils::run_async(
-            vec!["spin", "up", "--listen", &address],
+            // vec!["spin", "up", "--listen", &address],
+            vec!["spin", "up"],
             Some(&appdir),
             None,
         );
@@ -56,13 +57,13 @@ impl Controller for SpinUp {
 
         let reader = BufReader::new(stdout);
 
-        match utils::get_output(&mut child).await {
-            Ok(output) => print!("this output is {:?} until here", output),
-            Err(error) => panic!("problem running app {:?}", error),
-        };
+        // match utils::get_output(&mut child).await {
+        //     Ok(output) => print!("this output is {:?} until here", output),
+        //     Err(error) => panic!("problem running app {:?}", error),
+        // };
 
-        // ensure the server is accepting requests before continuing.
-        utils::wait_tcp(&address, &mut child, "spin").await?;
+        // // ensure the server is accepting requests before continuing.
+        // utils::wait_tcp(&address, &mut child, "spin").await?;
 
         Ok(AppInstance::new_with_process(
             AppMetadata {

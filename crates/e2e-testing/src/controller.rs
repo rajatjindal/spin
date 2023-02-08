@@ -52,4 +52,16 @@ impl AppInstance {
             logs_stream,
         }
     }
+
+    pub fn new_with_process_and_reader(
+        _: AppMetadata,
+        process: Option<tokio::process::Child>,
+        logs_stream: Option<BufReader<ChildStdout>>,
+    ) -> AppInstance {
+        AppInstance {
+            metadata:,
+            process,
+            logs_stream,
+        }
+    }
 }
