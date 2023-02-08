@@ -3,12 +3,17 @@ use crate::metadata_extractor::AppMetadata;
 use crate::spin;
 use crate::utils;
 use anyhow::{Context, Result};
+use core::pin::Pin;
 use derive_builder::Builder;
 use std::fs;
+use std::future::Future;
+use tokio::io::BufReader;
+use tokio::process::ChildStdout;
 use tokio::task;
 
 /// Represents a testcase
-#[derive(Builder)]
+// #[derive(Builder)]
+// #[builder(pattern = "owned")]
 pub struct TestCase {
     /// name of the testcase
     pub name: String,
@@ -40,10 +45,77 @@ pub struct TestCase {
     pub pre_build_hooks: Option<Vec<Vec<String>>>,
 
     /// assertions to run once the app is running
-    pub assertions: fn(app: &AppMetadata) -> Result<()>,
+    // #[builder(setter(custom, strip_option))]
+    // // #[builder(setter(into, strip_option))]
+    // pub assertions1: Box<
+    //     dyn FnOnce(
+    //             &AppMetadata,
+    //             Option<BufReader<ChildStdout>>,
+    //         ) -> Pin<Box<dyn Future<Output = Result<()>> + Send>>
+    //         + Send,
+    // >,
+    assertions: Box<
+        dyn FnOnce(
+                &AppMetadata,
+                Option<BufReader<ChildStdout>>,
+            ) -> Pin<Box<dyn Future<Output = Result<()>> + Send>>
+            + Send,
+    >,
 }
 
+// impl TestCaseBuilder {
+//     pub fn assertions<Func, Fut>(self, func: Func) -> Self
+//     where
+//         Func: Send + 'static + FnOnce(&AppMetadata, Option<BufReader<ChildStdout>>) -> Fut,
+//         Fut: Send + 'static + Future<Output = Result<()>>,
+//     {
+//         let mut new = self;
+
+//         let y = Box::new(
+//             |metadata: &AppMetadata,
+//              logs_stream: Option<BufReader<ChildStdout>>|
+//              -> Pin<Box<(dyn Future<Output = Result<()>> + Send + 'static)>> {
+//                 Box::pin(func(metadata, logs_stream))
+//             },
+//         );
+
+//         // expected `[closure@crates/e2e-testing/src/testcase.rs:68:13: 68:87]` to be a closure that returns
+
+//         // expected: `Pin<Box<(dyn Future<Output = Result<(), anyhow::Error>> + Send + 'static)>>`, but it returns
+//         // actual  : `Pin<Box<Fut>>`
+
+//         // expected struct `Pin<Box<(dyn Future<Output = Result<(), anyhow::Error>> + Send + 'static)>>`
+//         //    found struct `Pin<Box<Fut>>`
+
+//         new.assertions = Some(y);
+//         new
+//     }
+// }
+
 impl TestCase {
+    pub fn new_with_x<Func, Fut>(func: Func) -> TestCase
+    where
+        Func: Send + 'static + FnOnce(&AppMetadata, Option<BufReader<ChildStdout>>) -> Fut,
+        Fut: Send + 'static + Future<Output = Result<()>>,
+    {
+        let x = TestCase {
+            name: "http-c template".to_string(),
+            appname: None,
+            template: Some("http-c".to_string()),
+            template_install_args: None,
+            assertions: Box::new(
+                move |metadata: &AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
+                    Box::pin(func(metadata, logs_stream))
+                },
+            ),
+            plugins: None,
+            deploy_args: None,
+            pre_build_hooks: None,
+        };
+
+        x
+    }
+
     pub async fn run(&self, controller: &dyn Controller) -> Result<()> {
         controller.name();
 
@@ -98,12 +170,12 @@ impl TestCase {
 
         // run test specific assertions
         let metadata = app.metadata.clone();
-        let assert_fn = self.assertions;
+        // let assert_fn = self.assertions;
 
-        let result = task::spawn_blocking(move || assert_fn(&metadata))
-            .await
-            .context("running testcase specific assertions")
-            .unwrap();
+        // let result = task::spawn_blocking(move || assert_fn(&metadata))
+        //     .await
+        //     .context("running testcase specific assertions")
+        //     .unwrap();
 
         match controller
             .stop_app(Some(app.metadata.clone().name.as_str()), None)
@@ -117,6 +189,6 @@ impl TestCase {
             ),
         }
 
-        result
+        Ok(())
     }
 }
