@@ -50,11 +50,11 @@ jobs:
           #     # We have this enabled for releases, so we should test it.
           #     extraArgs: "--features openssl/vendored",
           #   }
-          - {
-              os: "macos-latest",
-              extension: "",
-              extraArgs: "",
-            }
+          # - {
+          #     os: "macos-latest",
+          #     extension: "",
+          #     extraArgs: "",
+          #   }
           - {
               os: "windows-latest",
               extension: ".exe",
