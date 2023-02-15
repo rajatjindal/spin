@@ -42,6 +42,7 @@ jobs:
     steps:
       - run: sleep ${{ matrix.config.sleep }}
       - run: echo "finishing run on ${{  runner.os }}"
+      - run: echo "job name is ${{ github.job }}"
 
   fast-ci:
     name: Build Spin
