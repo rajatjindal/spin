@@ -47,6 +47,6 @@ jobs:
   fast-ci:
     name: Build Spin
     runs-on: ubuntu-latest
-    needs: [build-spin-ubuntu-latest]
+    needs: [build-spin]
     steps:
       - run: echo "running downstream job"
