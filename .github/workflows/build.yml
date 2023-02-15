@@ -15,7 +15,7 @@ env:
   CARGO_TERM_COLOR: always
 jobs:
   build-rust:
-    name: Build Spin
+    name: build-spin-${{ matrix.config.os }}
     runs-on: ${{ matrix.config.os }}
     strategy:
       matrix:
@@ -47,6 +47,6 @@ jobs:
   fast-ci:
     name: Build Spin
     runs-on: ubuntu-latest
-    needs: [build-rust]
+    needs: [build-spin-ubuntu-latest]
     steps:
       - run: echo "running downstream job"
