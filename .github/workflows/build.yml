@@ -15,7 +15,7 @@ env:
   CARGO_TERM_COLOR: always
 jobs:
   build-rust:
-    name: build-spin-${{ matrix.config.os }}
+    name: Build Spin ${{ matrix.config.os }}
     runs-on: ${{ matrix.config.os }}
     strategy:
       matrix:
