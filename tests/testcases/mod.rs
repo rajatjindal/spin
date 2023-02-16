@@ -5,6 +5,7 @@ pub mod all {
     use e2e_testing::controller::Controller;
     use e2e_testing::metadata_extractor::AppMetadata;
     use e2e_testing::testcase::TestCase;
+    use e2e_testing::testcase::TestCaseBuilder;
 
     fn get_url(base: &str, path: &str) -> String {
         format!("{}{}", base, path)
@@ -20,16 +21,12 @@ pub mod all {
             );
         }
 
-        let tc = TestCase {
-            name: "http-go template".to_string(),
-            appname: None,
-            template: Some("http-go".to_string()),
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("http-go-template".to_string())
+            .template(Some("http-go".to_string()))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap();
     }
@@ -44,16 +41,12 @@ pub mod all {
             );
         }
 
-        let tc = TestCase {
-            name: "http-c template".to_string(),
-            appname: None,
-            template: Some("http-c".to_string()),
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("http-c-template".to_string())
+            .template(Some("http-c".to_string()))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
@@ -63,16 +56,12 @@ pub mod all {
             return assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello, Fermyon"));
         }
 
-        let tc = TestCase {
-            name: "http-rust-template".to_string(),
-            appname: None,
-            template: Some("http-rust".to_string()),
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("http-rust-template".to_string())
+            .template(Some("http-rust".to_string()))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
@@ -82,16 +71,12 @@ pub mod all {
             return assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello World!\n"));
         }
 
-        let tc = TestCase {
-            name: "http-zig-template".to_string(),
-            appname: None,
-            template: Some("http-zig".to_string()),
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("http-zig-template".to_string())
+            .template(Some("http-zig".to_string()))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
@@ -102,16 +87,12 @@ pub mod all {
             return assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello, World\n"));
         }
 
-        let tc = TestCase {
-            name: "http-grain-template".to_string(),
-            appname: None,
-            template: Some("http-grain".to_string()),
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("http-grain-template".to_string())
+            .template(Some("http-grain".to_string()))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
@@ -126,20 +107,19 @@ pub mod all {
             );
         }
 
-        let tc = TestCase {
-            name: "http-ts-template".to_string(),
-            appname: None,
-            template: Some("http-ts".to_string()),
-            template_install_args: Some(vec![
+        let tc = TestCaseBuilder::default()
+            .name("http-ts-template".to_string())
+            .template(Some("http-ts".to_string()))
+            .template_install_args(Some(vec![
                 "--git".to_string(),
                 "https://github.com/fermyon/spin-js-sdk".to_string(),
                 "--update".to_string(),
-            ]),
-            assertions: checks,
-            plugins: Some(vec!["js2wasm".to_string()]),
-            deploy_args: None,
-            pre_build_hooks: Some(vec![vec!["npm".to_string(), "install".to_string()]]),
-        };
+            ]))
+            .plugins(Some(vec!["js2wasm".to_string()]))
+            .pre_build_hooks(Some(vec![vec!["npm".to_string(), "install".to_string()]]))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
@@ -154,20 +134,19 @@ pub mod all {
             );
         }
 
-        let tc = TestCase {
-            name: "http-js-template".to_string(),
-            appname: None,
-            template: Some("http-js".to_string()),
-            template_install_args: Some(vec![
+        let tc = TestCaseBuilder::default()
+            .name("http-js-template".to_string())
+            .template(Some("http-js".to_string()))
+            .template_install_args(Some(vec![
                 "--git".to_string(),
                 "https://github.com/fermyon/spin-js-sdk".to_string(),
                 "--update".to_string(),
-            ]),
-            assertions: checks,
-            plugins: Some(vec!["js2wasm".to_string()]),
-            deploy_args: None,
-            pre_build_hooks: Some(vec![vec!["npm".to_string(), "install".to_string()]]),
-        };
+            ]))
+            .plugins(Some(vec!["js2wasm".to_string()]))
+            .pre_build_hooks(Some(vec![vec!["npm".to_string(), "install".to_string()]]))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
@@ -216,16 +195,12 @@ pub mod all {
             Ok(())
         }
 
-        let tc = TestCase {
-            name: "assets-test".to_string(),
-            appname: Some("assets-test".to_string()),
-            template: None,
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("assets-test".to_string())
+            .appname(Some("assets-test".to_string()))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
@@ -267,16 +242,12 @@ pub mod all {
             Ok(())
         }
 
-        let tc = TestCase {
-            name: "simple-spin-rust-test".to_string(),
-            appname: Some("simple-spin-rust-test".to_string()),
-            template: None,
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("simple-spin-rust-test".to_string())
+            .appname(Some("simple-spin-rust-test".to_string()))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
@@ -300,16 +271,12 @@ pub mod all {
             Ok(())
         }
 
-        let tc = TestCase {
-            name: "headers-env-routes-test".to_string(),
-            appname: Some("headers-env-routes-test".to_string()),
-            template: None,
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("headers-env-routes-test".to_string())
+            .appname(Some("headers-env-routes-test".to_string()))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
@@ -333,16 +300,13 @@ pub mod all {
             Ok(())
         }
 
-        let tc = TestCase {
-            name: "headers-dynamic-env-test".to_string(),
-            appname: Some("headers-dynamic-env-test".to_string()),
-            template: None,
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: Some(vec!["--env".to_string(), "foo=bar".to_string()]),
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("headers-dynamic-env-test".to_string())
+            .appname(Some("headers-dynamic-env-test".to_string()))
+            .deploy_args(Some(vec!["--env".to_string(), "foo=bar".to_string()]))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
@@ -366,16 +330,13 @@ pub mod all {
             Ok(())
         }
 
-        let tc = TestCase {
-            name: "http-rust-outbound-mysql".to_string(),
-            appname: Some("http-rust-outbound-mysql".to_string()),
-            template: None,
-            template_install_args: None,
-            assertions: checks,
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+        let tc = TestCaseBuilder::default()
+            .name("http-rust-outbound-mysql".to_string())
+            .appname(Some("http-rust-outbound-mysql".to_string()))
+            .deploy_args(Some(vec!["--env".to_string(), "foo=bar".to_string()]))
+            .assertions(checks)
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
