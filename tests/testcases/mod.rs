@@ -479,7 +479,7 @@ pub mod all {
                     "redis-cli",
                     "PUBLISH",
                     "redis-go-works-channel",
-                    "msg-from-channel",
+                    "msg-from-go-channel",
                 ],
                 None,
                 None,
@@ -490,7 +490,7 @@ pub mod all {
 
             assert_eq!(
                 stderr,
-                ["Payload::::", "msg-from-channel"],
+                ["Payload::::", "msg-from-go-channel"],
                 "redis-go trigger works"
             );
 
@@ -503,6 +503,61 @@ pub mod all {
             .new_app_args(vec![
                 "--value".to_string(),
                 "redis-channel=redis-go-works-channel".to_string(),
+                "--value".to_string(),
+                "redis-address=redis://redis:6379".to_string(),
+            ])
+            .trigger_type("redis".to_string())
+            .assertions(
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
+                },
+            )
+            .build()
+            .unwrap();
+
+        tc.run(controller).await.unwrap()
+    }
+
+    pub async fn redis_rust_works(controller: &dyn Controller) {
+        async fn checks(
+            _: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            stderr_stream: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
+            //TODO: wait for spin up to be ready dynamically
+            sleep(Duration::from_secs(20)).await;
+
+            utils::run(
+                vec![
+                    "redis-cli",
+                    "PUBLISH",
+                    "redis-rust-works-channel",
+                    "msg-from-rust-channel",
+                ],
+                None,
+                None,
+            )?;
+
+            let stderr =
+                utils::get_output_from_stderr(stderr_stream, Duration::from_secs(5)).await?;
+
+            assert_eq!(
+                stderr,
+                ["Payload::::", "msg-from-rust-channel"],
+                "redis-rust trigger works"
+            );
+
+            Ok(())
+        }
+
+        let tc = TestCaseBuilder::default()
+            .name("redis-rust".to_string())
+            .template(Some("redis-rust".to_string()))
+            .new_app_args(vec![
+                "--value".to_string(),
+                "redis-channel=redis-rust-works-channel".to_string(),
                 "--value".to_string(),
                 "redis-address=redis://redis:6379".to_string(),
             ])

@@ -13,3 +13,4 @@ tests/testcases/*-generated
 spin-plugin-update.lock
 package-lock.json
 .spin
+dump.rdb

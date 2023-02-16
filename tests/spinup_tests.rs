@@ -75,4 +75,9 @@ mod spinup_tests {
     async fn redis_go_works() {
         testcases::all::redis_go_works(CONTROLLER).await
     }
+
+    #[tokio::test]
+    async fn redis_rust_works() {
+        testcases::all::redis_rust_works(CONTROLLER).await
+    }
 }
