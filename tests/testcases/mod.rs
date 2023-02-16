@@ -5,11 +5,11 @@ pub mod all {
     use e2e_testing::controller::Controller;
     use e2e_testing::metadata_extractor::AppMetadata;
     use e2e_testing::testcase::TestCase;
+    use e2e_testing::testcase::TestCaseBuilder;
     use e2e_testing::utils;
     use std::time::Duration;
     use tokio::io::BufReader;
     use tokio::process::ChildStdout;
-
     fn get_url(base: &str, path: &str) -> String {
         format!("{}{}", base, path)
     }
@@ -401,18 +401,14 @@ pub mod all {
             Ok(())
         }
 
-        let tc = TestCase {
-            name: "http-rust-outbound-mysql".to_string(),
-            appname: Some("http-rust-outbound-mysql".to_string()),
-            template: None,
-            template_install_args: None,
-            assertions: |input, logs_stream: Option<BufReader<ChildStdout>>| {
+        let tc = TestCaseBuilder::default()
+            .name("redis-go".to_string())
+            .appname(Some("redis-go-generated".to_string()))
+            .assertions(|input, logs_stream: Option<BufReader<ChildStdout>>| {
                 Box::pin(checks(input, logs_stream))
-            },
-            plugins: None,
-            deploy_args: None,
-            pre_build_hooks: None,
-        };
+            })
+            .build()
+            .unwrap();
 
         tc.run(controller).await.unwrap()
     }
