@@ -5,6 +5,7 @@ use crate::utils;
 use anyhow::Result;
 use async_trait::async_trait;
 use std::process::Output;
+use tokio::io::BufReader;
 
 pub struct SpinUp {}
 
@@ -51,12 +52,13 @@ impl Controller for SpinUp {
         // ensure the server is accepting requests before continuing.
         utils::wait_tcp(&address, &mut child, "spin").await?;
 
-        match utils::get_output(&mut child).await {
-            Ok(output) => print!("this output is {:?} until here", output),
-            Err(error) => panic!("problem running app {:?}", error),
-        };
+        let stdout = child
+            .stdout
+            .take()
+            .expect("child did not have a handle to stdout");
+        let reader = BufReader::new(stdout);
 
-        Ok(AppInstance::new_with_process(
+        Ok(AppInstance::new_with_process_and_logs_stream(
             AppMetadata {
                 name: app_name.to_string(),
                 base: format!("http://{}", address),
@@ -64,6 +66,7 @@ impl Controller for SpinUp {
                 version: "".to_string(),
             },
             Some(child),
+            Some(reader),
         ))
     }
 
