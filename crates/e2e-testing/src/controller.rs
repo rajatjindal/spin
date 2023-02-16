@@ -13,10 +13,15 @@ pub trait Controller {
     fn name(&self) -> String;
     fn login(&self) -> Result<()>;
     fn template_install(&self, args: Vec<&str>) -> Result<Output>;
-    fn new_app(&self, template_name: &str, app_name: &str) -> Result<Output>;
+    fn new_app(&self, template_name: &str, app_name: &str, args: Vec<&str>) -> Result<Output>;
     fn build_app(&self, app_name: &str) -> Result<Output>;
     fn install_plugins(&self, plugins: Vec<&str>) -> Result<Output>;
-    async fn run_app(&self, app_name: &str, trigger_type: &str) -> Result<AppInstance>;
+    async fn run_app(
+        &self,
+        app_name: &str,
+        trigger_type: &str,
+        mut args: Vec<&str>,
+    ) -> Result<AppInstance>;
     async fn stop_app(
         &self,
         app_name: Option<&str>,

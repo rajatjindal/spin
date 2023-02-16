@@ -71,30 +71,6 @@ pub fn get_random_port() -> Result<u16> {
 }
 
 /// wait for tcp to work on a given port
-pub async fn wait_fn(url: &str, process: &mut tokio::process::Child, target: &str) -> Result<()> {
-    let mut wait_count = 0;
-    loop {
-        if wait_count >= 240 {
-            panic!(
-                "Ran out of retries waiting for {} to start on URL {}",
-                target, url
-            );
-        }
-
-        if let Ok(Some(_)) = process.try_wait() {
-            panic!(
-                "Process exited before starting to serve {} to start on URL {}",
-                target, url
-            );
-        }
-
-        wait_count += 1;
-    }
-
-    Ok(())
-}
-
-/// wait for tcp to work on a given port
 pub async fn wait_tcp(url: &str, process: &mut tokio::process::Child, target: &str) -> Result<()> {
     let mut wait_count = 0;
     loop {
@@ -205,35 +181,25 @@ pub async fn get_output_from_stdout(
     reader: Option<BufReader<ChildStdout>>,
     max_wait: Duration,
 ) -> Result<Vec<String>> {
-    println!("get_output_from_stdout");
     if reader.is_none() {
-        println!("get_output_from_stdout reader is none");
         let output: Result<Vec<String>, anyhow::Error> = Ok(vec![]);
         return output;
     }
 
-    println!("get_output_from_stdout init var");
     let mut output: Vec<String> = vec![];
     let mut lines = reader.unwrap().lines();
 
-    println!("get_output_from_stdout starting loop");
     loop {
         let nextline = lines.next_line();
-        println!("get_output_from_stdout after next line");
         match timeout(max_wait, nextline).await {
             Err(_) => break,
             Ok(result) => match result {
                 Err(_) => break,
-                Ok(line) => {
-                    let x = line.unwrap();
-                    println!("line is {}", x);
-                    output.push(x)
-                }
+                Ok(line) => output.push(line.unwrap()),
             },
         }
     }
 
-    println!("get_output_from_stdout returning from here");
     Ok(output)
 }
 
@@ -241,34 +207,24 @@ pub async fn get_output_from_stderr(
     reader: Option<BufReader<ChildStderr>>,
     max_wait: Duration,
 ) -> Result<Vec<String>> {
-    println!("get_output_from_stderr");
     if reader.is_none() {
-        println!("get_output_from_stderr reader is none");
         let output: Result<Vec<String>, anyhow::Error> = Ok(vec![]);
         return output;
     }
 
-    println!("get_output_from_stderr init var");
     let mut output: Vec<String> = vec![];
     let mut lines = reader.unwrap().lines();
 
-    println!("get_output_from_stderr starting loop");
     loop {
         let nextline = lines.next_line();
-        println!("get_output_from_stderr after next line");
         match timeout(max_wait, nextline).await {
             Err(_) => break,
             Ok(result) => match result {
                 Err(_) => break,
-                Ok(line) => {
-                    let x = line.unwrap();
-                    println!("line is {}", x);
-                    output.push(x)
-                }
+                Ok(line) => output.push(line.unwrap()),
             },
         }
     }
 
-    println!("get_output_from_stderr returning from here");
     Ok(output)
 }

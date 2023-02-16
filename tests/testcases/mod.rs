@@ -4,7 +4,6 @@ pub mod all {
     use e2e_testing::asserts::assert_http_response;
     use e2e_testing::controller::Controller;
     use e2e_testing::metadata_extractor::AppMetadata;
-    use e2e_testing::testcase::TestCase;
     use e2e_testing::testcase::TestCaseBuilder;
     use e2e_testing::utils;
     use std::time::Duration;
@@ -19,17 +18,9 @@ pub mod all {
     pub async fn http_go_works(controller: &dyn Controller) {
         async fn checks(
             metadata: AppMetadata,
-            stdout_stream: Option<BufReader<ChildStdout>>,
-            stderr_stream: Option<BufReader<ChildStderr>>,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
         ) -> Result<()> {
-            let stdout =
-                utils::get_output_from_stderr(stderr_stream, Duration::from_secs(20)).await?;
-            let stderr =
-                utils::get_output_from_stdout(stdout_stream, Duration::from_secs(20)).await?;
-
-            println!("stdout is {:?}", stdout);
-            println!("stderr is {:?}", stderr);
-
             assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello Fermyon!\n")).await
         }
 
@@ -408,7 +399,7 @@ pub mod all {
             assert_http_response(
                 get_url(metadata.base.as_str(), "/env/foo").as_str(),
                 200,
-                &[("env_some_key", "some_value")],
+                &[("foo", "bar")],
                 Some("I'm a teapot"),
             )
             .await?;
@@ -419,7 +410,7 @@ pub mod all {
         let tc = TestCaseBuilder::default()
             .name("headers-dynamic-env-test".to_string())
             .appname(Some("headers-dynamic-env-test".to_string()))
-            .deploy_args(Some(vec!["--env".to_string(), "foo=bar".to_string()]))
+            .deploy_args(vec!["--env".to_string(), "foo=bar".to_string()])
             .assertions(
                 |metadata: AppMetadata,
                  stdout_stream: Option<BufReader<ChildStdout>>,
@@ -461,7 +452,6 @@ pub mod all {
         let tc = TestCaseBuilder::default()
             .name("http-rust-outbound-mysql".to_string())
             .appname(Some("http-rust-outbound-mysql".to_string()))
-            .deploy_args(Some(vec!["--env".to_string(), "foo=bar".to_string()]))
             .assertions(
                 |metadata: AppMetadata,
                  stdout_stream: Option<BufReader<ChildStdout>>,
@@ -478,32 +468,42 @@ pub mod all {
     pub async fn redis_go_works(controller: &dyn Controller) {
         async fn checks(
             _: AppMetadata,
-            stdout_stream: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStdout>>,
             stderr_stream: Option<BufReader<ChildStderr>>,
         ) -> Result<()> {
+            //TODO: wait for spin up to be ready dynamically
             sleep(Duration::from_secs(10)).await;
 
             utils::run(
-                vec!["redis-cli", "PUBLISH", "abc", "msg-from-channel"],
+                vec![
+                    "redis-cli",
+                    "PUBLISH",
+                    "redis-go-works-channel",
+                    "msg-from-channel",
+                ],
                 None,
                 None,
             )?;
 
-            let stdout = utils::get_output_from_stderr(stderr_stream, Duration::from_secs(20));
-            let stderr = utils::get_output_from_stdout(stdout_stream, Duration::from_secs(20));
+            let stderr =
+                utils::get_output_from_stderr(stderr_stream, Duration::from_secs(5)).await?;
 
-            println!("stdout is {:?}", stdout.await?);
-            println!("stderr is {:?}", stderr.await?);
-
-            // assert_eq!(stdout, vec!["hello"], "redis-go stdout failed");
-            // assert_eq!(stderr, vec!["hello"], "redis-go stderr failed");
+            assert_eq!(
+                stderr,
+                ["Payload::::", "msg-from-channel"],
+                "redis-go trigger works"
+            );
 
             Ok(())
         }
 
         let tc = TestCaseBuilder::default()
             .name("redis-go".to_string())
-            .appname(Some("redis-go-generated".to_string()))
+            .template(Some("redis-go".to_string()))
+            .new_app_args(vec![
+                "--value".to_string(),
+                "redis-channel=redis-go-works-channel".to_string(),
+            ])
             .trigger_type("redis".to_string())
             .assertions(
                 |metadata: AppMetadata,

@@ -25,6 +25,11 @@ pub struct TestCase {
     #[builder(default)]
     pub template: Option<String>,
 
+    /// optional
+    /// template to use to create new app
+    #[builder(default = "vec![]")]
+    pub new_app_args: Vec<String>,
+
     /// trigger type for this spin app
     #[builder(default = "\"http\".to_string()")]
     pub trigger_type: String,
@@ -41,9 +46,9 @@ pub struct TestCase {
     pub plugins: Option<Vec<String>>,
 
     /// optional
-    /// if provided, appended to `spin deploy` command
-    #[builder(default)]
-    pub deploy_args: Option<Vec<String>>,
+    /// if provided, appended to `spin up/deploy` command
+    #[builder(default = "vec![]")]
+    pub deploy_args: Vec<String>,
 
     /// optional
     /// if provided, executed as command line before running `spin build`
@@ -93,8 +98,9 @@ impl TestCase {
 
             if fs::remove_dir_all(&appdir).is_err() {};
 
+            let new_app_args = self.new_app_args.iter().map(|s| s as &str).collect();
             controller
-                .new_app(self.template.as_ref().unwrap(), &appname)
+                .new_app(self.template.as_ref().unwrap(), &appname, new_app_args)
                 .context("creating new app")?;
         }
 
@@ -111,8 +117,9 @@ impl TestCase {
 
         // run `spin up` (or `spin deploy` for cloud).
         // `AppInstance` has some basic info about the running app like base url, routes (only for cloud) etc.
+        let deploy_args = self.deploy_args.iter().map(|s| s as &str).collect();
         let app = controller
-            .run_app(&appname, &self.trigger_type)
+            .run_app(&appname, &self.trigger_type, deploy_args)
             .await
             .context("running app")?;
 

@@ -25,8 +25,8 @@ impl Controller for SpinUp {
         spin::template_install(args)
     }
 
-    fn new_app(&self, template_name: &str, app_name: &str) -> Result<Output> {
-        spin::new_app(template_name, app_name)
+    fn new_app(&self, template_name: &str, app_name: &str, args: Vec<&str>) -> Result<Output> {
+        spin::new_app(template_name, app_name, args)
     }
 
     fn install_plugins(&self, plugins: Vec<&str>) -> Result<Output> {
@@ -37,26 +37,31 @@ impl Controller for SpinUp {
         spin::build_app(app_name)
     }
 
-    async fn run_app(&self, app_name: &str, trigger_type: &str) -> Result<AppInstance> {
+    async fn run_app(
+        &self,
+        app_name: &str,
+        trigger_type: &str,
+        mut xargs: Vec<&str>,
+    ) -> Result<AppInstance> {
         let appdir = spin::appdir(app_name);
 
         let mut cmd = vec!["spin", "up"];
+        if xargs.len() > 0 {
+            cmd.append(&mut xargs);
+        }
 
-        let mut child: tokio::process::Child;
-        let mut address: String = "".to_string();
-
+        let mut address = "".to_string();
         if trigger_type == "http" {
             let port = utils::get_random_port()?;
             address = format!("127.0.0.1:{}", port);
-            let mut args = vec!["--listen", &address];
-            cmd.append(&mut args);
+            cmd.append(&mut vec!["--listen", address.as_str()]);
+        }
 
-            child = utils::run_async(cmd, Some(&appdir), None);
+        let mut child = utils::run_async(cmd, Some(&appdir), None);
 
+        if trigger_type == "http" {
             // ensure the server is accepting requests before continuing.
             utils::wait_tcp(&address, &mut child, "spin").await?;
-        } else {
-            child = utils::run_async(cmd, Some(&appdir), None);
         }
 
         let stdout = child

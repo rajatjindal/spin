@@ -26,14 +26,18 @@ pub fn template_install(mut args: Vec<&str>) -> Result<Output> {
     result
 }
 
-pub fn new_app(template_name: &str, app_name: &str) -> Result<Output> {
+pub fn new_app<'a>(
+    template_name: &'a str,
+    app_name: &'a str,
+    mut args: Vec<&'a str>,
+) -> Result<Output> {
     let basedir = utils::testcases_base_dir();
+    let mut cmd = vec!["spin", "new", template_name, app_name, "--accept-defaults"];
+    if args.len() > 0 {
+        cmd.append(&mut args);
+    }
 
-    return utils::run(
-        vec!["spin", "new", template_name, app_name, "--accept-defaults"],
-        Some(basedir.as_str()),
-        None,
-    );
+    return utils::run(cmd, Some(basedir.as_str()), None);
 }
 
 pub fn install_plugins(plugins: Vec<&str>) -> Result<Output> {
