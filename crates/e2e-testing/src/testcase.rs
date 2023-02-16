@@ -3,45 +3,56 @@ use crate::metadata_extractor::AppMetadata;
 use crate::spin;
 use crate::utils;
 use anyhow::{Context, Result};
+use core::pin::Pin;
 use derive_builder::Builder;
 use std::fs;
-use tokio::task;
+use std::future::Future;
+use tokio::io::BufReader;
+use tokio::process::ChildStdout;
 
 /// Represents a testcase
 #[derive(Builder)]
-#[builder(pattern = "owned")]
 pub struct TestCase {
     /// name of the testcase
     pub name: String,
 
     /// name of the app under test
+    #[builder(default)]
     pub appname: Option<String>,
 
     /// optional
     /// template to use to create new app
+    #[builder(default)]
     pub template: Option<String>,
 
     /// optional
     /// template install args. appended to `spin install templates <template_install_args>
     /// defaults to `--git https://github.com/fermyon/spin`
+    #[builder(default)]
     pub template_install_args: Option<Vec<String>>,
 
     /// optional
     /// plugins required for the testcase. e.g. js2wasm for js/ts tests
+    #[builder(default)]
     pub plugins: Option<Vec<String>>,
 
     /// optional
     /// if provided, appended to `spin deploy` command
+    #[builder(default)]
     pub deploy_args: Option<Vec<String>>,
 
     /// optional
     /// if provided, executed as command line before running `spin build`
     /// useful if some external script or process needs to run before `spin build`
     /// e.g. `npm install` before running `spin build` for `js/ts` tests
+    #[builder(default)]
     pub pre_build_hooks: Option<Vec<Vec<String>>>,
 
     /// assertions to run once the app is running
-    pub assertions: fn(app: &AppMetadata) -> Result<()>,
+    pub assertions: fn(
+        AppMetadata,
+        Option<BufReader<ChildStdout>>,
+    ) -> Pin<Box<dyn Future<Output = Result<()>>>>,
 }
 
 impl TestCase {
@@ -98,26 +109,23 @@ impl TestCase {
         let app = controller.run_app(&appname).await.context("running app")?;
 
         // run test specific assertions
-        let metadata = app.metadata.clone();
-        let assert_fn = self.assertions;
+        let deployed_app_metadata = app.metadata;
+        let deployed_name_name = deployed_app_metadata.name.clone();
 
-        let result = task::spawn_blocking(move || assert_fn(&metadata))
-            .await
-            .context("running testcase specific assertions")
-            .unwrap();
+        let assertions_result = (self.assertions)(deployed_app_metadata, app.logs_stream).await;
 
         match controller
-            .stop_app(Some(app.metadata.clone().name.as_str()), None)
+            .stop_app(Some(deployed_name_name.as_str()), app.process)
             .await
         {
             Ok(_) => (),
             Err(e) => println!(
                 "warn: failed to stop app {} with error {:?}",
-                app.metadata.clone().name.as_str(),
+                deployed_name_name.as_str(),
                 e
             ),
         }
 
-        result
+        assertions_result
     }
 }

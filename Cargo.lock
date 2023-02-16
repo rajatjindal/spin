@@ -1265,6 +1265,7 @@ dependencies = [
  "async-trait",
  "derive_builder 0.12.0",
  "hyper",
+ "hyper-tls",
  "nix 0.26.2",
  "regex",
  "reqwest",
