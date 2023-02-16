@@ -3,8 +3,11 @@ use crate::metadata_extractor::AppMetadata;
 use crate::spin;
 use crate::utils;
 use anyhow::{Context, Result};
+use core::pin::Pin;
 use std::fs;
-use tokio::task;
+use std::future::Future;
+use tokio::io::BufReader;
+use tokio::process::ChildStdout;
 
 /// Represents a testcase
 pub struct TestCase {
@@ -38,11 +41,14 @@ pub struct TestCase {
     pub pre_build_hooks: Option<Vec<Vec<String>>>,
 
     /// assertions to run once the app is running
-    pub assertions: fn(app: &AppMetadata) -> Result<()>,
+    pub assertions: fn(
+        AppMetadata,
+        Option<BufReader<ChildStdout>>,
+    ) -> Pin<Box<dyn Future<Output = Result<()>>>>,
 }
 
 impl TestCase {
-    pub async fn run(&self, controller: &dyn Controller) -> Result<()> {
+    pub async fn run(self, controller: &dyn Controller) -> Result<()> {
         controller.name();
 
         // install spin plugins if requested in testcase config
@@ -94,27 +100,23 @@ impl TestCase {
         // `AppInstance` has some basic info about the running app like base url, routes (only for cloud) etc.
         let app = controller.run_app(&appname).await.context("running app")?;
 
-        // run test specific assertions
-        let metadata = app.metadata.clone();
-        let assert_fn = self.assertions;
+        let deployed_app_metadata = app.metadata;
+        let deployed_name_name = deployed_app_metadata.name.clone();
 
-        let result = task::spawn_blocking(move || assert_fn(&metadata))
-            .await
-            .context("running testcase specific assertions")
-            .unwrap();
+        let assertions_result = (self.assertions)(deployed_app_metadata, app.logs_stream).await;
 
         match controller
-            .stop_app(Some(app.metadata.clone().name.as_str()), None)
+            .stop_app(Some(deployed_name_name.as_str()), app.process)
             .await
         {
             Ok(_) => (),
             Err(e) => println!(
                 "warn: failed to stop app {} with error {:?}",
-                app.metadata.clone().name.as_str(),
+                deployed_name_name.as_str(),
                 e
             ),
         }
 
-        result
+        assertions_result
     }
 }

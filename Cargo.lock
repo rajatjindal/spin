@@ -1232,6 +1232,7 @@ version = "0.8.0"
 dependencies = [
  "anyhow",
  "async-trait",
+ "futures",
  "hyper",
  "nix 0.26.2",
  "regex",
