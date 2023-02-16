@@ -10,6 +10,7 @@ pub mod all {
     use std::time::Duration;
     use tokio::io::BufReader;
     use tokio::process::{ChildStderr, ChildStdout};
+    use tokio::time::sleep;
 
     fn get_url(base: &str, path: &str) -> String {
         format!("{}{}", base, path)
@@ -18,9 +19,17 @@ pub mod all {
     pub async fn http_go_works(controller: &dyn Controller) {
         async fn checks(
             metadata: AppMetadata,
-            _: Option<BufReader<ChildStdout>>,
-            _: Option<BufReader<ChildStderr>>,
+            stdout_stream: Option<BufReader<ChildStdout>>,
+            stderr_stream: Option<BufReader<ChildStderr>>,
         ) -> Result<()> {
+            let stdout =
+                utils::get_output_from_stderr(stderr_stream, Duration::from_secs(20)).await?;
+            let stderr =
+                utils::get_output_from_stdout(stdout_stream, Duration::from_secs(20)).await?;
+
+            println!("stdout is {:?}", stdout);
+            println!("stderr is {:?}", stderr);
+
             assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello Fermyon!\n")).await
         }
 
@@ -472,14 +481,16 @@ pub mod all {
             stdout_stream: Option<BufReader<ChildStdout>>,
             stderr_stream: Option<BufReader<ChildStderr>>,
         ) -> Result<()> {
-            let stdout = utils::get_output_from_stderr(stderr_stream, Duration::from_secs(20));
-            let stderr = utils::get_output_from_stdout(stdout_stream, Duration::from_secs(20));
+            sleep(Duration::from_secs(10)).await;
 
             utils::run(
                 vec!["redis-cli", "PUBLISH", "abc", "msg-from-channel"],
                 None,
                 None,
             )?;
+
+            let stdout = utils::get_output_from_stderr(stderr_stream, Duration::from_secs(20));
+            let stderr = utils::get_output_from_stdout(stdout_stream, Duration::from_secs(20));
 
             println!("stdout is {:?}", stdout.await?);
             println!("stderr is {:?}", stderr.await?);

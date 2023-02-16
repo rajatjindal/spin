@@ -71,6 +71,30 @@ pub fn get_random_port() -> Result<u16> {
 }
 
 /// wait for tcp to work on a given port
+pub async fn wait_fn(url: &str, process: &mut tokio::process::Child, target: &str) -> Result<()> {
+    let mut wait_count = 0;
+    loop {
+        if wait_count >= 240 {
+            panic!(
+                "Ran out of retries waiting for {} to start on URL {}",
+                target, url
+            );
+        }
+
+        if let Ok(Some(_)) = process.try_wait() {
+            panic!(
+                "Process exited before starting to serve {} to start on URL {}",
+                target, url
+            );
+        }
+
+        wait_count += 1;
+    }
+
+    Ok(())
+}
+
+/// wait for tcp to work on a given port
 pub async fn wait_tcp(url: &str, process: &mut tokio::process::Child, target: &str) -> Result<()> {
     let mut wait_count = 0;
     loop {
