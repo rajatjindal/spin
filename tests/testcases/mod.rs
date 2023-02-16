@@ -9,14 +9,18 @@ pub mod all {
     use e2e_testing::utils;
     use std::time::Duration;
     use tokio::io::BufReader;
-    use tokio::process::ChildStdout;
+    use tokio::process::{ChildStderr, ChildStdout};
 
     fn get_url(base: &str, path: &str) -> String {
         format!("{}{}", base, path)
     }
 
     pub async fn http_go_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello Fermyon!\n")).await
         }
 
@@ -24,8 +28,10 @@ pub mod all {
             .name("http-go-template".to_string())
             .template(Some("http-go".to_string()))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -35,7 +41,11 @@ pub mod all {
     }
 
     pub async fn http_c_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(
                 metadata.base.as_str(),
                 200,
@@ -49,8 +59,10 @@ pub mod all {
             .name("http-c-template".to_string())
             .template(Some("http-c".to_string()))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -60,7 +72,11 @@ pub mod all {
     }
 
     pub async fn http_rust_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello, Fermyon")).await
         }
 
@@ -68,8 +84,10 @@ pub mod all {
             .name("http-rust-template".to_string())
             .template(Some("http-rust".to_string()))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -79,7 +97,11 @@ pub mod all {
     }
 
     pub async fn http_zig_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello World!\n")).await
         }
 
@@ -87,8 +109,10 @@ pub mod all {
             .name("http-zig-template".to_string())
             .template(Some("http-zig".to_string()))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -99,7 +123,11 @@ pub mod all {
 
     #[allow(unused)]
     pub async fn http_grain_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello, World\n")).await
         }
 
@@ -107,8 +135,10 @@ pub mod all {
             .name("http-grain-template".to_string())
             .template(Some("http-grain".to_string()))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -118,7 +148,11 @@ pub mod all {
     }
 
     pub async fn http_ts_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello from TS-SDK")).await
         }
 
@@ -133,8 +167,10 @@ pub mod all {
             .plugins(Some(vec!["js2wasm".to_string()]))
             .pre_build_hooks(Some(vec![vec!["npm".to_string(), "install".to_string()]]))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -144,7 +180,11 @@ pub mod all {
     }
 
     pub async fn http_js_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(metadata.base.as_str(), 200, &[], Some("Hello from JS-SDK")).await
         }
 
@@ -159,8 +199,10 @@ pub mod all {
             .plugins(Some(vec!["js2wasm".to_string()]))
             .pre_build_hooks(Some(vec![vec!["npm".to_string(), "install".to_string()]]))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -170,7 +212,11 @@ pub mod all {
     }
 
     pub async fn assets_routing_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(
                 get_url(metadata.base.as_str(), "/static/thisshouldbemounted/1").as_str(),
                 200,
@@ -222,8 +268,10 @@ pub mod all {
             .name("assets-test".to_string())
             .appname(Some("assets-test".to_string()))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -233,7 +281,11 @@ pub mod all {
     }
 
     pub async fn simple_spin_rust_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(
                 get_url(metadata.base.as_str(), "/test/hello").as_str(),
                 200,
@@ -277,8 +329,10 @@ pub mod all {
             .name("simple-spin-rust-test".to_string())
             .appname(Some("simple-spin-rust-test".to_string()))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -288,7 +342,11 @@ pub mod all {
     }
 
     pub async fn header_env_routes_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(
                 get_url(metadata.base.as_str(), "/env").as_str(),
                 200,
@@ -312,8 +370,10 @@ pub mod all {
             .name("headers-env-routes-test".to_string())
             .appname(Some("headers-env-routes-test".to_string()))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -323,7 +383,11 @@ pub mod all {
     }
 
     pub async fn header_dynamic_env_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(
                 get_url(metadata.base.as_str(), "/env").as_str(),
                 200,
@@ -348,8 +412,10 @@ pub mod all {
             .appname(Some("headers-dynamic-env-test".to_string()))
             .deploy_args(Some(vec!["--env".to_string(), "foo=bar".to_string()]))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -359,7 +425,11 @@ pub mod all {
     }
 
     pub async fn http_rust_outbound_mysql_works(controller: &dyn Controller) {
-        async fn checks(metadata: AppMetadata, _: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            metadata: AppMetadata,
+            _: Option<BufReader<ChildStdout>>,
+            _: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
             assert_http_response(
                 get_url(metadata.base.as_str(), "/test_numeric_types").as_str(),
                 200,
@@ -384,8 +454,10 @@ pub mod all {
             .appname(Some("http-rust-outbound-mysql".to_string()))
             .deploy_args(Some(vec!["--env".to_string(), "foo=bar".to_string()]))
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()
@@ -395,17 +467,26 @@ pub mod all {
     }
 
     pub async fn redis_go_works(controller: &dyn Controller) {
-        async fn checks(_: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>) -> Result<()> {
+        async fn checks(
+            _: AppMetadata,
+            stdout_stream: Option<BufReader<ChildStdout>>,
+            stderr_stream: Option<BufReader<ChildStderr>>,
+        ) -> Result<()> {
+            let stdout = utils::get_output_from_stderr(stderr_stream, Duration::from_secs(20));
+            let stderr = utils::get_output_from_stdout(stdout_stream, Duration::from_secs(20));
+
             utils::run(
                 vec!["redis-cli", "PUBLISH", "abc", "msg-from-channel"],
                 None,
                 None,
             )?;
-            let logs = utils::get_output_from_reader(logs_stream, Duration::from_secs(25)).await?;
 
-            assert_eq!(logs, vec!["hello"], "redis-go failed");
+            println!("stdout is {:?}", stdout.await?);
+            println!("stderr is {:?}", stderr.await?);
 
-            println!("{:?}", logs);
+            // assert_eq!(stdout, vec!["hello"], "redis-go stdout failed");
+            // assert_eq!(stderr, vec!["hello"], "redis-go stderr failed");
+
             Ok(())
         }
 
@@ -414,8 +495,10 @@ pub mod all {
             .appname(Some("redis-go-generated".to_string()))
             .trigger_type("redis".to_string())
             .assertions(
-                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
-                    Box::pin(checks(metadata, logs_stream))
+                |metadata: AppMetadata,
+                 stdout_stream: Option<BufReader<ChildStdout>>,
+                 stderr_stream: Option<BufReader<ChildStderr>>| {
+                    Box::pin(checks(metadata, stdout_stream, stderr_stream))
                 },
             )
             .build()

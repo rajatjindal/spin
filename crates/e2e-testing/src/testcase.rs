@@ -8,7 +8,7 @@ use derive_builder::Builder;
 use std::fs;
 use std::future::Future;
 use tokio::io::BufReader;
-use tokio::process::ChildStdout;
+use tokio::process::{ChildStderr, ChildStdout};
 
 /// Represents a testcase
 #[derive(Builder)]
@@ -56,6 +56,7 @@ pub struct TestCase {
     pub assertions: fn(
         AppMetadata,
         Option<BufReader<ChildStdout>>,
+        Option<BufReader<ChildStderr>>,
     ) -> Pin<Box<dyn Future<Output = Result<()>>>>,
 }
 
@@ -119,7 +120,8 @@ impl TestCase {
         let deployed_app_metadata = app.metadata;
         let deployed_name_name = deployed_app_metadata.name.clone();
 
-        let assertions_result = (self.assertions)(deployed_app_metadata, app.logs_stream).await;
+        let assertions_result =
+            (self.assertions)(deployed_app_metadata, app.stdout_stream, app.stderr_stream).await;
 
         match controller
             .stop_app(Some(deployed_name_name.as_str()), app.process)

@@ -56,8 +56,6 @@ impl Controller for SpinUp {
             // ensure the server is accepting requests before continuing.
             utils::wait_tcp(&address, &mut child, "spin").await?;
         } else {
-            let mut args = vec!["--follow-all"];
-            cmd.append(&mut args);
             child = utils::run_async(cmd, Some(&appdir), None);
         }
 
@@ -65,7 +63,13 @@ impl Controller for SpinUp {
             .stdout
             .take()
             .expect("child did not have a handle to stdout");
-        let reader = BufReader::new(stdout);
+        let stdout_stream = BufReader::new(stdout);
+
+        let stderr = child
+            .stderr
+            .take()
+            .expect("child did not have a handle to stderr");
+        let stderr_stream = BufReader::new(stderr);
 
         Ok(AppInstance::new_with_process_and_logs_stream(
             AppMetadata {
@@ -75,7 +79,8 @@ impl Controller for SpinUp {
                 version: "".to_string(),
             },
             Some(child),
-            Some(reader),
+            Some(stdout_stream),
+            Some(stderr_stream),
         ))
     }
 

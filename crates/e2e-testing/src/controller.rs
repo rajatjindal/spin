@@ -3,7 +3,7 @@ use anyhow::Result;
 use async_trait::async_trait;
 use std::process::Output;
 use tokio::io::BufReader;
-use tokio::process::ChildStdout;
+use tokio::process::{ChildStderr, ChildStdout};
 
 /// defines crate::controller::Controller trait
 /// this is to enable running same set of tests
@@ -29,7 +29,8 @@ pub trait Controller {
 pub struct AppInstance {
     pub metadata: AppMetadata,
     pub process: Option<tokio::process::Child>,
-    pub logs_stream: Option<BufReader<ChildStdout>>,
+    pub stdout_stream: Option<BufReader<ChildStdout>>,
+    pub stderr_stream: Option<BufReader<ChildStderr>>,
 }
 
 impl AppInstance {
@@ -37,7 +38,8 @@ impl AppInstance {
         AppInstance {
             metadata,
             process: None,
-            logs_stream: None,
+            stdout_stream: None,
+            stderr_stream: None,
         }
     }
 
@@ -48,19 +50,22 @@ impl AppInstance {
         AppInstance {
             metadata,
             process,
-            logs_stream: None,
+            stdout_stream: None,
+            stderr_stream: None,
         }
     }
 
     pub fn new_with_process_and_logs_stream(
         metadata: AppMetadata,
         process: Option<tokio::process::Child>,
-        logs_stream: Option<BufReader<ChildStdout>>,
+        stdout_stream: Option<BufReader<ChildStdout>>,
+        stderr_stream: Option<BufReader<ChildStderr>>,
     ) -> AppInstance {
         AppInstance {
             metadata,
             process,
-            logs_stream,
+            stdout_stream,
+            stderr_stream,
         }
     }
 }

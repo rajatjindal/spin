@@ -10,8 +10,8 @@ use std::{
 };
 
 use tokio::io::{AsyncBufReadExt, BufReader};
-use tokio::process::ChildStdout;
 use tokio::process::Command as TokioCommand;
+use tokio::process::{ChildStderr, ChildStdout};
 use tokio::time::timeout;
 use tokio::{net::TcpStream, time::sleep};
 
@@ -177,28 +177,74 @@ pub fn testcases_base_dir() -> String {
     basedir.to_str().unwrap().to_string()
 }
 
-pub async fn get_output_from_reader(
+pub async fn get_output_from_stdout(
     reader: Option<BufReader<ChildStdout>>,
     max_wait: Duration,
 ) -> Result<Vec<String>> {
+    println!("get_output_from_stdout");
     if reader.is_none() {
+        println!("get_output_from_stdout reader is none");
         let output: Result<Vec<String>, anyhow::Error> = Ok(vec![]);
         return output;
     }
 
+    println!("get_output_from_stdout init var");
     let mut output: Vec<String> = vec![];
     let mut lines = reader.unwrap().lines();
 
+    println!("get_output_from_stdout starting loop");
     loop {
         let nextline = lines.next_line();
+        println!("get_output_from_stdout after next line");
         match timeout(max_wait, nextline).await {
             Err(_) => break,
             Ok(result) => match result {
                 Err(_) => break,
-                Ok(line) => output.push(line.unwrap()),
+                Ok(line) => {
+                    let x = line.unwrap();
+                    println!("line is {}", x);
+                    output.push(x)
+                }
             },
         }
     }
 
+    println!("get_output_from_stdout returning from here");
+    Ok(output)
+}
+
+pub async fn get_output_from_stderr(
+    reader: Option<BufReader<ChildStderr>>,
+    max_wait: Duration,
+) -> Result<Vec<String>> {
+    println!("get_output_from_stderr");
+    if reader.is_none() {
+        println!("get_output_from_stderr reader is none");
+        let output: Result<Vec<String>, anyhow::Error> = Ok(vec![]);
+        return output;
+    }
+
+    println!("get_output_from_stderr init var");
+    let mut output: Vec<String> = vec![];
+    let mut lines = reader.unwrap().lines();
+
+    println!("get_output_from_stderr starting loop");
+    loop {
+        let nextline = lines.next_line();
+        println!("get_output_from_stderr after next line");
+        match timeout(max_wait, nextline).await {
+            Err(_) => break,
+            Ok(result) => match result {
+                Err(_) => break,
+                Ok(line) => {
+                    let x = line.unwrap();
+                    println!("line is {}", x);
+                    output.push(x)
+                }
+            },
+        }
+    }
+
+    println!("get_output_from_stderr returning from here");
     Ok(output)
 }
