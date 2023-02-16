@@ -503,6 +503,8 @@ pub mod all {
             .new_app_args(vec![
                 "--value".to_string(),
                 "redis-channel=redis-go-works-channel".to_string(),
+                "--value".to_string(),
+                "redis-address=redis://redis:6379".to_string(),
             ])
             .trigger_type("redis".to_string())
             .assertions(
