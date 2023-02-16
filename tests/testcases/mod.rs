@@ -6,6 +6,7 @@ pub mod all {
     use e2e_testing::metadata_extractor::AppMetadata;
     use e2e_testing::testcase::TestCase;
     use e2e_testing::testcase::TestCaseBuilder;
+    use e2e_testing::utils;
     use std::time::Duration;
     use tokio::io::BufReader;
     use tokio::process::ChildStdout;
@@ -393,30 +394,33 @@ pub mod all {
         tc.run(controller).await.unwrap()
     }
 
-    // pub async fn redis_go_works(controller: &dyn Controller) {
-    //     async fn checks<'a>(
-    //         _: AppMetadata,
-    //         logs_stream: Option<BufReader<ChildStdout>>,
-    //     ) -> Result<()> {
-    //         utils::run(
-    //             vec!["redis-cli", "PUBLISH", "abc", "msg-from-channel"],
-    //             None,
-    //             None,
-    //         )
-    //         .context("publishing redis msg")?;
-    //         let logs = utils::get_output_from_reader(logs_stream, Duration::from_secs(2)).await;
+    pub async fn redis_go_works(controller: &dyn Controller) {
+        async fn checks(_: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>) -> Result<()> {
+            utils::run(
+                vec!["redis-cli", "PUBLISH", "abc", "msg-from-channel"],
+                None,
+                None,
+            )?;
+            let logs = utils::get_output_from_reader(logs_stream, Duration::from_secs(25)).await?;
 
-    //         println!("{:?}", logs);
-    //         Ok(())
-    //     }
+            assert_eq!(logs, vec!["hello"], "redis-go failed");
 
-    //     let tc = TestCaseBuilder::default()
-    //         .name("redis-go".to_string())
-    //         .appname(Some("redis-go-generated".to_string()))
-    //         .assertions(checks)
-    //         .build()
-    //         .unwrap();
+            println!("{:?}", logs);
+            Ok(())
+        }
 
-    //     tc.run(controller).await.unwrap()
-    // }
+        let tc = TestCaseBuilder::default()
+            .name("redis-go".to_string())
+            .appname(Some("redis-go-generated".to_string()))
+            .trigger_type("redis".to_string())
+            .assertions(
+                |metadata: AppMetadata, logs_stream: Option<BufReader<ChildStdout>>| {
+                    Box::pin(checks(metadata, logs_stream))
+                },
+            )
+            .build()
+            .unwrap();
+
+        tc.run(controller).await.unwrap()
+    }
 }

@@ -16,7 +16,7 @@ pub trait Controller {
     fn new_app(&self, template_name: &str, app_name: &str) -> Result<Output>;
     fn build_app(&self, app_name: &str) -> Result<Output>;
     fn install_plugins(&self, plugins: Vec<&str>) -> Result<Output>;
-    async fn run_app(&self, app_name: &str) -> Result<AppInstance>;
+    async fn run_app(&self, app_name: &str, trigger_type: &str) -> Result<AppInstance>;
     async fn stop_app(
         &self,
         app_name: Option<&str>,

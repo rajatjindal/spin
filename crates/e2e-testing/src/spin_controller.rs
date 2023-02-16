@@ -37,20 +37,29 @@ impl Controller for SpinUp {
         spin::build_app(app_name)
     }
 
-    async fn run_app(&self, app_name: &str) -> Result<AppInstance> {
+    async fn run_app(&self, app_name: &str, trigger_type: &str) -> Result<AppInstance> {
         let appdir = spin::appdir(app_name);
 
-        let port = utils::get_random_port()?;
-        let address = format!("127.0.0.1:{}", port);
+        let mut cmd = vec!["spin", "up"];
 
-        let mut child = utils::run_async(
-            vec!["spin", "up", "--listen", &address],
-            Some(&appdir),
-            None,
-        );
+        let mut child: tokio::process::Child;
+        let mut address: String = "".to_string();
 
-        // ensure the server is accepting requests before continuing.
-        utils::wait_tcp(&address, &mut child, "spin").await?;
+        if trigger_type == "http" {
+            let port = utils::get_random_port()?;
+            address = format!("127.0.0.1:{}", port);
+            let mut args = vec!["--listen", &address];
+            cmd.append(&mut args);
+
+            child = utils::run_async(cmd, Some(&appdir), None);
+
+            // ensure the server is accepting requests before continuing.
+            utils::wait_tcp(&address, &mut child, "spin").await?;
+        } else {
+            let mut args = vec!["--follow-all"];
+            cmd.append(&mut args);
+            child = utils::run_async(cmd, Some(&appdir), None);
+        }
 
         let stdout = child
             .stdout

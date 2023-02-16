@@ -25,6 +25,10 @@ pub struct TestCase {
     #[builder(default)]
     pub template: Option<String>,
 
+    /// trigger type for this spin app
+    #[builder(default = "\"http\".to_string()")]
+    pub trigger_type: String,
+
     /// optional
     /// template install args. appended to `spin install templates <template_install_args>
     /// defaults to `--git https://github.com/fermyon/spin`
@@ -106,7 +110,10 @@ impl TestCase {
 
         // run `spin up` (or `spin deploy` for cloud).
         // `AppInstance` has some basic info about the running app like base url, routes (only for cloud) etc.
-        let app = controller.run_app(&appname).await.context("running app")?;
+        let app = controller
+            .run_app(&appname, &self.trigger_type)
+            .await
+            .context("running app")?;
 
         // run test specific assertions
         let deployed_app_metadata = app.metadata;
