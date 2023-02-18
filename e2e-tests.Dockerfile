@@ -61,3 +61,4 @@ WORKDIR /e2e-tests
 COPY . .
 
 CMD cargo test spinup_tests --features new-e2e-tests --no-fail-fast -- --nocapture
+
