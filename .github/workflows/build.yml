@@ -169,6 +169,7 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-22.04
     # needs: build-rust-ubuntu
+    needs: detect-changes
     steps:
       - uses: actions/checkout@v3
 
