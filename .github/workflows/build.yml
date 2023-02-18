@@ -183,7 +183,7 @@ jobs:
           DOCKERFILE_CHANGED: ${{ needs.changes.outputs.e2e-tests-dockerfile }}
         run: |
           ## build docker image if e2e-tests.Dockerfile has changed or ghcr.io/fermyon/spin-e2e-tests:latest does not exist
-          docker manifest inspect ghcr.io/rajatjindal/fermyon-cloud-preview:v0.0.1 >/dev/null 2>&1 || exit_code=$?
+          docker manifest inspect ghcr.io/rajatjindal/gotest-to-html:v0.0.22 >/dev/null 2>&1 || exit_code=$?
           echo "exit code is $exit_code"
           if [[ $exit_code -ne 0 ]] || [[ "$DOCKERFILE_CHANGED" == "true" ]]; then
             # docker build -t ghcr.io/fermyon/spin-e2e-tests:latest -f e2e-tests.Dockerfile .
