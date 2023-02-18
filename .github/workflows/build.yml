@@ -156,7 +156,7 @@ jobs:
     name: Detect changes to e2e-tests Dockerfile
     runs-on: ubuntu-latest
     outputs:
-      jobs: ${{ steps.filter.outputs.e2e-tests-dockerfile }}
+      e2e-tests-dockerfile: ${{ steps.filter.outputs.e2e-tests-dockerfile }}
     steps:
       - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
