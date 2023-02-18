@@ -2,7 +2,7 @@
 name: Build docker image for spin e2e tests
 on:
   push:
-    branches: [main]
+    branches: [e2e-tests-docker]
     paths:
     - "e2e-tests.Dockerfile"
 
