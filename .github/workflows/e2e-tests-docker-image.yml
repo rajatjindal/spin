@@ -2,13 +2,13 @@
 name: Build docker image for spin e2e tests
 on:
   push:
-    branches: [e2e-tests-docker]
+    branches: [main]
     paths:
     - "e2e-tests.Dockerfile"
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: rajatjindal/spin-e2e-tests
 
 jobs:
   build-and-push:
