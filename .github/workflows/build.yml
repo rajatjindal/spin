@@ -152,9 +152,23 @@ jobs:
       - name: "Test Go SDK"
         run: make test-sdk-go
 
+  detect-changes:
+    name: Detect changes to e2e-tests Dockerfile
+    runs-on: ubuntu-latest
+    outputs:
+      e2e-tests-dockerfile: ${{ steps.filter.outputs.e2e-tests-dockerfile }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            e2e-tests-dockerfile:
+              - 'e2e-tests.Dockerfile'
+
   e2e-tests:
     runs-on: ubuntu-22.04
-    needs: build-rust-ubuntu
+    needs: [detect-changes, build-rust-ubuntu]
     steps:
       - uses: actions/checkout@v3
 
@@ -165,8 +179,20 @@ jobs:
           path: target/release/
 
       - name: Build e2e tests image
+        env:
+          DOCKERFILE_CHANGED: ${{ needs.detect-changes.outputs.e2e-tests-dockerfile }}
         run: |
-          docker build -t spin-e2e-tests -f e2e-tests.Dockerfile .
+          ## build docker image if e2e-tests.Dockerfile has changed
+          ## or ghcr.io/fermyon/spin-e2e-tests:latest does not exist
+          docker manifest inspect ghcr.io/fermyon/spin-e2e-tests:latest >/dev/null 2>&1 || exit_code=$?
+          if [[ $exit_code -ne 0 ]] || [[ "$DOCKERFILE_CHANGED" == "true" ]]; then
+            docker build -t ghcr.io/fermyon/spin-e2e-tests:latest -f e2e-tests.Dockerfile .
+          else
+            docker pull ghcr.io/fermyon/spin-e2e-tests:latest  
+          fi
+
+          docker tag ghcr.io/fermyon/spin-e2e-tests:latest spin-e2e-tests
+
       - name: Run e2e tests
         run: |
           chmod +x `pwd`/target/release/spin

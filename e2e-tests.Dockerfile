@@ -1,25 +1,29 @@
 FROM ubuntu:22.04
 
 WORKDIR /root
-RUN apt-get update && apt-get install -y wget sudo xz-utils gcc git pkg-config
+RUN apt-get update && apt-get install -y wget sudo xz-utils gcc git pkg-config libssl-dev
 
 # nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-RUN apt-get install -y nodejs npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+RUN apt-get install -y nodejs npm && \
+    rm -rf /var/lib/apt/lists/*
 
 # golang
 RUN wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && \
-    rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz
+    rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.5.linux-amd64.tar.gz && \
+    rm -rf go1.19.5.linux-amd64.tar.gz
 ENV PATH="$PATH:/usr/local/go/bin"
 
 # tinygo
 RUN wget https://github.com/tinygo-org/tinygo/releases/download/v0.25.0/tinygo_0.25.0_amd64.deb && \
     sudo dpkg -i tinygo_0.25.0_amd64.deb && \
-    tinygo env
+    tinygo env && \
+    rm -rf tinygo_0.25.0_amd64.deb
 
 # zig
 RUN wget https://ziglang.org/download/0.10.0/zig-linux-x86_64-0.10.0.tar.xz && \
-    tar -xf zig-linux-x86_64-0.10.0.tar.xz
+    tar -xf zig-linux-x86_64-0.10.0.tar.xz && \
+    rm -rf zig-linux-x86_64-0.10.0.tar.xz
 ENV PATH="$PATH:/root/zig-linux-x86_64-0.10.0"
 
 # grain
@@ -30,7 +34,8 @@ RUN wget https://github.com/grain-lang/grain/releases/download/grain-v0.5.4/grai
 RUN wget https://github.com/fermyon/spin/releases/download/canary/spin-canary-linux-amd64.tar.gz && \
     tar -xvf spin-canary-linux-amd64.tar.gz && \
     ls -ltr && \
-    mv spin /usr/local/bin/spin
+    mv spin /usr/local/bin/spin && \
+    rm -rf spin-canary-linux-amd64.tar.gz
 
 # # rust
 ENV RUSTUP_HOME=/usr/local/rustup \
