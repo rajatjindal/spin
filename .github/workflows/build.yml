@@ -180,7 +180,7 @@ jobs:
 
       - name: Build e2e tests image
         env:
-          DOCKERFILE_CHANGED=${{ needs.changes.outputs.e2e-tests-dockerfile }}
+          DOCKERFILE_CHANGED: ${{ needs.changes.outputs.e2e-tests-dockerfile }}
         run: |
           ## build docker image if e2e-tests.Dockerfile has changed or ghcr.io/fermyon/spin-e2e-tests:latest does not exist
           docker manifest inspect ghcr.io/rajatjindal/fermyon-cloud-preview:v0.0.1 >/dev/null 2>&1 || exit_code=$?
