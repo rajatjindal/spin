@@ -60,6 +60,33 @@ pub fn install_plugins(plugins: Vec<&str>) -> Result<Output> {
     Ok(output)
 }
 
+pub fn registry_push(appname: &str, registry_app_url: &str) -> Result<Output> {
+    let appdir = appdir(appname);
+    utils::run(
+        vec!["spin", "registry", "push", registry_app_url, "--insecure"],
+        Some(&appdir),
+        None,
+    )
+}
+
+// use docker login until https://github.com/fermyon/spin/issues/1211
+pub fn registry_login(registry_url: &str, username: &str, password: &str) -> Result<Output> {
+    utils::run(
+        vec![
+            "spin",
+            "registry",
+            "login",
+            "-u",
+            username,
+            "-p",
+            password,
+            registry_url,
+        ],
+        None,
+        None,
+    )
+}
+
 pub fn build_app(appname: &str) -> Result<Output> {
     let appdir = appdir(appname);
     utils::run(vec!["spin", "build"], Some(&appdir), None)
@@ -86,5 +113,12 @@ pub async fn stop_app_process(process: &mut tokio::process::Child) -> Result<(),
     match process.wait().await {
         Ok(_) => Ok(()),
         Err(e) => Err(anyhow::Error::msg(e)),
+    }
+}
+
+pub fn version() -> Result<String> {
+    match utils::run(vec!["spin", "--version"], None, None) {
+        Ok(output) => Ok(format!("{:#?}", std::str::from_utf8(&output.stdout)?)),
+        Err(err) => Err(err),
     }
 }
