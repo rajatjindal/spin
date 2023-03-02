@@ -1335,6 +1335,7 @@ dependencies = [
  "nix 0.26.2",
  "regex",
  "reqwest",
+ "soft",
  "tokio",
  "url",
 ]
@@ -4265,6 +4266,11 @@ dependencies = [
  "libc",
  "winapi",
 ]
+
+[[package]]
+name = "soft"
+version = "0.1.1"
+source = "git+https://github.com/rajatjindal/soft?branch=error#f0da93c8de251c0919b75708b143c417c91799a7"
 
 [[package]]
 name = "spin"

@@ -4,6 +4,7 @@ pub mod all {
     use e2e_testing::asserts::assert_http_response;
     use e2e_testing::controller::Controller;
     use e2e_testing::metadata_extractor::AppMetadata;
+    use e2e_testing::spin;
     use e2e_testing::testcase::TestCaseBuilder;
     use e2e_testing::utils;
     use std::time::Duration;
@@ -806,7 +807,7 @@ pub mod all {
                 get_url(metadata.base.as_str(), "/typescript").as_str(),
                 200,
                 &[],
-                Some("Hello from TS-SDK"),
+                Some("Hello from TS-K"),
             )
             .await?;
 
@@ -826,6 +827,16 @@ pub mod all {
             .build()
             .unwrap();
 
-        tc.run(controller).await.unwrap()
+        let version = match spin::version() {
+            Ok(version) => version,
+            Err(err) => {
+                println!("{}", err);
+                "".to_string()
+            }
+        };
+        let msg = format!("app using a wasm module built by 'spin version 0.9.0 (a99ed51 2023-02-16)' no longer works with {}", version);
+        if let Err(e) = tc.run(controller).await {
+            panic!("{}\nError: {}", msg, e)
+        }
     }
 }

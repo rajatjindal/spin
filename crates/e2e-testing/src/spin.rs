@@ -115,3 +115,10 @@ pub async fn stop_app_process(process: &mut tokio::process::Child) -> Result<(),
         Err(e) => Err(anyhow::Error::msg(e)),
     }
 }
+
+pub fn version() -> Result<String> {
+    match utils::run(vec!["spin", "--version"], None, None) {
+        Ok(output) => Ok(format!("{:#?}", std::str::from_utf8(&output.stdout)?)),
+        Err(err) => Err(err),
+    }
+}

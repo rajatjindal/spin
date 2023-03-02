@@ -153,7 +153,6 @@ impl TestCase {
                 e
             ),
         }
-
         assertions_result
     }
 }
