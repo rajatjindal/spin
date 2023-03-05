@@ -13,6 +13,11 @@ use std::{
     sync::Arc,
 };
 
+use crate::{
+    routes::{RoutePattern, Router},
+    spin::SpinHttpExecutor,
+    wagi::WagiHttpExecutor,
+};
 use anyhow::{Context, Error, Result};
 use async_trait::async_trait;
 use clap::Args;
@@ -25,18 +30,13 @@ use hyper::{
     Body, Request, Response, Server,
 };
 use serde::{Deserialize, Serialize};
+use spin_analytics::analytics::RecordBuilder;
 use spin_trigger::{TriggerAppEngine, TriggerExecutor};
+pub use tls::TlsConfig;
 use tls_listener::TlsListener;
 use tokio::net::{TcpListener, TcpStream};
 use tokio_rustls::server::TlsStream;
 use tracing::log;
-
-use crate::{
-    routes::{RoutePattern, Router},
-    spin::SpinHttpExecutor,
-    wagi::WagiHttpExecutor,
-};
-pub use tls::TlsConfig;
 pub use wagi::WagiTriggerConfig;
 
 wit_bindgen_wasmtime::import!({paths: ["../../wit/ephemeral/spin-http.wit"], async: *});
@@ -225,12 +225,19 @@ impl HttpTrigger {
             };
         }
 
+        let mut span = RecordBuilder::default()
+            .path(path.to_string())
+            .build()
+            .unwrap();
         // Route to app component
         match self.router.route(path) {
             Ok(component_id) => {
                 let trigger = self.component_trigger_configs.get(component_id).unwrap();
-
                 let executor = trigger.executor.as_ref().unwrap_or(&HttpExecutorType::Spin);
+
+                span.set_component_id(component_id.to_string())
+                    .set_trigger_type(format!("{:?}", executor))
+                    .start_recording();
 
                 let res = match executor {
                     HttpExecutorType::Spin => {
@@ -263,14 +270,23 @@ impl HttpTrigger {
                     }
                 };
                 match res {
-                    Ok(res) => Ok(res),
+                    Ok(res) => {
+                        span.set_execution_status("ok".to_string())
+                            .set_http_status_code(res.status().as_u16());
+
+                        Ok(res)
+                    }
                     Err(e) => {
+                        span.set_execution_status("err".to_string());
                         log::error!("Error processing request: {:?}", e);
                         Self::internal_error(None)
                     }
                 }
             }
-            Err(_) => Self::not_found(),
+            Err(_) => {
+                span.set_execution_status("not-found".to_string());
+                Self::not_found()
+            }
         }
     }
 

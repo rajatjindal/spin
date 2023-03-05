@@ -1,0 +1,12 @@
+[package]
+name = "spin-analytics"
+version = { workspace = true }
+authors = { workspace = true }
+edition = { workspace = true }
+
+[lib]
+doctest = false
+
+[dependencies]
+derive_builder = "0.12.0"
+chrono = "0.4"

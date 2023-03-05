@@ -1,0 +1,7 @@
+{
+    "trigger_type": "http|redis",
+    "component_id": "from-spin-toml",
+    "execution_time": "duration",
+    "execution_status": "ok|err",
+    "http_status_code": "200|400|500"
+}
