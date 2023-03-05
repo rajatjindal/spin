@@ -4298,6 +4298,8 @@ version = "0.11.0-pre0"
 dependencies = [
  "chrono",
  "derive_builder 0.12.0",
+ "spin-key-value",
+ "spin-key-value-sqlite",
 ]
 
 [[package]]
@@ -4619,6 +4621,7 @@ dependencies = [
  "futures",
  "redis",
  "serde",
+ "spin-analytics",
  "spin-app",
  "spin-core",
  "spin-testing",

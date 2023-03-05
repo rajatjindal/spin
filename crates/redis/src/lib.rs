@@ -4,14 +4,14 @@ mod spin;
 
 use std::collections::HashMap;
 
+use crate::spin::SpinRedisExecutor;
 use anyhow::{anyhow, Context, Result};
 use async_trait::async_trait;
 use futures::StreamExt;
 use redis::{Client, ConnectionLike};
 use serde::{de::IgnoredAny, Deserialize, Serialize};
+use spin_analytics::analytics::RecordBuilder;
 use spin_trigger::{cli::NoArgs, TriggerAppEngine, TriggerExecutor};
-
-use crate::spin::SpinRedisExecutor;
 
 wit_bindgen_wasmtime::import!({paths: ["../../wit/ephemeral/spin-redis.wit"], async: *});
 
@@ -110,14 +110,32 @@ impl RedisTrigger {
     // Handle the message.
     async fn handle(&self, msg: redis::Msg) -> Result<()> {
         let channel = msg.get_channel_name();
+        let mut span = RecordBuilder::default()
+            .path(channel.to_string())
+            .build()
+            .unwrap();
+
+        span.start_recording();
+
         tracing::info!("Received message on channel {:?}", channel);
 
         if let Some(component_id) = self.channel_components.get(channel) {
+            span.set_component_id(component_id.to_string());
             tracing::trace!("Executing Redis component {component_id:?}");
             let executor = SpinRedisExecutor;
-            executor
+            let result = executor
                 .execute(&self.engine, component_id, channel, msg.get_payload_bytes())
-                .await?
+                .await;
+            match result {
+                Ok(()) => {
+                    span.set_execution_status("ok".to_string());
+                    return Ok(());
+                }
+                Err(err) => {
+                    span.set_execution_status("err".to_string());
+                    return Err(err);
+                }
+            }
         } else {
             tracing::debug!("No subscription found for {:?}", channel);
         }

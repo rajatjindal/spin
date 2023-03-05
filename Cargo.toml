@@ -116,7 +116,8 @@ members = [
   "crates/trigger",
   "sdk/rust",
   "sdk/rust/macro",
-  "crates/e2e-testing"
+  "crates/e2e-testing",
+  "crates/analytics"
 ]
 
 [workspace.dependencies]

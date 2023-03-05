@@ -1,12 +1,9 @@
+use std::path::PathBuf;
+
 use chrono::{DateTime, Duration, Utc};
 use derive_builder::Builder;
-// use anyhow::Result;
-// use http::{Method, StatusCode};
-// use spin_sdk::{
-//     http::{Request, Response},
-//     http_component,
-//     key_value::{Error, Store},
-// };
+use spin_key_value_sqlite::{DatabaseLocation, KeyValueSqlite};
+use spin_key_value::StoreManager;
 
 /// Represents a Record
 #[derive(Builder, Clone, Debug)]
@@ -74,9 +71,11 @@ impl Record {
 impl Drop for Record {
     fn drop(&mut self) {
         self.set_execution_time(Utc::now() - self.start_time);
-        println!("inside drop {:?}", self);
-        // let store = Store::open_default()?;
-        // store.set("first-key", "first-value")?;
-        // println!("inside drop")
+        let store = KeyValueSqlite::new(DatabaseLocation::Path(PathBuf::from("./analytics.db"))).get("analytics");
+        store.
+        match store.set(self.path.as_str(), format!("{:?}", self)) {
+            Ok(_) => {}
+            Err(err) => println!("error when inserting {:?}", err),
+        }
     }
 }
