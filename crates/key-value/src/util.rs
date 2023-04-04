@@ -234,4 +234,78 @@ impl Store for CachingStore {
             .into_iter()
             .collect())
     }
+
+    async fn get_keys_with_prefix(&self, prefix: &str) -> Result<Vec<String>, Error> {
+        // Get the keys from the backing store, remove any which are `None` in the cache, and add any which are
+        // `Some` in the cache, returning the result.
+        //
+        // Note that we don't bother caching the result, since we expect this function won't be called more than
+        // once for a given store in normal usage, and maintaining consistency would be complicated.
+
+        let mut state = self.state.lock().await;
+
+        // Flush any outstanding writes first in case entries have been popped off the end of the LRU cache prior
+        // to their corresponding writes reaching the backing store.
+        state.flush().await?;
+
+        Ok(self
+            .inner
+            .get_keys()
+            .await?
+            .into_iter()
+            .filter(|k| k.starts_with(prefix))
+            .filter(|k| {
+                state
+                    .cache
+                    .peek(k)
+                    .map(|v| v.as_ref().is_some())
+                    .unwrap_or(true)
+            })
+            .chain(
+                state
+                    .cache
+                    .iter()
+                    .filter_map(|(k, v)| v.as_ref().map(|_| k.to_owned())),
+            )
+            .collect::<HashSet<_>>()
+            .into_iter()
+            .collect())
+    }
+
+    async fn get_all_with_prefix(&self, prefix: &str) -> Result<Vec<(String, Vec<u8>)>, Error> {
+        // Get the keys from the backing store, remove any which are `None` in the cache, and add any which are
+        // `Some` in the cache, returning the result.
+        //
+        // Note that we don't bother caching the result, since we expect this function won't be called more than
+        // once for a given store in normal usage, and maintaining consistency would be complicated.
+
+        let mut state = self.state.lock().await;
+
+        // Flush any outstanding writes first in case entries have been popped off the end of the LRU cache prior
+        // to their corresponding writes reaching the backing store.
+        state.flush().await?;
+
+        Ok(self
+            .inner
+            .get_keys()
+            .await?
+            .into_iter()
+            .filter(|k| k.starts_with(prefix))
+            .filter(|k| {
+                state
+                    .cache
+                    .peek(k)
+                    .map(|v| v.as_ref().is_some())
+                    .unwrap_or(true)
+            })
+            .chain(
+                state
+                    .cache
+                    .iter()
+                    .filter_map(|(k, v)| v.as_ref().map(|_| k.to_owned())),
+            )
+            .collect::<HashSet<_>>()
+            .into_iter()
+            .collect())
+    }
 }

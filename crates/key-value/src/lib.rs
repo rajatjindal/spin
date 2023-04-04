@@ -33,6 +33,10 @@ pub trait Store: Sync + Send {
     async fn exists(&self, key: &str) -> Result<bool, Error>;
 
     async fn get_keys(&self) -> Result<Vec<String>, Error>;
+
+    async fn get_keys_with_prefix(&self, prefix: &str) -> Result<Vec<String>, Error>;
+
+    async fn get_all_with_prefix(&self, prefix: &str) -> Result<Vec<(String, Vec<u8>)>, Error>;
 }
 
 pub struct KeyValueDispatch {

@@ -1,0 +1,168 @@
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 55778 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 55780 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 56068 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 56081 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 56068 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 56081 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 56068 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 56081 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 56068 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 56081 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 56068 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 56081 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 56068 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 56081 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 56068 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 56081 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 55777 rajatjindal spin watch --listen 127.0.0.1:63949
+ \-+= 56068 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+   \--- 56081 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949

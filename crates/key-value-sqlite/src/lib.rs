@@ -135,6 +135,22 @@ impl Store for SqliteStore {
                 .collect()
         })
     }
+
+    async fn get_keys_with_prefix(&self, prefix: &str) -> Result<Vec<String>, Error> {
+        task::block_in_place(|| {
+            self.connection
+                .lock()
+                .unwrap()
+                .prepare_cached(
+                    "SELECT key FROM spin_key_value WHERE store=$1 AND key like '%' || $2 || '%';",
+                )
+                .map_err(log_error)?
+                .query_map([&self.name, prefix], |row| row.get(0))
+                .map_err(log_error)?
+                .map(|r| r.map_err(log_error))
+                .collect()
+        })
+    }
 }
 
 #[cfg(test)]

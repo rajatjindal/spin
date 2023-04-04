@@ -1,0 +1,658 @@
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 53572 rajatjindal spin build
+       \-+- 53573 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo build --target wasm32-wasi --release
+         \-+- 53684 rajatjindal /Library/Developer/CommandLineTools/usr/bin/git fetch --force --update-head-ok https://github.com/rust-lang/crates.io-index +HEAD:refs/remotes/origin/HEAD
+           \--- 53685 rajatjindal /usr/bin/ssh -o SendEnv=GIT_PROTOCOL git@github.com git-upload-pack '/rust-lang/crates.io-index'
+
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 53572 rajatjindal spin build
+       \-+- 53573 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo build --target wasm32-wasi --release
+         \-+- 53684 rajatjindal /Library/Developer/CommandLineTools/usr/bin/git fetch --force --update-head-ok https://github.com/rust-lang/crates.io-index +HEAD:refs/remotes/origin/HEAD
+           \--- 53685 rajatjindal /usr/bin/ssh -o SendEnv=GIT_PROTOCOL git@github.com git-upload-pack '/rust-lang/crates.io-index'
+
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 53572 rajatjindal spin build
+       \--- 53573 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo build --target wasm32-wasi --release
+
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 53572 rajatjindal spin build
+       \-+- 53573 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo build --target wasm32-wasi --release
+         |--- 53835 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name tinyvec --edition=2018 /Users/rajatjindal/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debug-assertions=off --cfg feature="alloc" --cfg feature="default" --cfg feature="tinyvec_macros" -C metadata=6d43b7177e2227ee -C extra-filename=-6d43b7177e2227ee --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --extern tinyvec_macros=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libtinyvec_macros-d14f87bd1939dd2a.rmeta --cap-lints allow
+         |--- 53923 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name bytes --edition=2018 /Users/rajatjindal/.cargo/registry/src/github.com-1ecc6299db9ec823/bytes-1.4.0/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debug-assertions=off --cfg feature="default" --cfg feature="std" -C metadata=45174d3ee18feec1 -C extra-filename=-45174d3ee18feec1 --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --cap-lints allow
+         |--- 54103 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name proc_macro2 --edition=2018 /Users/rajatjindal/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.56/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debug-assertions=off --cfg feature="default" --cfg feature="proc-macro" -C metadata=f1fe79c97c4fa5f6 -C extra-filename=-f1fe79c97c4fa5f6 --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --extern unicode_ident=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libunicode_ident-832146d9c282d767.rmeta --cap-lints allow --cfg use_proc_macro --cfg wrap_proc_macro --cfg proc_macro_span
+         |--- 54182 rajatjindal (rustc)
+         |--- 54192 rajatjindal (rustc)
+         |--- 54213 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name bytes --edition=2018 /Users/rajatjindal/.cargo/registry/src/github.com-1ecc6299db9ec823/bytes-1.4.0/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no --cfg feature="default" --cfg feature="std" -C metadata=e8d3348d82fddd7e -C extra-filename=-e8d3348d82fddd7e --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps --target wasm32-wasi -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --cap-lints allow
+         |--- 54236 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/build/unicase-9b74a482373319e7/build-script-build
+         |--- 54266 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name build_script_build --edition=2021 /Users/rajatjindal/.cargo/git/checkouts/spin-91500438ac5656d2/df99be2/sdk/rust/build.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type bin --emit=dep-info,link -C embed-bitcode=no -C debug-assertions=off --cfg feature="default" --cfg feature="export-sdk-language" -C metadata=12cf192273c1bb07 -C extra-filename=-12cf192273c1bb07 --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/build/spin-sdk-12cf192273c1bb07 -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --cap-lints allow
+         |-+- 54310 rajatjindal (build-script-bui)
+         | \--- 54371 rajatjindal (rustc)
+         |--- 54377 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name http --edition=2018 /Users/rajatjindal/.cargo/registry/src/github.com-1ecc6299db9ec823/http-0.2.9/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debug-assertions=off -C metadata=3c4a48bc63246b49 -C extra-filename=-3c4a48bc63246b49 --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --extern bytes=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libbytes-45174d3ee18feec1.rmeta --extern fnv=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libfnv-5c34605d61b92f2a.rmeta --extern itoa=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libitoa-65546099a07c450b.rmeta --cap-lints allow
+         |--- 54385 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name fnv /Users/rajatjindal/.cargo/registry/src/github.com-1ecc6299db9ec823/fnv-1.0.7/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no --cfg feature="default" --cfg feature="std" -C metadata=fda109de5be89011 -C extra-filename=-fda109de5be89011 --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps --target wasm32-wasi -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --cap-lints allow
+         \--- 54386 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name quote --edition=2018 /Users/rajatjindal/.cargo/registry/src/github.com-1ecc6299db9ec823/quote-1.0.26/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debug-assertions=off --cfg feature="default" --cfg feature="proc-macro" -C metadata=6eeae18390346cde -C extra-filename=-6eeae18390346cde --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --extern proc_macro2=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libproc_macro2-f1fe79c97c4fa5f6.rmeta --cap-lints allow
+
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 53572 rajatjindal spin build
+       \-+- 53573 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo build --target wasm32-wasi --release
+         |--- 54490 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name syn --edition=2021 /Users/rajatjindal/.cargo/registry/src/github.com-1ecc6299db9ec823/syn-2.0.13/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debug-assertions=off --cfg feature="clone-impls" --cfg feature="default" --cfg feature="derive" --cfg feature="full" --cfg feature="parsing" --cfg feature="printing" --cfg feature="proc-macro" --cfg feature="quote" --cfg feature="visit-mut" -C metadata=964e8fc70ec1f492 -C extra-filename=-964e8fc70ec1f492 --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --extern proc_macro2=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libproc_macro2-f1fe79c97c4fa5f6.rmeta --extern quote=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libquote-6eeae18390346cde.rmeta --extern unicode_ident=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libunicode_ident-832146d9c282d767.rmeta --cap-lints allow
+         |--- 54491 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name syn --edition=2018 /Users/rajatjindal/.cargo/registry/src/github.com-1ecc6299db9ec823/syn-1.0.109/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debug-assertions=off --cfg feature="clone-impls" --cfg feature="default" --cfg feature="derive" --cfg feature="full" --cfg feature="parsing" --cfg feature="printing" --cfg feature="proc-macro" --cfg feature="quote" -C metadata=7f2c3158bcc392fa -C extra-filename=-7f2c3158bcc392fa --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --extern proc_macro2=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libproc_macro2-f1fe79c97c4fa5f6.rmeta --extern quote=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libquote-6eeae18390346cde.rmeta --extern unicode_ident=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libunicode_ident-832146d9c282d767.rmeta --cap-lints allow
+         \--- 54511 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name wit_parser --edition=2018 /Users/rajatjindal/.cargo/git/checkouts/wit-bindgen-f98ccff846621481/cb871cf/crates/parser/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debug-assertions=off -C metadata=f2b66370951ddd55 -C extra-filename=-f2b66370951ddd55 --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --extern anyhow=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libanyhow-c6c3d22c12238f00.rmeta --extern id_arena=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libid_arena-de5d795669571207.rmeta --extern pulldown_cmark=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libpulldown_cmark-92d8a6e0dcdc63ec.rmeta --extern unicode_normalization=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libunicode_normalization-cd22b13ff87a6651.rmeta --extern unicode_xid=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libunicode_xid-2daa47d90fcebd1d.rmeta --cap-lints allow
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 53572 rajatjindal spin build
+       \-+- 53573 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo build --target wasm32-wasi --release
+         |--- 54490 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name syn --edition=2021 /Users/rajatjindal/.cargo/registry/src/github.com-1ecc6299db9ec823/syn-2.0.13/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debug-assertions=off --cfg feature="clone-impls" --cfg feature="default" --cfg feature="derive" --cfg feature="full" --cfg feature="parsing" --cfg feature="printing" --cfg feature="proc-macro" --cfg feature="quote" --cfg feature="visit-mut" -C metadata=964e8fc70ec1f492 -C extra-filename=-964e8fc70ec1f492 --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --extern proc_macro2=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libproc_macro2-f1fe79c97c4fa5f6.rmeta --extern quote=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libquote-6eeae18390346cde.rmeta --extern unicode_ident=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libunicode_ident-832146d9c282d767.rmeta --cap-lints allow
+         \--- 54491 rajatjindal (rustc)
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 53572 rajatjindal spin build
+       \-+- 53573 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo build --target wasm32-wasi --release
+         \--- 54667 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rustc --crate-name spin_sdk --edition=2021 /Users/rajatjindal/.cargo/git/checkouts/spin-91500438ac5656d2/df99be2/sdk/rust/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no --cfg feature="default" --cfg feature="export-sdk-language" -C metadata=04d5ae6dbc42ed4b -C extra-filename=-04d5ae6dbc42ed4b --out-dir /Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps --target wasm32-wasi -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps -L dependency=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps --extern anyhow=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps/libanyhow-1550cf8e7d88c901.rmeta --extern bytes=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps/libbytes-e8d3348d82fddd7e.rmeta --extern form_urlencoded=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps/libform_urlencoded-5762f14f2c32155c.rmeta --extern http=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps/libhttp-0d710174fc2bb4e1.rmeta --extern spin_macro=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/release/deps/libspin_macro-2ff27eeabadf627f.dylib --extern thiserror=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps/libthiserror-4db9a013ed48f93a.rmeta --extern wit_bindgen_rust=/Users/rajatjindal/go/src/github.com/fermyon/spin/tests/testcases/http-rust-generated/target/wasm32-wasi/release/deps/libwit_bindgen_rust-6bf1666ab412c14a.rmeta --cap-lints allow
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \-+= 54756 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+         \--- 54758 rajatjindal /usr/local/bin/spin trigger http --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
+
+-+= 53323 rajatjindal /Library/Developer/CommandLineTools/usr/bin/make test-kv
+ \-+- 53325 rajatjindal /Users/rajatjindal/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo test --test spin_watch_tests --features e2e-tests --no-fail-fast -- spin_watch_tests::spin_watch_works --nocapture
+   \-+- 53478 rajatjindal /Users/rajatjindal/go/src/github.com/fermyon/spin/target/debug/deps/spin_watch_tests-7d8953174cf5ebf7 spin_watch_tests::spin_watch_works --nocapture
+     \-+- 54755 rajatjindal spin watch --listen 127.0.0.1:63949
+       \--= 54768 rajatjindal /usr/local/bin/spin build --up -f spin.toml --listen 127.0.0.1:63949
