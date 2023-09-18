@@ -100,4 +100,4 @@ jobs:
       - name: Copy Binary to S3 - ${{ env.RELEASE_VERSION }}
         if: runner.os == 'linux'
         run: |
-          aws s3 cp _dist/spin-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz ${{ secrets.SPIN_RELEASE_ARTIFACTS }}/spin-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz
+          aws s3 cp _dist/spin-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz ${{ secrets.SPIN_RELEASE_ARTIFACTS_REPO }}/spin-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz
