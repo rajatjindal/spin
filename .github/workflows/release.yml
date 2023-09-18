@@ -87,10 +87,10 @@ jobs:
           echo "RUNNER_OS=$OS" >> $GITHUB_ENV
 
       - name: simulate release
-        run: mkdir _dist && touch spin-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz
+        run: mkdir _dist && touch _dist/spin-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz
 
       - name: Configure AWS Credentials
-        if: runner.os == 'linux'
+        if: runner.os == 'linux' && matrix.config.arch == 'amd64'
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.INFRA_NAMESPACE }}-${{ secrets.AWS_REGION }}-spin-release-artifacts
@@ -98,6 +98,6 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Copy Binary to S3 - ${{ env.RELEASE_VERSION }}
-        if: runner.os == 'linux'
+        if: runner.os == 'linux' && matrix.config.arch == 'amd64'
         run: |
           aws s3 cp _dist/spin-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz ${{ secrets.SPIN_RELEASE_ARTIFACTS_REPO }}/spin-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz
