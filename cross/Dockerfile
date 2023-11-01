@@ -17,6 +17,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rust-setup.sh
 RUN chmod +x rust-setup.sh
 RUN ./rust-setup.sh -y
 ENV PATH=$PATH:/root/.cargo/bin
+RUN ls -ltr /root/.cargo/bin/
 
 # See https://github.com/fermyon/spin/issues/1786 for the upstream issue requiring this polyfill.
 RUN --mount=type=bind,from=jorgeprendes420/gcc_vld1q_s8_x4_polyfill,source=/polyfill.sh,target=/polyfill.sh /polyfill.sh
