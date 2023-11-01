@@ -53,8 +53,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: spin-ubuntu-latest
-          path: target/release/spin
+          path: target/x86_64-unknown-linux-musl/release/spin
 
       - name: check ldd
-        run: ldd target/release/spin
+        run: ldd target/x86_64-unknown-linux-musl/release/spin
       
