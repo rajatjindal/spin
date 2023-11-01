@@ -39,12 +39,6 @@ jobs:
           rust-wasm: true
           rust-cache: true
 
-      - name: "Archive executable artifact"
-        uses: actions/upload-artifact@v3
-        with:
-          name: spin-ubuntu-latest
-          path: target/release/spin
-
       - name: "setup tools"
         shell: bash
         run: sudo apt-get install -y --no-install-recommends asciidoctor zsh xz-utils liblz4-tool musl-tools brotli zstd
@@ -57,4 +51,4 @@ jobs:
           echo "TARGET_DIR=./target/x86_64-unknown-linux-musl" >> $GITHUB_ENV
 
       - name: Build release binary
-        run: cross build --verbose --release
+        run: cross build --verbose --release --target x86_64-unknown-linux-musl
