@@ -39,10 +39,6 @@ jobs:
           rust-wasm: true
           rust-cache: true
 
-      - name: "setup tools"
-        shell: bash
-        run: sudo apt-get install -y --no-install-recommends asciidoctor zsh xz-utils liblz4-tool musl-tools brotli zstd
-
       - name: Use Cross
         shell: bash
         run: |
@@ -51,7 +47,7 @@ jobs:
           echo "TARGET_DIR=./target/x86_64-unknown-linux-musl" >> $GITHUB_ENV
 
       - name: Build release binary
-        run: BUILD_SPIN_EXAMPLES=false cross build --verbose --release --target x86_64-unknown-linux-musl --features openssl/vendored
+        run: cross build --verbose --release --target x86_64-unknown-linux-musl --features openssl/vendored
 
       - name: "Archive executable artifact"
         uses: actions/upload-artifact@v3
