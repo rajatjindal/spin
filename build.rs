@@ -105,15 +105,17 @@ fn build_wasm_test_program(name: &'static str, root: &'static str) {
 }
 
 fn has_wasm32_wasi_target() -> bool {
-    let output = run(vec!["rustup", "target", "list", "--installed"], None, None);
-    let output = std::str::from_utf8(&output.stdout).unwrap();
-    for line in output.lines() {
-        if line == "wasm32-wasi" {
-            return true;
-        }
-    }
+    // let output = run(vec!["rustup", "target", "list", "--installed"], None, None);
+    // let output = std::str::from_utf8(&output.stdout).unwrap();
+    // for line in output.lines() {
+    //     if line == "wasm32-wasi" {
+    //         return true;
+    //     }
+    // }
 
-    false
+    // false
+
+    true
 }
 
 fn cargo_build(dir: &str) {
