@@ -15,7 +15,6 @@ ENV LIBSECCOMP_LIB_PATH="${CROSS_SYSROOT}/lib"
 RUN apk add zlib-dev zlib-static curl
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rust-setup.sh
 RUN chmod +x rust-setup.sh
-RUN which rustup
 RUN ./rust-setup.sh -y
 RUN which rustup
 
