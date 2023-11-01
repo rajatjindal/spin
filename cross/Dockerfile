@@ -12,7 +12,8 @@ ENV LIBSECCOMP_LINK_TYPE="static"
 ENV LIBSECCOMP_LIB_PATH="${CROSS_SYSROOT}/lib"
 
 # wws needs zlib (though libssh2-sys)
-RUN apk add zlib-dev zlib-static
+RUN apk add zlib-dev zlib-static curl
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # See https://github.com/fermyon/spin/issues/1786 for the upstream issue requiring this polyfill.
 RUN --mount=type=bind,from=jorgeprendes420/gcc_vld1q_s8_x4_polyfill,source=/polyfill.sh,target=/polyfill.sh /polyfill.sh
