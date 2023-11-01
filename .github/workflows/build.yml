@@ -52,3 +52,13 @@ jobs:
 
       - name: Build release binary
         run: BUILD_SPIN_EXAMPLES=false cross build --verbose --release --target x86_64-unknown-linux-musl --features openssl/vendored
+
+      - name: "Archive executable artifact"
+        uses: actions/upload-artifact@v3
+        with:
+          name: spin-ubuntu-latest
+          path: target/release/spin
+
+      - name: check ldd
+        run: ldd target/release/spin
+      
