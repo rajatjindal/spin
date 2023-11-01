@@ -23,7 +23,7 @@ concurrency:
 env:
   CARGO_TERM_COLOR: always
 jobs:
-  build spin:
+  build-spin:
     name: build spin
     runs-on: "ubuntu-latest"
     permissions:
