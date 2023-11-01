@@ -16,6 +16,7 @@ RUN apk add zlib-dev zlib-static curl
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rust-setup.sh
 RUN chmod +x rust-setup.sh
 RUN ./rust-setup.sh -y
+RUN which rustup
 
 # See https://github.com/fermyon/spin/issues/1786 for the upstream issue requiring this polyfill.
 RUN --mount=type=bind,from=jorgeprendes420/gcc_vld1q_s8_x4_polyfill,source=/polyfill.sh,target=/polyfill.sh /polyfill.sh
