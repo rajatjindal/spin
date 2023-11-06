@@ -47,7 +47,7 @@ fn main() {
         let current_toolchain = current_toolchain.split_once('-').unwrap().0;
 
         // Default toolchain: e.g. "stable (default)", "nightly", "1.60-x86_64-pc-windows-msvc"
-        let default_toolchain = run(vec!["/root/.cargo/bin/rustup", "default"], None, None);
+        let default_toolchain = run(vec!["rustup", "default"], None, None);
         let default_toolchain = std::str::from_utf8(&default_toolchain.stdout).unwrap();
         let default_toolchain = default_toolchain.split(['-', ' ']).next().unwrap();
 
@@ -105,7 +105,7 @@ fn build_wasm_test_program(name: &'static str, root: &'static str) {
 }
 
 fn has_wasm32_wasi_target() -> bool {
-    let output = run(vec!["/root/.cargo/bin/rustup", "target", "list", "--installed"], None, None);
+    let output = run(vec!["rustup", "target", "list", "--installed"], None, None);
     let output = std::str::from_utf8(&output.stdout).unwrap();
     for line in output.lines() {
         if line == "wasm32-wasi" {
@@ -180,7 +180,7 @@ fn get_os_process() -> String {
     if cfg!(target_os = "windows") {
         String::from("powershell.exe")
     } else {
-        String::from("bash")
+        String::from("sh")
     }
 }
 
