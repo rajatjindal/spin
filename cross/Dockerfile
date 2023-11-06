@@ -19,6 +19,8 @@ RUN ./rust-setup.sh -y
 ENV PATH=$PATH:/root/.cargo/bin
 RUN ls -ltr /root/.cargo/bin/
 
+RUN chown -R 1001:127 /root/.cargo/
+
 # See https://github.com/fermyon/spin/issues/1786 for the upstream issue requiring this polyfill.
 RUN --mount=type=bind,from=jorgeprendes420/gcc_vld1q_s8_x4_polyfill,source=/polyfill.sh,target=/polyfill.sh /polyfill.sh
 
