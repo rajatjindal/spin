@@ -24,3 +24,6 @@ RUN --mount=type=bind,from=jorgeprendes420/gcc_vld1q_s8_x4_polyfill,source=/poly
 
 RUN apt-get -y update && \
     apt-get install -y pkg-config protobuf-compiler
+
+RUN cat /root/.cargo/bin/rustup
+RUN /root/.cargo/bin/rustup
