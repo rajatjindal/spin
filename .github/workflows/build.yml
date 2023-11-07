@@ -72,7 +72,7 @@ jobs:
           echo "TARGET_DIR=./target/x86_64-unknown-linux-musl" >> $GITHUB_ENV
 
       - name: Build release binary
-        run: cross build --verbose --release --target x86_64-unknown-linux-musl --features openssl/vendored
+        run: cross build --workspace --verbose --release --target x86_64-unknown-linux-musl --features openssl/vendored --features all-tests
         env:
           CROSS_CONTAINER_UID: 0
           CROSS_CONTAINER_GID: 0
