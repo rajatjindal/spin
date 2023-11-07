@@ -921,7 +921,7 @@ dependencies = [
 [[package]]
 name = "cargo-target-dep"
 version = "0.1.0"
-source = "git+https://github.com/rajatjindal/cargo-target-dep?rev=009b551b7bc0f55cc559bfc6e863242d6c7339f2#009b551b7bc0f55cc559bfc6e863242d6c7339f2"
+source = "git+https://github.com/rajatjindal/cargo-target-dep?rev=dba6eb007d3323ccc8d305a7d088d73c95e2cc81#dba6eb007d3323ccc8d305a7d088d73c95e2cc81"
 dependencies = [
  "glob",
 ]

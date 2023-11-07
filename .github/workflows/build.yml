@@ -68,17 +68,17 @@ jobs:
         shell: bash
         run: |
           cargo install cross
-          echo "TARGET_FLAGS=--target aarch64-unknown-linux-musl" >> $GITHUB_ENV
-          echo "TARGET_DIR=./target/aarch64-unknown-linux-musl" >> $GITHUB_ENV
+          echo "TARGET_FLAGS=--target x86_64-unknown-linux-musl" >> $GITHUB_ENV
+          echo "TARGET_DIR=./target/x86_64-unknown-linux-musl" >> $GITHUB_ENV
 
       - name: Build release binary
-        run: cross build --workspace --verbose --release --target aarch64-unknown-linux-musl --features openssl/vendored --features all-tests
+        run: cross build --workspace --verbose --release --target x86_64-unknown-linux-musl --features openssl/vendored --features all-tests
         env:
           CROSS_CONTAINER_UID: 0
           CROSS_CONTAINER_GID: 0
 
       - name: check ldd
-        run: ldd target/aarch64-unknown-linux-musl/release/spin
+        run: ldd target/x86_64-unknown-linux-musl/release/spin
    
   # ## This is separated out to remove e2e-tests dependency on windows/mac builds
   # build-rust-ubuntu:

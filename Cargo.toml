@@ -88,7 +88,7 @@ which = "4.2.5"
 e2e-testing = { path = "crates/e2e-testing" }
 
 [build-dependencies]
-cargo-target-dep = { git = "https://github.com/rajatjindal/cargo-target-dep", rev = "009b551b7bc0f55cc559bfc6e863242d6c7339f2" }
+cargo-target-dep = { git = "https://github.com/rajatjindal/cargo-target-dep", rev = "dba6eb007d3323ccc8d305a7d088d73c95e2cc81" }
 vergen = { version = "^8.2.1", default-features = false, features = [
   "build",
   "git",
