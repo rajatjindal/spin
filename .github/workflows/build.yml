@@ -76,7 +76,13 @@ jobs:
         env:
           CROSS_CONTAINER_UID: 0
           CROSS_CONTAINER_GID: 0
-
+      
+      - name: "Archive executable artifact"
+        uses: actions/upload-artifact@v3
+        with:
+          name: spin-aarch-linux-latest
+          path: target/aarch64-unknown-linux-musl/release/spin
+  
       - name: check ldd
         run: ldd target/aarch64-unknown-linux-musl/release/spin
    
