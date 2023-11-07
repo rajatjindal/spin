@@ -180,7 +180,7 @@ fn get_os_process() -> String {
     if cfg!(target_os = "windows") {
         String::from("powershell.exe")
     } else {
-        String::from("bash")
+        String::from("sh")
     }
 }
 
