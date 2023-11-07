@@ -42,12 +42,12 @@ jobs:
       - name: Use Cross
         shell: bash
         run: |
-          sudo cargo install cross
+          sudo /home/ubuntu/.cargo/bin/cargo install cross
           echo "TARGET_FLAGS=--target x86_64-unknown-linux-musl" >> $GITHUB_ENV
           echo "TARGET_DIR=./target/x86_64-unknown-linux-musl" >> $GITHUB_ENV
 
       - name: Build release binary
-        run: sudo cross build --verbose --release --target x86_64-unknown-linux-musl --features openssl/vendored
+        run: sudo /home/ubuntu/.cargo/bin/cross build --verbose --release --target x86_64-unknown-linux-musl --features openssl/vendored
 
       - name: "Archive executable artifact"
         uses: actions/upload-artifact@v3
