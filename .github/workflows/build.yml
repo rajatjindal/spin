@@ -42,7 +42,7 @@ jobs:
       - name: Use Cross
         shell: bash
         run: |
-          cargo install cross
+          sudo cargo install cross
           echo "TARGET_FLAGS=--target x86_64-unknown-linux-musl" >> $GITHUB_ENV
           echo "TARGET_DIR=./target/x86_64-unknown-linux-musl" >> $GITHUB_ENV
 
