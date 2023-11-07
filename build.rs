@@ -47,7 +47,7 @@ fn main() {
         let current_toolchain = current_toolchain.split_once('-').unwrap().0;
 
         // Default toolchain: e.g. "stable (default)", "nightly", "1.60-x86_64-pc-windows-msvc"
-        let default_toolchain = run("rustup".to_string(), vec!["default"], None, None);
+        let default_toolchain = run(vec!["rustup", "default"], None, None);
         let default_toolchain = std::str::from_utf8(&default_toolchain.stdout).unwrap();
         let default_toolchain = default_toolchain.split(['-', ' ']).next().unwrap();
 
@@ -105,7 +105,7 @@ fn build_wasm_test_program(name: &'static str, root: &'static str) {
 }
 
 fn has_wasm32_wasi_target() -> bool {
-    let output = run("rustup".to_string(), vec!["target", "list", "--installed"], None, None);
+    let output = run(vec!["rustup", "target", "list", "--installed"], None, None);
     let output = std::str::from_utf8(&output.stdout).unwrap();
     for line in output.lines() {
         if line == "wasm32-wasi" {
@@ -118,8 +118,8 @@ fn has_wasm32_wasi_target() -> bool {
 
 fn cargo_build(dir: &str) {
     run(
-        "cargo".to_string(),
         vec![
+            "cargo",
             "build",
             "--target",
             "wasm32-wasi",
@@ -137,12 +137,11 @@ fn cargo_build(dir: &str) {
 }
 
 fn run<S: Into<String> + AsRef<std::ffi::OsStr>>(
-    bin: String,
     args: Vec<S>,
     dir: Option<S>,
     env: Option<HashMap<S, S>>,
 ) -> process::Output {
-    let mut cmd = Command::new(bin);
+    let mut cmd = Command::new(get_os_process());
     cmd.stdout(process::Stdio::piped());
     cmd.stderr(process::Stdio::piped());
 
