@@ -91,6 +91,9 @@ jobs:
         env:
           CARGO_INCREMENTAL: 0
           BUILD_SPIN_EXAMPLES: 0
+          CROSS_CONTAINER_UID: 0
+          CROSS_CONTAINER_GID: 0
+          RUSTFLAGS: '-C target-feature=+crt-static -C link-self-contained=yes'
 
       - name: "Archive executable artifact"
         uses: actions/upload-artifact@v3
@@ -116,7 +119,9 @@ jobs:
         env:
           CARGO_INCREMENTAL: 0
           BUILD_SPIN_EXAMPLES: 0
-          RUSTFLAGS: '-C target-feature=+fp16'
+          CROSS_CONTAINER_UID: 0
+          CROSS_CONTAINER_GID: 0
+          RUSTFLAGS: '-C target-feature=+fp16 -C target-feature=+crt-static -C link-self-contained=yes'
 
       - name: "Archive executable artifact"
         uses: actions/upload-artifact@v3
