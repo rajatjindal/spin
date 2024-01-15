@@ -4,10 +4,15 @@
 //! * `RuntimeTest` - bootstraps and runs a single runtime test
 //! * `TestEnvironment` - bootstraps a test environment which can be used by more than just runtime tests
 
+mod cloud;
 mod io;
 mod manifest_template;
 mod services;
 mod spin;
+mod utils;
+mod configuration;
+mod app_item;
+mod cloud_api;
 mod test_environment;
 
 pub use manifest_template::ManifestTemplate;

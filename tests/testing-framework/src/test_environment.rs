@@ -3,6 +3,7 @@ use std::path::{Path, PathBuf};
 use crate::{
     services::{Services, ServicesConfig},
     spin::{Spin, SpinMode},
+    cloud::Cloud,
     Runtime,
 };
 use anyhow::Context as _;
@@ -149,6 +150,32 @@ impl TestEnvironmentConfig<Spin> {
             create_runtime: Box::new(move |env| {
                 preboot(env)?;
                 Spin::start(&spin_binary, env.path(), spin_up_args, mode)
+            }),
+        }
+    }
+}
+
+
+impl TestEnvironmentConfig<Cloud> {
+    /// Configure a test environment that uses a local Spin as a runtime
+    ///
+    /// * `spin_binary` - the path to the Spin binary
+    /// * `preboot` - a callback that happens after the services have started but before the runtime is
+    /// * `test` - a callback that runs the test against the runtime
+    /// * `services_config` - the services that the test requires
+    pub fn cloud(
+        spin_binary: PathBuf,
+        spin_up_args: impl IntoIterator<Item = String>,
+        preboot: impl FnOnce(&mut TestEnvironment<Cloud>) -> anyhow::Result<()> + 'static,
+        services_config: ServicesConfig,
+        mode: SpinMode,
+    ) -> Self {
+        let spin_up_args = spin_up_args.into_iter().collect();
+        Self {
+            services_config,
+            create_runtime: Box::new(move |env| {
+                preboot(env)?;
+                Cloud::start(&spin_binary, env.path(), spin_up_args, mode)
             }),
         }
     }

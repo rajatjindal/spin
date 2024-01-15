@@ -6664,13 +6664,20 @@ name = "testing-framework"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "dirs 4.0.0",
  "fslock",
+ "hyper 0.14.27",
+ "hyper-tls 0.6.0",
+ "hyper-util",
  "log",
  "nix 0.26.4",
  "regex",
  "reqwest",
+ "serde",
+ "serde_json",
  "temp-dir",
  "test-components",
+ "tokio",
  "toml 0.8.8",
 ]
 

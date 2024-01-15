@@ -185,7 +185,7 @@ impl Runtime for Spin {
     }
 }
 
-fn kill_process(process: &mut std::process::Child) {
+pub fn kill_process(process: &mut std::process::Child) {
     #[cfg(windows)]
     {
         let _ = process.kill();
@@ -198,9 +198,10 @@ fn kill_process(process: &mut std::process::Child) {
 }
 
 /// How this Spin instance is communicating with the outside world
-enum IoMode {
+pub enum IoMode {
     Http(u16),
     Redis,
+    HttpUrl(String)
 }
 
 /// The mode start Spin up in
@@ -210,7 +211,7 @@ pub enum SpinMode {
 }
 
 /// Uses a track to ge a random unused port
-fn get_random_port() -> anyhow::Result<u16> {
+pub fn get_random_port() -> anyhow::Result<u16> {
     Ok(std::net::TcpListener::bind("localhost:0")?
         .local_addr()?
         .port())

@@ -34,7 +34,7 @@ fn key_value_cli_flag() -> anyhow::Result<()> {
 #[test]
 /// Test that basic http trigger support works
 fn http_smoke_test() -> anyhow::Result<()> {
-    run_test(
+    run_test_cloud(
         "http-smoke-test",
         testing_framework::SpinMode::Http,
         [],
@@ -162,6 +162,30 @@ fn dynamic_env_test() -> anyhow::Result<()> {
 
 /// Run an e2e test
 fn run_test(
+    test_name: impl Into<String>,
+    mode: testing_framework::SpinMode,
+    spin_up_args: impl IntoIterator<Item = String>,
+    services_config: testing_framework::ServicesConfig,
+    test: impl FnOnce(
+            &mut testing_framework::TestEnvironment<testing_framework::Spin>,
+        ) -> testing_framework::TestResult<anyhow::Error>
+        + 'static,
+) -> testing_framework::TestResult<anyhow::Error> {
+    let test_name = test_name.into();
+    let config = testing_framework::TestEnvironmentConfig::spin(
+        spin_binary(),
+        spin_up_args,
+        move |env| preboot(&test_name, env),
+        services_config,
+        mode,
+    );
+    let mut env = testing_framework::TestEnvironment::up(config)?;
+    test(&mut env)?;
+    Ok(())
+}
+
+/// Run an e2e test
+fn run_test_cloud(
     test_name: impl Into<String>,
     mode: testing_framework::SpinMode,
     spin_up_args: impl IntoIterator<Item = String>,

@@ -13,3 +13,10 @@ reqwest = { workspace = true }
 temp-dir = "0.1.11"
 test-components = { path = "../test-components" }
 toml = "0.8.6"
+tokio = { version = "1.23", features = ["full"] }
+hyper-tls = "0.6.0"
+serde = { version = "1.0", features = ["derive"] }
+hyper = { version = "0.14", features = [ "full" ] }
+dirs = "4.0"
+serde_json = "1.0.82"
+hyper-util = "0.1.2"
