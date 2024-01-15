@@ -114,7 +114,7 @@ config-provider-tests = []
 e2e-tests = []
 llm = ["spin-trigger-http/llm"]
 llm-metal = ["llm", "spin-trigger-http/llm-metal"]
-llm-cublas = ["llm", "spin-trigger-http/llm-cublas"]
+# llm-cublas = ["llm", "spin-trigger-http/llm-cublas"]
 
 [workspace]
 members = [
