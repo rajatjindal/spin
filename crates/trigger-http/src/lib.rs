@@ -48,7 +48,7 @@ use tracing::{field::Empty, log, Instrument};
 use wasmtime_wasi_http::{
     bindings::wasi::http::types::ErrorCode,
     body::{HyperIncomingBody as Body, HyperOutgoingBody},
-    types::HostFutureIncomingResponse,
+    types::{ClientCertAuth, HostFutureIncomingResponse},
     HttpError, HttpResult,
 };
 
@@ -86,6 +86,18 @@ pub struct CliArgs {
     /// The path to the certificate key to use for https, if this is not set, normal http will be used. The key should be in PKCS#8 format
     #[clap(long, env = "SPIN_TLS_KEY", requires = "tls-cert")]
     pub tls_key: Option<PathBuf>,
+
+    // The patch to the CA certificate to use for outbound requests. The CA certificate should be in PEM format
+    #[clap(long, env = "SPIN_HTTP_CA_CERT")]
+    pub outbound_http_ca_cert: Option<PathBuf>,
+
+    // The patch to the certificate to use for outbound requests. The certificate should be in PEM format
+    #[clap(long, env = "SPIN_HTTP_CLIENT_CERT", requires = "outbound-http-client-key")]
+    pub outbound_http_client_cert: Option<PathBuf>,
+
+    // The patch to the certificate private key to use for outbound requests. The private key should be in PKCS#8 format
+    #[clap(long, env = "SPIN_HTTP_CLIENT_KEY", requires = "outbound-http-client-cert")]
+    pub outbound_http_client_key: Option<PathBuf>,
 }
 
 impl CliArgs {
@@ -585,6 +597,12 @@ pub struct HttpRuntimeData {
     chained_handler: Option<ChainedRequestHandler>,
     /// The hosts this app is allowed to make outbound requests to
     allowed_hosts: AllowedHostsConfig,
+    /// The CA certificate to use for outbound requests
+    ca_certificate: Option<String>,
+    /// The client certificate to use for outbound requests
+    client_certificate: Option<String>,
+    /// The client private key to use for outbound requests
+    client_key: Option<String>,
 }
 
 impl HttpRuntimeData {
@@ -729,6 +747,19 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
 
         println!("making outbound request {:?}", config.use_tls);
 
+        config.custom_root_ca = this.ca_certificate.clone();
+        config.client_cert_auth = match (&this.client_certificate, &this.client_key) {
+            (Some(cert), Some(key)) => {
+                Some(ClientCertAuth {
+                    cert_chain: cert.to_owned(),
+                    private_key: key.to_owned(),
+                })
+            },
+            (Some(_), None) => None,
+            (None, Some(_)) => None,
+            (None, None) => None,
+        };
+
         config.custom_root_ca = Some(String::from(r#"-----BEGIN CERTIFICATE-----
 MIIBeDCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
 dmVyLWNhQDE3MTc3ODA1MjAwHhcNMjQwNjA3MTcxNTIwWhcNMzQwNjA1MTcxNTIw
@@ -739,8 +770,9 @@ BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUzXLACkzCDPAXXERIxQim
 NdG07zEwCgYIKoZIzj0EAwIDSQAwRgIhALwsHX2R7a7GXfgmn7h8rNRRvlQwyRaG
 9hyv0a1cyJr2AiEA8+2vF0CZ/S0MG6rT0Y6xZ+iqi/vhcDnmBhJCxx2rwAI=
 -----END CERTIFICATE-----
-                    "#));
-                        config.client_auth_cert = Some(String::from(r#"-----BEGIN CERTIFICATE-----
+"#));
+        config.client_cert_auth = Some(ClientCertAuth {
+            cert_chain: String::from(r#"-----BEGIN CERTIFICATE-----
 MIIBkjCCATegAwIBAgIIEOURVvWgx1AwCgYIKoZIzj0EAwIwIzEhMB8GA1UEAwwY
 azNzLWNsaWVudC1jYUAxNzE3NzgwNTIwMB4XDTI0MDYwNzE3MTUyMFoXDTI1MDYw
 NzE3MTUyMFowMDEXMBUGA1UEChMOc3lzdGVtOm1hc3RlcnMxFTATBgNVBAMTDHN5
@@ -761,13 +793,14 @@ BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUaYocknltw2n5lNXMOizJ
 0AkAw+IwCgYIKoZIzj0EAwIDRwAwRAIgR8YcLA8cH4qAMDRPDsJqLaw4GJFkgjwV
 TCrMgyUxSvACIBwyklgm7mgHcC5WM9CqmliAGZJyV0xRPZBK01POrNf0
 -----END CERTIFICATE-----
-                    "#));
-                        config.client_auth_private_key = Some(String::from(r#"-----BEGIN EC PRIVATE KEY-----
+"#),
+            private_key: String::from(r#"-----BEGIN EC PRIVATE KEY-----
 MHcCAQEEIA+FBtmKJbd8wBGOWeuJQfHiCKjjXF8ywEPrvj8S1N3VoAoGCCqGSM49
 AwEHoUQDQgAEUYT8JW5q6PySZ16LgBqBInkZiAacvR4Xnki2JespKMyawh/83wTJ
 5qbFB9Y8pWT/XGEftxL0ZxCA17petG+YvA==
 -----END EC PRIVATE KEY-----
-                    "#));
+"#),
+        });
 
         // TODO: This is a temporary workaround to make sure that outbound task is instrumented.
         // Once Wasmtime gives us the ability to do the spawn ourselves we can just call .instrument
