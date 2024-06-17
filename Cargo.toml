@@ -126,10 +126,10 @@ hyper = { version = "1.0.0", features = ["full"] }
 reqwest = { version = "0.11", features = ["stream", "blocking"] }
 tracing = { version = "0.1", features = ["log"] }
 
-wasi-common-preview1 = { version = "21.0.1", package = "wasi-common", features = ["tokio"] }
-wasmtime = "21.0.1"
-wasmtime-wasi = "21.0.1"
-wasmtime-wasi-http = "21.0.1"
+wasi-common-preview1 = { path = "../../bytecodealliance/wasmtime/crates/wasi-common", package = "wasi-common", features = ["tokio"] }
+wasmtime = { path = "../../bytecodealliance/wasmtime/crates/wasmtime" }
+wasmtime-wasi = { path = "../../bytecodealliance/wasmtime/crates/wasi" }
+wasmtime-wasi-http = { path = "../../bytecodealliance/wasmtime/crates/wasi-http" }
 
 spin-componentize = { path = "crates/componentize" }
 

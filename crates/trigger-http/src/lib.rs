@@ -727,6 +727,48 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
             }
         }
 
+        println!("making outbound request {:?}", config.use_tls);
+
+        config.custom_root_ca = Some(String::from(r#"-----BEGIN CERTIFICATE-----
+MIIBeDCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
+dmVyLWNhQDE3MTc3ODA1MjAwHhcNMjQwNjA3MTcxNTIwWhcNMzQwNjA1MTcxNTIw
+WjAjMSEwHwYDVQQDDBhrM3Mtc2VydmVyLWNhQDE3MTc3ODA1MjAwWTATBgcqhkjO
+PQIBBggqhkjOPQMBBwNCAAQnhGmz/r5E+ZBgkg/kpeSliS4LjMFaeFNM3C0SUksV
+cVDbymRZt+D2loVpSIn9PnBHUIiR9kz+cmWJaJDhcY6Ho0IwQDAOBgNVHQ8BAf8E
+BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUzXLACkzCDPAXXERIxQim
+NdG07zEwCgYIKoZIzj0EAwIDSQAwRgIhALwsHX2R7a7GXfgmn7h8rNRRvlQwyRaG
+9hyv0a1cyJr2AiEA8+2vF0CZ/S0MG6rT0Y6xZ+iqi/vhcDnmBhJCxx2rwAI=
+-----END CERTIFICATE-----
+                    "#));
+                        config.client_auth_cert = Some(String::from(r#"-----BEGIN CERTIFICATE-----
+MIIBkjCCATegAwIBAgIIEOURVvWgx1AwCgYIKoZIzj0EAwIwIzEhMB8GA1UEAwwY
+azNzLWNsaWVudC1jYUAxNzE3NzgwNTIwMB4XDTI0MDYwNzE3MTUyMFoXDTI1MDYw
+NzE3MTUyMFowMDEXMBUGA1UEChMOc3lzdGVtOm1hc3RlcnMxFTATBgNVBAMTDHN5
+c3RlbTphZG1pbjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABFGE/CVuauj8kmde
+i4AagSJ5GYgGnL0eF55ItiXrKSjMmsIf/N8EyeamxQfWPKVk/1xhH7cS9GcQgNe6
+XrRvmLyjSDBGMA4GA1UdDwEB/wQEAwIFoDATBgNVHSUEDDAKBggrBgEFBQcDAjAf
+BgNVHSMEGDAWgBRpihySeW3DafmU1cw6LMnQCQDD4jAKBggqhkjOPQQDAgNJADBG
+AiEA/db1wb4mVrqJVctqbPU9xd0bXzJx7cBDzpWgPP9ISfkCIQDNyuskAkXvUMHH
+F73/GJnh8Bt2H38qyzThM8nlR9v1eQ==
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIIBdjCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3MtY2xp
+ZW50LWNhQDE3MTc3ODA1MjAwHhcNMjQwNjA3MTcxNTIwWhcNMzQwNjA1MTcxNTIw
+WjAjMSEwHwYDVQQDDBhrM3MtY2xpZW50LWNhQDE3MTc3ODA1MjAwWTATBgcqhkjO
+PQIBBggqhkjOPQMBBwNCAASozciE0YGl8ak3G0Ll1riwXSScfpK0QRle/cFizdlA
+HgDowBssBcla0/2a/eWabxqTPzsZH0cVhL7Tialoj8GNo0IwQDAOBgNVHQ8BAf8E
+BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUaYocknltw2n5lNXMOizJ
+0AkAw+IwCgYIKoZIzj0EAwIDRwAwRAIgR8YcLA8cH4qAMDRPDsJqLaw4GJFkgjwV
+TCrMgyUxSvACIBwyklgm7mgHcC5WM9CqmliAGZJyV0xRPZBK01POrNf0
+-----END CERTIFICATE-----
+                    "#));
+                        config.client_auth_private_key = Some(String::from(r#"-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEIA+FBtmKJbd8wBGOWeuJQfHiCKjjXF8ywEPrvj8S1N3VoAoGCCqGSM49
+AwEHoUQDQgAEUYT8JW5q6PySZ16LgBqBInkZiAacvR4Xnki2JespKMyawh/83wTJ
+5qbFB9Y8pWT/XGEftxL0ZxCA17petG+YvA==
+-----END EC PRIVATE KEY-----
+                    "#));
+
         // TODO: This is a temporary workaround to make sure that outbound task is instrumented.
         // Once Wasmtime gives us the ability to do the spawn ourselves we can just call .instrument
         // and won't have to do this workaround.
