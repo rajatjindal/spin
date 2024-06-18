@@ -51,7 +51,6 @@ use wasmtime_wasi_http::bindings::http::types;
 use wasmtime_wasi_http::{
     bindings::wasi::http::types::ErrorCode,
     body::{HyperIncomingBody as Body, HyperOutgoingBody},
-    error::hyper_request_error,
     types::HostFutureIncomingResponse,
     HttpError, HttpResult,
 };
@@ -639,6 +638,21 @@ impl HttpRuntimeData {
     }
 }
 
+/// Translate a [`hyper::Error`] to a wasi-http `ErrorCode` in the context of a request.
+pub fn hyper_request_error(_err: hyper::Error) -> ErrorCode {
+    // TODO(rajatjindal): fix this
+    // // If there's a source, we might be able to extract a wasi-http error from it.
+    // if let Some(cause) = err.source() {
+    //     if let Some(err) = cause.downcast_ref::<ErrorCode>() {
+    //         return err.clone();
+    //     }
+    // }
+
+    // tracing::warn!("hyper request error: {err:?}");
+
+    ErrorCode::HttpProtocolError
+}
+
 pub fn dns_error(rcode: String, info_code: u16) -> ErrorCode {
     ErrorCode::DnsError(wasmtime_wasi_http::bindings::http::types::DnsErrorPayload {
         rcode: Some(rcode),
@@ -651,7 +665,6 @@ pub(crate) fn internal_error(msg: String) -> ErrorCode {
 }
 
 async fn default_send_request_handler(
-    data: &mut spin_core::Data<HttpRuntimeData>,
     mut request: Request<HyperOutgoingBody>,
     wasmtime_wasi_http::types::OutgoingRequestConfig {
         use_tls,
@@ -891,7 +904,7 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
         }
 
         let response_handle = async move {
-            let res = default_send_request_handler(data, request, config).await;
+            let res = default_send_request_handler(request, config).await;
             if let Ok(res) = &res {
                 tracing::Span::current()
                     .record("http.response.status_code", res.resp.status().as_u16());
