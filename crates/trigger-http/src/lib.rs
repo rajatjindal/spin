@@ -583,11 +583,47 @@ struct ChainedRequestHandler {
 pub struct HttpRuntimeData {
     origin: Option<String>,
     chained_handler: Option<ChainedRequestHandler>,
+    custom_root_ca: Option<String>,
     /// The hosts this app is allowed to make outbound requests to
     allowed_hosts: AllowedHostsConfig,
 }
 
 impl HttpRuntimeData {
+    fn default_send_request_handler(
+        data: &mut spin_core::Data<Self>,
+        mut request: Request<HyperOutgoingBody>,
+        mut config: wasmtime_wasi_http::types::OutgoingRequestConfig,
+    ) -> HttpResult<wasmtime_wasi_http::types::HostFutureIncomingResponse> {
+        let response_handle = async move {
+            let res = default_send_request_handler2(request, config).await;
+            if let Ok(res) = &res {
+                tracing::Span::current()
+                    .record("http.response.status_code", res.resp.status().as_u16());
+            }
+            Ok(res)
+        }
+        .in_current_span();
+
+        return Ok(HostFutureIncomingResponse::Pending(
+            wasmtime_wasi::runtime::spawn(response_handle),
+        ));
+
+        async fn default_send_request_handler2(
+            mut request: hyper::Request<HyperOutgoingBody>,
+            wasmtime_wasi_http::types::OutgoingRequestConfig {
+                use_tls,
+                connect_timeout,
+                first_byte_timeout,
+                between_bytes_timeout,
+            }: wasmtime_wasi_http::types::OutgoingRequestConfig,
+        ) -> Result<
+            wasmtime_wasi_http::types::IncomingResponse,
+            wasmtime_wasi_http::bindings::http::types::ErrorCode,
+        > {
+            Err(wasmtime_wasi_http::bindings::http::types::ErrorCode::HttpRequestUriInvalid)
+        }
+    }
+
     fn chain_request(
         data: &mut spin_core::Data<Self>,
         request: Request<HyperOutgoingBody>,
@@ -727,22 +763,7 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
             }
         }
 
-        // TODO: This is a temporary workaround to make sure that outbound task is instrumented.
-        // Once Wasmtime gives us the ability to do the spawn ourselves we can just call .instrument
-        // and won't have to do this workaround.
-        let response_handle = async move {
-            let res =
-                wasmtime_wasi_http::types::default_send_request_handler(request, config).await;
-            if let Ok(res) = &res {
-                tracing::Span::current()
-                    .record("http.response.status_code", res.resp.status().as_u16());
-            }
-            Ok(res)
-        }
-        .in_current_span();
-        Ok(HostFutureIncomingResponse::Pending(
-            wasmtime_wasi::runtime::spawn(response_handle),
-        ))
+        Self::default_send_request_handler(data, request, config)
     }
 }
 
