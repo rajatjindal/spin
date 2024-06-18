@@ -7,6 +7,7 @@ mod wagi;
 
 use std::{
     collections::HashMap,
+    default,
     io::IsTerminal,
     net::{Ipv4Addr, SocketAddr, ToSocketAddrs},
     path::PathBuf,
@@ -582,7 +583,7 @@ struct ChainedRequestHandler {
     executor: HttpHandlerExecutor,
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct HttpRuntimeData {
     origin: Option<String>,
     chained_handler: Option<ChainedRequestHandler>,
@@ -664,14 +665,42 @@ pub(crate) fn internal_error(msg: String) -> ErrorCode {
     ErrorCode::InternalError(Some(msg))
 }
 
+use std::time::Duration;
+
+#[derive(Clone)]
+/// Configuration for client cert auth.
+pub struct ClientCertAuth {
+    /// The auth cert chain to use for client-auth
+    pub cert_chain: String,
+    /// The private key to use for client-auth
+    pub private_key: String,
+}
+
+pub struct OutgoingRequestConfig {
+    /// Whether to use TLS for the request.
+    pub use_tls: bool,
+    /// The timeout for connecting.
+    pub connect_timeout: Duration,
+    /// The timeout until the first byte.
+    pub first_byte_timeout: Duration,
+    /// The timeout between chunks of a streaming body
+    pub between_bytes_timeout: Duration,
+    /// The custom root ca to add to root ca store
+    pub custom_root_ca: Option<String>,
+    /// The client auth
+    pub client_cert_auth: Option<ClientCertAuth>,
+}
+
 async fn default_send_request_handler(
     mut request: Request<HyperOutgoingBody>,
-    wasmtime_wasi_http::types::OutgoingRequestConfig {
+    OutgoingRequestConfig {
         use_tls,
         connect_timeout,
         first_byte_timeout,
         between_bytes_timeout,
-    }: wasmtime_wasi_http::types::OutgoingRequestConfig,
+        custom_root_ca,
+        client_cert_auth,
+    }: OutgoingRequestConfig,
 ) -> Result<
     wasmtime_wasi_http::types::IncomingResponse,
     wasmtime_wasi_http::bindings::http::types::ErrorCode,
@@ -686,6 +715,7 @@ async fn default_send_request_handler(
     } else {
         return Err(types::ErrorCode::HttpRequestUriInvalid);
     };
+
     let tcp_stream = timeout(connect_timeout, TcpStream::connect(&authority))
         .await
         .map_err(|_| types::ErrorCode::ConnectionTimeout)?
@@ -903,16 +933,24 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
             }
         }
 
+        let config2 = OutgoingRequestConfig{
+            connect_timeout: config.connect_timeout,
+            use_tls: config.use_tls,
+            between_bytes_timeout: config.between_bytes_timeout,
+            first_byte_timeout: config.first_byte_timeout,
+            custom_root_ca: None,
+            client_cert_auth: None
+        };
+
         let response_handle = async move {
-            let res = default_send_request_handler(request, config).await;
+            let res = default_send_request_handler(request, config2).await;
             if let Ok(res) = &res {
                 tracing::Span::current()
                     .record("http.response.status_code", res.resp.status().as_u16());
             }
             Ok(res)
-        }
-        .in_current_span();
-
+        };
+        
         return Ok(HostFutureIncomingResponse::Pending(
             wasmtime_wasi::runtime::spawn(response_handle),
         ));
