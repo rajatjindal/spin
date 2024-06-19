@@ -1,23 +1,21 @@
 pub mod cli;
 pub mod loader;
 pub mod network;
-mod runtime_config;
 mod stdio;
 
 use std::{collections::HashMap, marker::PhantomData};
 
 use anyhow::{Context, Result};
 pub use async_trait::async_trait;
-use runtime_config::llm::LLmOptions;
+use spin_runtime_config::llm::LLmOptions;
 use serde::de::DeserializeOwned;
-use runtime_config::outbound_http::OutboundHttpOptions;
 use spin_app::{App, AppComponent, AppLoader, AppTrigger, Loader, OwnedApp, APP_NAME_KEY};
 use spin_core::{
     Config, Engine, EngineBuilder, Instance, InstancePre, OutboundWasiHttpHandler, Store,
     StoreBuilder, WasiVersion,
 };
 
-pub use crate::runtime_config::RuntimeConfig;
+pub use spin_runtime_config::{RuntimeConfig, TriggerHooks};
 
 #[async_trait]
 pub trait TriggerExecutor: Sized + Send + Sync {
@@ -128,7 +126,7 @@ impl<Executor: TriggerExecutor> TriggerExecutorBuilder<Executor> {
     pub async fn build(
         mut self,
         app_uri: String,
-        runtime_config: runtime_config::RuntimeConfig,
+        runtime_config: spin_runtime_config::RuntimeConfig,
         init_data: HostComponentInitData,
     ) -> Result<Executor>
     where
@@ -178,12 +176,12 @@ impl<Executor: TriggerExecutor> TriggerExecutorBuilder<Executor> {
                 )?;
                 self.loader.add_dynamic_host_component(
                     &mut builder,
-                    runtime_config::llm::build_component(&runtime_config, init_data.llm.use_gpu)
+                    spin_runtime_config::llm::build_component(&runtime_config, init_data.llm.use_gpu)
                         .await,
                 )?;
                 self.loader.add_dynamic_host_component(
                     &mut builder,
-                    runtime_config::key_value::build_key_value_component(
+                    spin_runtime_config::key_value::build_key_value_component(
                         &runtime_config,
                         &init_data.kv,
                     )
@@ -191,7 +189,7 @@ impl<Executor: TriggerExecutor> TriggerExecutorBuilder<Executor> {
                 )?;
                 self.loader.add_dynamic_host_component(
                     &mut builder,
-                    runtime_config::sqlite::build_component(&runtime_config, &init_data.sqlite)
+                    spin_runtime_config::sqlite::build_component(&runtime_config, &init_data.sqlite)
                         .await?,
                 )?;
                 self.loader.add_dynamic_host_component(
@@ -433,31 +431,3 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
     }
 }
 
-/// TriggerHooks allows a Spin environment to hook into a TriggerAppEngine's
-/// configuration and execution processes.
-pub trait TriggerHooks: Send + Sync {
-    #![allow(unused_variables)]
-
-    /// Called once, immediately after an App is loaded.
-    fn app_loaded(
-        &mut self,
-        app: &App,
-        runtime_config: &RuntimeConfig,
-        resolver: &std::sync::Arc<spin_expressions::PreparedResolver>,
-    ) -> Result<()> {
-        Ok(())
-    }
-
-    /// Called while an AppComponent is being prepared for execution.
-    /// Implementations may update the given StoreBuilder to change the
-    /// environment of the instance to be executed.
-    fn component_store_builder(
-        &self,
-        component: &AppComponent,
-        store_builder: &mut StoreBuilder,
-    ) -> Result<()> {
-        Ok(())
-    }
-}
-
-impl TriggerHooks for () {}

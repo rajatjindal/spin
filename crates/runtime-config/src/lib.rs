@@ -2,8 +2,8 @@ pub mod key_value;
 pub mod llm;
 pub mod sqlite;
 pub mod variables_provider;
-pub mod outbound_http;
 
+use spin_app::{App, AppComponent};
 use std::{
     collections::HashMap,
     fs,
@@ -16,15 +16,13 @@ use serde::Deserialize;
 use spin_common::ui::quoted_path;
 use spin_sqlite::Connection;
 
-use crate::TriggerHooks;
-
 use self::{
     key_value::{KeyValueStore, KeyValueStoreOpts},
     llm::LlmComputeOpts,
     sqlite::SqliteDatabaseOpts,
     variables_provider::{VariablesProvider, VariablesProviderOpts},
-    outbound_http::OutboundHttpOptions,
 };
+use spin_core::StoreBuilder;
 
 pub const DEFAULT_STATE_DIR: &str = ".spin";
 const DEFAULT_LOGS_DIR: &str = "logs";
@@ -218,9 +216,8 @@ pub struct RuntimeConfigOpts {
 
     #[serde(skip)]
     pub file_path: Option<PathBuf>,
-
-    #[serde(default)]
-    pub outbound_http: Option<OutboundHttpOptions>,
+    // #[serde(default)]
+    // pub outbound_http: Option<OutboundHttpOptions>,
 }
 
 impl RuntimeConfigOpts {
@@ -266,12 +263,12 @@ fn resolve_config_path(path: &Path, config_opts: &RuntimeConfigOpts) -> Result<P
     Ok(base_path.join(path))
 }
 
-pub(crate) struct SummariseRuntimeConfigHook {
+pub struct SummariseRuntimeConfigHook {
     runtime_config_file: Option<PathBuf>,
 }
 
 impl SummariseRuntimeConfigHook {
-    pub(crate) fn new(runtime_config_file: &Option<PathBuf>) -> Self {
+    pub fn new(runtime_config_file: &Option<PathBuf>) -> Self {
         Self {
             runtime_config_file: runtime_config_file.clone(),
         }
@@ -520,3 +517,32 @@ mod tests {
         }
     }
 }
+
+/// TriggerHooks allows a Spin environment to hook into a TriggerAppEngine's
+/// configuration and execution processes.
+pub trait TriggerHooks: Send + Sync {
+    #![allow(unused_variables)]
+
+    /// Called once, immediately after an App is loaded.
+    fn app_loaded(
+        &mut self,
+        app: &App,
+        runtime_config: &RuntimeConfig,
+        resolver: &std::sync::Arc<spin_expressions::PreparedResolver>,
+    ) -> Result<()> {
+        Ok(())
+    }
+
+    /// Called while an AppComponent is being prepared for execution.
+    /// Implementations may update the given StoreBuilder to change the
+    /// environment of the instance to be executed.
+    fn component_store_builder(
+        &self,
+        component: &AppComponent,
+        store_builder: &mut StoreBuilder,
+    ) -> Result<()> {
+        Ok(())
+    }
+}
+
+impl TriggerHooks for () {}

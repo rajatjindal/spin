@@ -1,6 +1,6 @@
 use std::{collections::HashMap, path::PathBuf, sync::Arc};
 
-use crate::{runtime_config::RuntimeConfig, TriggerHooks};
+use crate::{RuntimeConfig, TriggerHooks};
 use anyhow::Context;
 use spin_common::ui::quoted_path;
 use spin_sqlite::{Connection, ConnectionsStore, SqliteComponent, DATABASES_KEY};
@@ -9,7 +9,7 @@ use super::RuntimeConfigOpts;
 
 const DEFAULT_SQLITE_DB_FILENAME: &str = "sqlite_db.db";
 
-pub(crate) async fn build_component(
+pub async fn build_component(
     runtime_config: &RuntimeConfig,
     sqlite_statements: &[String],
 ) -> anyhow::Result<SqliteComponent> {

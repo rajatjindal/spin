@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::TriggerHooks;
+use spin_runtime_config::TriggerHooks;
 
 #[derive(Default)]
 pub struct Network {

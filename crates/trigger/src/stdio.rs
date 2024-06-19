@@ -8,7 +8,7 @@ use anyhow::{Context, Result};
 use spin_common::ui::quoted_path;
 use tokio::io::AsyncWrite;
 
-use crate::{runtime_config::RuntimeConfig, TriggerHooks};
+use spin_runtime_config::{RuntimeConfig, TriggerHooks};
 
 /// Which components should have their logs followed on stdout/stderr.
 #[derive(Clone, Debug)]

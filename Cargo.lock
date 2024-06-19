@@ -7740,6 +7740,58 @@ dependencies = [
 ]
 
 [[package]]
+name = "spin-runtime-config"
+version = "2.6.0-pre0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "clap 3.2.25",
+ "ctrlc",
+ "dirs 4.0.0",
+ "futures",
+ "indexmap 1.9.3",
+ "ipnet",
+ "outbound-http",
+ "outbound-mqtt",
+ "outbound-mysql",
+ "outbound-pg",
+ "outbound-redis",
+ "sanitize-filename",
+ "serde 1.0.197",
+ "serde_json",
+ "spin-app",
+ "spin-common",
+ "spin-componentize",
+ "spin-core",
+ "spin-expressions",
+ "spin-key-value",
+ "spin-key-value-azure",
+ "spin-key-value-redis",
+ "spin-key-value-sqlite",
+ "spin-llm",
+ "spin-llm-local",
+ "spin-llm-remote-http",
+ "spin-loader",
+ "spin-manifest",
+ "spin-outbound-networking",
+ "spin-sqlite",
+ "spin-sqlite-inproc",
+ "spin-sqlite-libsql",
+ "spin-telemetry",
+ "spin-variables",
+ "spin-world",
+ "tempfile",
+ "terminal",
+ "tokio",
+ "toml 0.5.11",
+ "tracing",
+ "url",
+ "wasmtime",
+ "wasmtime-wasi",
+ "wasmtime-wasi-http",
+]
+
+[[package]]
 name = "spin-serde"
 version = "2.6.0-pre0"
 dependencies = [
@@ -7897,6 +7949,7 @@ dependencies = [
  "spin-loader",
  "spin-manifest",
  "spin-outbound-networking",
+ "spin-runtime-config",
  "spin-sqlite",
  "spin-sqlite-inproc",
  "spin-sqlite-libsql",
