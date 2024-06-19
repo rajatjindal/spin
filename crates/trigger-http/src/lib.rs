@@ -7,7 +7,6 @@ mod wagi;
 
 use std::{
     collections::HashMap,
-    default,
     io::IsTerminal,
     net::{Ipv4Addr, SocketAddr, ToSocketAddrs},
     path::PathBuf,
@@ -692,15 +691,14 @@ pub struct OutgoingRequestConfig {
 }
 
 async fn default_send_request_handler(
+    data: HttpRuntimeData,
     mut request: Request<HyperOutgoingBody>,
-    OutgoingRequestConfig {
+    wasmtime_wasi_http::types::OutgoingRequestConfig {
         use_tls,
         connect_timeout,
         first_byte_timeout,
         between_bytes_timeout,
-        custom_root_ca,
-        client_cert_auth,
-    }: OutgoingRequestConfig,
+    }: wasmtime_wasi_http::types::OutgoingRequestConfig,
 ) -> Result<
     wasmtime_wasi_http::types::IncomingResponse,
     wasmtime_wasi_http::bindings::http::types::ErrorCode,
@@ -933,24 +931,18 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
             }
         }
 
-        let config2 = OutgoingRequestConfig{
-            connect_timeout: config.connect_timeout,
-            use_tls: config.use_tls,
-            between_bytes_timeout: config.between_bytes_timeout,
-            first_byte_timeout: config.first_byte_timeout,
-            custom_root_ca: None,
-            client_cert_auth: None
-        };
+        let x = (*data.as_ref()).clone();
 
         let response_handle = async move {
-            let res = default_send_request_handler(request, config2).await;
+            let res = default_send_request_handler(x, request, config).await;
             if let Ok(res) = &res {
                 tracing::Span::current()
                     .record("http.response.status_code", res.resp.status().as_u16());
             }
             Ok(res)
-        };
-        
+        }
+        .in_current_span();
+
         return Ok(HostFutureIncomingResponse::Pending(
             wasmtime_wasi::runtime::spawn(response_handle),
         ));

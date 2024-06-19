@@ -10,7 +10,7 @@ use anyhow::{Context, Result};
 pub use async_trait::async_trait;
 use runtime_config::llm::LLmOptions;
 use serde::de::DeserializeOwned;
-
+use runtime_config::outbound_http::OutboundHttpOptions;
 use spin_app::{App, AppComponent, AppLoader, AppTrigger, Loader, OwnedApp, APP_NAME_KEY};
 use spin_core::{
     Config, Engine, EngineBuilder, Instance, InstancePre, OutboundWasiHttpHandler, Store,
