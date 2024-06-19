@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fs, path::PathBuf, sync::Arc};
 
-use crate::{RuntimeConfig, TriggerHooks};
+use crate::{runtime_config::RuntimeConfig, TriggerHooks};
 use anyhow::{bail, Context, Result};
 use serde::Deserialize;
 use spin_common::ui::quoted_path;

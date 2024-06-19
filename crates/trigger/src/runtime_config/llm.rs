@@ -6,7 +6,7 @@ pub struct LLmOptions {
     pub use_gpu: bool,
 }
 
-pub async fn build_component(
+pub(crate) async fn build_component(
     runtime_config: &crate::RuntimeConfig,
     use_gpu: bool,
 ) -> spin_llm::LlmComponent {
