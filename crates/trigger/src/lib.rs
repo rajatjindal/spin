@@ -234,7 +234,7 @@ impl<Executor: TriggerExecutor> TriggerExecutorBuilder<Executor> {
             .try_for_each(|h| h.app_loaded(app.borrowed(), &runtime_config, &prepared_resolver))?;
 
         let mut x: HashMap<String, String> = HashMap::new();
-        x.insert(String::from("hello"), runtime_config.outbound_http_opts().unwrap().hello.clone());
+        x.insert(String::from("hello"), String::from("world"));
         // Run trigger executor
         Executor::new(
             TriggerAppEngine::new(

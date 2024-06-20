@@ -4,7 +4,7 @@ mod handler;
 mod instrument;
 mod tls;
 mod wagi;
-
+use std::time::Duration;
 use std::{
     collections::HashMap,
     io::IsTerminal,
@@ -664,32 +664,6 @@ pub(crate) fn internal_error(msg: String) -> ErrorCode {
     ErrorCode::InternalError(Some(msg))
 }
 
-use std::time::Duration;
-
-#[derive(Clone)]
-/// Configuration for client cert auth.
-pub struct ClientCertAuth {
-    /// The auth cert chain to use for client-auth
-    pub cert_chain: String,
-    /// The private key to use for client-auth
-    pub private_key: String,
-}
-
-pub struct OutgoingRequestConfig {
-    /// Whether to use TLS for the request.
-    pub use_tls: bool,
-    /// The timeout for connecting.
-    pub connect_timeout: Duration,
-    /// The timeout until the first byte.
-    pub first_byte_timeout: Duration,
-    /// The timeout between chunks of a streaming body
-    pub between_bytes_timeout: Duration,
-    /// The custom root ca to add to root ca store
-    pub custom_root_ca: Option<String>,
-    /// The client auth
-    pub client_cert_auth: Option<ClientCertAuth>,
-}
-
 async fn default_send_request_handler(
     data: HttpRuntimeData,
     mut request: Request<HyperOutgoingBody>,
@@ -703,7 +677,10 @@ async fn default_send_request_handler(
     wasmtime_wasi_http::types::IncomingResponse,
     wasmtime_wasi_http::bindings::http::types::ErrorCode,
 > {
-    println!("inside default send request handler {:?}", data.outbound_http_options);
+    println!(
+        "inside default send request handler {:?}",
+        data.outbound_http_options
+    );
     let authority = if let Some(authority) = request.uri().authority() {
         if authority.port().is_some() {
             authority.to_string()

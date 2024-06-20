@@ -1,8 +1,8 @@
 pub mod key_value;
 pub mod llm;
+pub mod outbound_http;
 pub mod sqlite;
 pub mod variables_provider;
-pub mod outbound_http;
 
 use std::{
     collections::HashMap,
@@ -184,8 +184,13 @@ impl RuntimeConfig {
         }
     }
 
-    pub fn outbound_http_opts(&self) -> Option<&OutboundHttpOpts> {
-        self.find_opt(|opts| &opts.outbound_http)
+    pub fn outbound_http_opts(&self) -> Vec<&OutboundHttpOpts> {
+        let mut outbound_http_opts2: Vec<&OutboundHttpOpts> = vec![];
+        outbound_http_opts2.extend(
+            self.opts_layers()
+                .flat_map(|opts| opts.outbound_http_opts.iter().map(|opts| opts)),
+        );
+        outbound_http_opts2
     }
 
     /// Returns an iterator of RuntimeConfigOpts in order of decreasing precedence
@@ -224,7 +229,7 @@ pub struct RuntimeConfigOpts {
     pub file_path: Option<PathBuf>,
 
     #[serde(rename = "outbound_http", default)]
-    pub outbound_http: Option<OutboundHttpOpts>,
+    pub outbound_http_opts: Vec<OutboundHttpOpts>,
 }
 
 impl RuntimeConfigOpts {
