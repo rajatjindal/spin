@@ -60,8 +60,8 @@ wasmtime = { workspace = true }
 wasmtime-wasi = { workspace = true }
 wasmtime-wasi-http = { workspace = true }
 tokio-rustls = { version = "0.25.0" }
-rustls-pemfile = "0.3.0"
-rustls-pki-types = "1.7"
+rustls-pemfile = "2.1.2"
+rustls-pki-types = "1.7.0"
 rustls = { version = "0.22.0" }
 webpki-roots = { version = "0.26.0" }
 

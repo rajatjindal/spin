@@ -18,6 +18,7 @@ pub struct TlsConfig {
 impl TlsConfig {
     // Creates a TLS acceptor from server config.
     pub(super) fn server_config(&self) -> anyhow::Result<TlsAcceptor> {
+        tracing::trace!("cert path is {:?}", &self.cert_path);
         let certs = load_certs(&self.cert_path)?;
         let key = load_keys(&self.key_path)?;
 

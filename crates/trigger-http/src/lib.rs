@@ -729,9 +729,15 @@ async fn default_send_request_handler(
                 subject: ta.subject.to_owned(),
                 subject_public_key_info: ta.subject_public_key_info.to_owned(),
             }));
+            let xx = data.outbound_http_options.get("https://localhost:6551").unwrap().clone();
+            for cer in xx.custom_root_ca.unwrap().clone() {
+                let _ = root_cert_store.add(cer);
+            }
+            
+            let yy = xx.client_cert_auth.unwrap().clone();
             let config = rustls::ClientConfig::builder()
                 .with_root_certificates(root_cert_store)
-                .with_no_client_auth();
+                .with_client_auth_cert(yy.cert_chain, yy.private_key.clone_key()).unwrap();
             let connector = tokio_rustls::TlsConnector::from(std::sync::Arc::new(config));
             let mut parts = authority.split(":");
             let host = parts.next().unwrap_or(&authority);

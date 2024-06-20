@@ -6,7 +6,7 @@ pub mod variables_provider;
 
 use anyhow::{Context, Result};
 use outbound_http::OutboundHttpOpts;
-use rustls_pemfile::{certs, pkcs8_private_keys};
+use rustls_pemfile::{certs, private_key};
 use serde::Deserialize;
 use spin_common::ui::quoted_path;
 use spin_sqlite::Connection;
@@ -251,30 +251,24 @@ fn parse_outbound_opts(inp: &OutboundHttpOpts) -> Result<ParsedOutboundHttpOpts,
 }
 
 //TODO(rajatjindal): copied over from trigger-http/tls. should move to a common place.
-fn load_certs(
-    path: impl AsRef<Path>,
-) -> io::Result<Vec<rustls_pki_types::CertificateDer<'static>>> {
-    certs(&mut io::BufReader::new(fs::File::open(path)?))
-        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid cert"))
-        .map(|mut certs| {
-            certs
-                .drain(..)
-                .map(rustls_pki_types::CertificateDer::from)
-                .collect()
-        })
+fn load_certs(path: impl AsRef<Path>) -> Result<Vec<rustls_pki_types::CertificateDer<'static>>> {
+    use std::io::Cursor;
+
+    let contents = fs::read_to_string(path).expect("Should have been able to read the file");
+
+    let mut custom_root_ca_cursor = Cursor::new(contents);
+
+    Ok(rustls_pemfile::certs(&mut custom_root_ca_cursor)
+        .into_iter()
+        .map(|x| x.unwrap())
+        .collect())
 }
 
 // Loads private key from file.
 fn load_keys(path: impl AsRef<Path>) -> io::Result<rustls_pki_types::PrivateKeyDer<'static>> {
-    let x = pkcs8_private_keys(&mut io::BufReader::new(fs::File::open(path)?))
+    let x = private_key(&mut io::BufReader::new(fs::File::open(path)?))
         .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid key"))
-        .map(|mut keys| {
-            keys.drain(..)
-                .map(rustls_pki_types::PrivateKeyDer::try_from)
-                .last()
-                .unwrap()
-                .unwrap()
-        });
+        .map(|mut keys| keys.unwrap());
 
     x
 }
