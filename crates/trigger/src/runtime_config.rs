@@ -200,13 +200,16 @@ impl RuntimeConfig {
         }
     }
 
-    pub fn outbound_http_opts(&self) -> Vec<ParsedOutboundHttpOpts> {
-        let mut outbound_http_opts2: Vec<ParsedOutboundHttpOpts> = vec![];
-        outbound_http_opts2.extend(self.opts_layers().flat_map(|opts| {
-            opts.outbound_http_opts
-                .iter()
-                .map(|opts| parse_outbound_opts(opts).unwrap())
-        }));
+    pub fn outbound_http_opts(&self) -> HashMap<String, ParsedOutboundHttpOpts> {
+        let mut outbound_http_opts2: HashMap<String, ParsedOutboundHttpOpts> = HashMap::new();
+
+        for o in self.opts_layers() {
+            let xx = &o.outbound_http_opts;
+            for oo in xx {
+                outbound_http_opts2.insert(oo.host.clone(), parse_outbound_opts(oo).unwrap());
+            }
+        }
+
         outbound_http_opts2
     }
 

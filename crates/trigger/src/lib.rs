@@ -235,7 +235,6 @@ impl<Executor: TriggerExecutor> TriggerExecutorBuilder<Executor> {
             .iter_mut()
             .try_for_each(|h| h.app_loaded(app.borrowed(), &runtime_config, &prepared_resolver))?;
 
-        let x: HashMap<String, ParsedOutboundHttpOpts> = HashMap::new();
         // Run trigger executor
         Executor::new(
             TriggerAppEngine::new(
@@ -244,7 +243,7 @@ impl<Executor: TriggerExecutor> TriggerExecutorBuilder<Executor> {
                 app,
                 self.hooks,
                 &prepared_resolver,
-                x,
+                runtime_config.outbound_http_opts(),
             )
             .await?,
         )
