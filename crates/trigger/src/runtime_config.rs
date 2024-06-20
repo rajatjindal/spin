@@ -2,7 +2,6 @@ pub mod key_value;
 pub mod llm;
 pub mod sqlite;
 pub mod variables_provider;
-pub mod outbound_http;
 
 use std::{
     collections::HashMap,
@@ -23,7 +22,6 @@ use self::{
     llm::LlmComputeOpts,
     sqlite::SqliteDatabaseOpts,
     variables_provider::{VariablesProvider, VariablesProviderOpts},
-    outbound_http::OutboundHttpOptions,
 };
 
 pub const DEFAULT_STATE_DIR: &str = ".spin";
@@ -218,9 +216,6 @@ pub struct RuntimeConfigOpts {
 
     #[serde(skip)]
     pub file_path: Option<PathBuf>,
-
-    #[serde(default)]
-    pub outbound_http: Option<OutboundHttpOptions>,
 }
 
 impl RuntimeConfigOpts {

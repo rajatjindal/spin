@@ -8,7 +8,6 @@ use spin_common::{arg_parser::parse_kv, sloth};
 
 use crate::network::Network;
 use crate::runtime_config::llm::LLmOptions;
-use crate::runtime_config::outbound_http::OutboundHttpOptions;
 use crate::runtime_config::sqlite::SqlitePersistenceMessageHook;
 use crate::runtime_config::SummariseRuntimeConfigHook;
 use crate::stdio::StdioLoggingTriggerHooks;
