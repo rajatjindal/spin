@@ -586,7 +586,7 @@ struct ChainedRequestHandler {
 pub struct HttpRuntimeData {
     origin: Option<String>,
     chained_handler: Option<ChainedRequestHandler>,
-    custom_root_ca: Option<String>,
+    outbound_http_options: HashMap<String, String>,
     /// The hosts this app is allowed to make outbound requests to
     allowed_hosts: AllowedHostsConfig,
 }
@@ -703,6 +703,7 @@ async fn default_send_request_handler(
     wasmtime_wasi_http::types::IncomingResponse,
     wasmtime_wasi_http::bindings::http::types::ErrorCode,
 > {
+    println!("inside default send request handler {:?}", data.outbound_http_options);
     let authority = if let Some(authority) = request.uri().authority() {
         if authority.port().is_some() {
             authority.to_string()

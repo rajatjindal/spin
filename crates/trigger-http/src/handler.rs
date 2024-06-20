@@ -410,6 +410,7 @@ fn set_http_origin_from_request(
             };
             store.as_mut().data_mut().as_mut().origin = Some(origin);
             store.as_mut().data_mut().as_mut().chained_handler = Some(chained_request_handler);
+            store.as_mut().data_mut().as_mut().outbound_http_options = engine.get_outbound_http_opts();
         }
     }
 }

@@ -2,6 +2,7 @@ pub mod key_value;
 pub mod llm;
 pub mod sqlite;
 pub mod variables_provider;
+pub mod outbound_http;
 
 use std::{
     collections::HashMap,
@@ -11,6 +12,7 @@ use std::{
 };
 
 use anyhow::{Context, Result};
+use outbound_http::OutboundHttpOpts;
 use serde::Deserialize;
 use spin_common::ui::quoted_path;
 use spin_sqlite::Connection;
@@ -182,6 +184,10 @@ impl RuntimeConfig {
         }
     }
 
+    pub fn outbound_http_opts(&self) -> Option<&OutboundHttpOpts> {
+        self.find_opt(|opts| &opts.outbound_http)
+    }
+
     /// Returns an iterator of RuntimeConfigOpts in order of decreasing precedence
     fn opts_layers(&self) -> impl Iterator<Item = &RuntimeConfigOpts> {
         std::iter::once(&self.overrides).chain(self.files.iter().rev())
@@ -216,6 +222,9 @@ pub struct RuntimeConfigOpts {
 
     #[serde(skip)]
     pub file_path: Option<PathBuf>,
+
+    #[serde(rename = "outbound_http", default)]
+    pub outbound_http: Option<OutboundHttpOpts>,
 }
 
 impl RuntimeConfigOpts {
@@ -232,12 +241,15 @@ impl RuntimeConfigOpts {
                 )
             })
         } else {
-            toml::from_str(&contents).with_context(|| {
+            let x = toml::from_str(&contents).with_context(|| {
                 format!(
                     "Failed to parse runtime config TOML file {}",
                     quoted_path(path)
                 )
-            })
+            });
+
+            tracing::info!("runtime config is {:?}", x);
+            x
         }
     }
 }

@@ -8,7 +8,7 @@ use std::{collections::HashMap, marker::PhantomData};
 
 use anyhow::{Context, Result};
 pub use async_trait::async_trait;
-use runtime_config::llm::LLmOptions;
+use runtime_config::{llm::LLmOptions, outbound_http::OutboundHttpOpts};
 use serde::de::DeserializeOwned;
 use spin_app::{App, AppComponent, AppLoader, AppTrigger, Loader, OwnedApp, APP_NAME_KEY};
 use spin_core::{
@@ -233,9 +233,19 @@ impl<Executor: TriggerExecutor> TriggerExecutorBuilder<Executor> {
             .iter_mut()
             .try_for_each(|h| h.app_loaded(app.borrowed(), &runtime_config, &prepared_resolver))?;
 
+        let mut x: HashMap<String, String> = HashMap::new();
+        x.insert(String::from("hello"), runtime_config.outbound_http_opts().unwrap().hello.clone());
         // Run trigger executor
         Executor::new(
-            TriggerAppEngine::new(engine, app_name, app, self.hooks, &prepared_resolver).await?,
+            TriggerAppEngine::new(
+                engine,
+                app_name,
+                app,
+                self.hooks,
+                &prepared_resolver,
+                x,
+            )
+            .await?,
         )
         .await
     }
@@ -282,6 +292,8 @@ pub struct TriggerAppEngine<Executor: TriggerExecutor> {
     component_instance_pres: HashMap<String, Executor::InstancePre>,
     // Resolver for value template expressions
     resolver: std::sync::Arc<spin_expressions::PreparedResolver>,
+    // config for outbound_http
+    outbound_http_configs: HashMap<String, String>,
 }
 
 impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
@@ -293,6 +305,7 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
         app: OwnedApp,
         hooks: Vec<Box<dyn TriggerHooks>>,
         resolver: &std::sync::Arc<spin_expressions::PreparedResolver>,
+        outbound_http_configs: HashMap<String, String>,
     ) -> Result<Self>
     where
         <Executor as TriggerExecutor>::TriggerConfig: DeserializeOwned,
@@ -344,6 +357,7 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
             trigger_configs: trigger_configs.into_iter().map(|(_, v)| v).collect(),
             component_instance_pres,
             resolver: resolver.clone(),
+            outbound_http_configs,
         })
     }
 
@@ -422,6 +436,10 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
                 self.app_name, component_id
             )
         })
+    }
+
+    pub fn get_outbound_http_opts(&self) -> HashMap<String, String> {
+        self.outbound_http_configs.clone()
     }
 
     pub fn resolve_template(
