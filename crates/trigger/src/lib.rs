@@ -8,7 +8,7 @@ use std::{collections::HashMap, marker::PhantomData};
 
 use anyhow::{Context, Result};
 pub use async_trait::async_trait;
-use runtime_config::{llm::LLmOptions, outbound_http::OutboundHttpOpts};
+use runtime_config::llm::LLmOptions;
 use serde::de::DeserializeOwned;
 use spin_app::{App, AppComponent, AppLoader, AppTrigger, Loader, OwnedApp, APP_NAME_KEY};
 use spin_core::{
@@ -17,6 +17,8 @@ use spin_core::{
 };
 
 pub use crate::runtime_config::RuntimeConfig;
+pub use crate::runtime_config::ParsedClientCertAuth;
+pub use crate::runtime_config::ParsedOutboundHttpOpts;
 
 #[async_trait]
 pub trait TriggerExecutor: Sized + Send + Sync {
@@ -233,8 +235,7 @@ impl<Executor: TriggerExecutor> TriggerExecutorBuilder<Executor> {
             .iter_mut()
             .try_for_each(|h| h.app_loaded(app.borrowed(), &runtime_config, &prepared_resolver))?;
 
-        let mut x: HashMap<String, String> = HashMap::new();
-        x.insert(String::from("hello"), String::from("world"));
+        let x: HashMap<String, ParsedOutboundHttpOpts> = HashMap::new();
         // Run trigger executor
         Executor::new(
             TriggerAppEngine::new(
@@ -293,7 +294,7 @@ pub struct TriggerAppEngine<Executor: TriggerExecutor> {
     // Resolver for value template expressions
     resolver: std::sync::Arc<spin_expressions::PreparedResolver>,
     // config for outbound_http
-    outbound_http_configs: HashMap<String, String>,
+    outbound_http_configs: HashMap<String, ParsedOutboundHttpOpts>,
 }
 
 impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
@@ -305,7 +306,7 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
         app: OwnedApp,
         hooks: Vec<Box<dyn TriggerHooks>>,
         resolver: &std::sync::Arc<spin_expressions::PreparedResolver>,
-        outbound_http_configs: HashMap<String, String>,
+        outbound_http_configs: HashMap<String, ParsedOutboundHttpOpts>,
     ) -> Result<Self>
     where
         <Executor as TriggerExecutor>::TriggerConfig: DeserializeOwned,
@@ -438,7 +439,7 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
         })
     }
 
-    pub fn get_outbound_http_opts(&self) -> HashMap<String, String> {
+    pub fn get_outbound_http_opts(&self) -> HashMap<String, ParsedOutboundHttpOpts> {
         self.outbound_http_configs.clone()
     }
 

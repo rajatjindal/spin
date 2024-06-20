@@ -4,18 +4,19 @@ pub mod outbound_http;
 pub mod sqlite;
 pub mod variables_provider;
 
+use anyhow::{Context, Result};
+use outbound_http::OutboundHttpOpts;
+use rustls_pemfile::{certs, pkcs8_private_keys};
+use serde::Deserialize;
+use spin_common::ui::quoted_path;
+use spin_sqlite::Connection;
+use std::io;
 use std::{
     collections::HashMap,
     fs,
     path::{Path, PathBuf},
     sync::Arc,
 };
-
-use anyhow::{Context, Result};
-use outbound_http::OutboundHttpOpts;
-use serde::Deserialize;
-use spin_common::ui::quoted_path;
-use spin_sqlite::Connection;
 
 use crate::TriggerHooks;
 
@@ -36,6 +37,21 @@ pub struct RuntimeConfig {
     local_app_dir: Option<PathBuf>,
     files: Vec<RuntimeConfigOpts>,
     overrides: RuntimeConfigOpts,
+}
+
+// parsed outbound http opts
+#[derive(Debug, Clone)]
+pub struct ParsedOutboundHttpOpts {
+    pub host: String,
+    pub custom_root_ca: Option<Vec<rustls_pki_types::CertificateDer<'static>>>,
+    pub client_cert_auth: Option<ParsedClientCertAuth>,
+}
+
+// parsed client cert auth
+#[derive(Debug, Clone)]
+pub struct ParsedClientCertAuth {
+    pub cert_chain: Vec<rustls_pki_types::CertificateDer<'static>>,
+    pub private_key: Arc<rustls_pki_types::PrivateKeyDer<'static>>,
 }
 
 impl RuntimeConfig {
@@ -184,12 +200,13 @@ impl RuntimeConfig {
         }
     }
 
-    pub fn outbound_http_opts(&self) -> Vec<&OutboundHttpOpts> {
-        let mut outbound_http_opts2: Vec<&OutboundHttpOpts> = vec![];
-        outbound_http_opts2.extend(
-            self.opts_layers()
-                .flat_map(|opts| opts.outbound_http_opts.iter().map(|opts| opts)),
-        );
+    pub fn outbound_http_opts(&self) -> Vec<ParsedOutboundHttpOpts> {
+        let mut outbound_http_opts2: Vec<ParsedOutboundHttpOpts> = vec![];
+        outbound_http_opts2.extend(self.opts_layers().flat_map(|opts| {
+            opts.outbound_http_opts
+                .iter()
+                .map(|opts| parse_outbound_opts(opts).unwrap())
+        }));
         outbound_http_opts2
     }
 
@@ -202,6 +219,61 @@ impl RuntimeConfig {
     fn find_opt<T>(&self, mut f: impl FnMut(&RuntimeConfigOpts) -> &Option<T>) -> Option<&T> {
         self.opts_layers().find_map(|opts| f(opts).as_ref())
     }
+}
+
+fn parse_outbound_opts(inp: &OutboundHttpOpts) -> Result<ParsedOutboundHttpOpts, io::Error> {
+    let custom_root_ca = match &inp.custom_root_ca_file {
+        Some(path) => Some(load_certs(path.clone()).unwrap()),
+        None => None,
+    };
+
+    let client_cert_auth = match &inp.client_cert_auth {
+        Some(config) => {
+            let cert_chain = load_certs(&config.cert_chain_file).unwrap();
+            let privatekey = load_keys(&config.private_key_file).unwrap();
+
+            Some(ParsedClientCertAuth {
+                cert_chain: cert_chain,
+                private_key: Arc::from(privatekey),
+            })
+        }
+        None => None,
+    };
+
+    Ok(ParsedOutboundHttpOpts {
+        host: inp.host.clone(),
+        custom_root_ca,
+        client_cert_auth,
+    })
+}
+
+//TODO(rajatjindal): copied over from trigger-http/tls. should move to a common place.
+fn load_certs(
+    path: impl AsRef<Path>,
+) -> io::Result<Vec<rustls_pki_types::CertificateDer<'static>>> {
+    certs(&mut io::BufReader::new(fs::File::open(path)?))
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid cert"))
+        .map(|mut certs| {
+            certs
+                .drain(..)
+                .map(rustls_pki_types::CertificateDer::from)
+                .collect()
+        })
+}
+
+// Loads private key from file.
+fn load_keys(path: impl AsRef<Path>) -> io::Result<rustls_pki_types::PrivateKeyDer<'static>> {
+    let x = pkcs8_private_keys(&mut io::BufReader::new(fs::File::open(path)?))
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid key"))
+        .map(|mut keys| {
+            keys.drain(..)
+                .map(rustls_pki_types::PrivateKeyDer::try_from)
+                .last()
+                .unwrap()
+                .unwrap()
+        });
+
+    x
 }
 
 #[derive(Debug, Default, Deserialize)]

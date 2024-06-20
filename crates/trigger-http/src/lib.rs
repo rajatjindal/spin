@@ -4,7 +4,6 @@ mod handler;
 mod instrument;
 mod tls;
 mod wagi;
-use std::time::Duration;
 use std::{
     collections::HashMap,
     io::IsTerminal,
@@ -40,7 +39,7 @@ use spin_http::{
 use spin_outbound_networking::{
     is_service_chaining_host, parse_service_chaining_target, AllowedHostsConfig, OutboundUrl,
 };
-use spin_trigger::{TriggerAppEngine, TriggerExecutor, TriggerInstancePre};
+use spin_trigger::{ParsedOutboundHttpOpts, TriggerAppEngine, TriggerExecutor, TriggerInstancePre};
 use tokio::{
     io::{AsyncRead, AsyncWrite},
     net::TcpListener,
@@ -586,7 +585,7 @@ struct ChainedRequestHandler {
 pub struct HttpRuntimeData {
     origin: Option<String>,
     chained_handler: Option<ChainedRequestHandler>,
-    outbound_http_options: HashMap<String, String>,
+    outbound_http_options: HashMap<String, ParsedOutboundHttpOpts>,
     /// The hosts this app is allowed to make outbound requests to
     allowed_hosts: AllowedHostsConfig,
 }

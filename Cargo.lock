@@ -7879,6 +7879,9 @@ dependencies = [
  "outbound-mysql",
  "outbound-pg",
  "outbound-redis",
+ "rustls 0.22.3",
+ "rustls-pemfile 0.3.0",
+ "rustls-pki-types",
  "sanitize-filename",
  "serde 1.0.197",
  "serde_json",
@@ -7906,12 +7909,14 @@ dependencies = [
  "tempfile",
  "terminal",
  "tokio",
+ "tokio-rustls 0.25.0",
  "toml 0.5.11",
  "tracing",
  "url",
  "wasmtime",
  "wasmtime-wasi",
  "wasmtime-wasi-http",
+ "webpki-roots 0.26.1",
 ]
 
 [[package]]

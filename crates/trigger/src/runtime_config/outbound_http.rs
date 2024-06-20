@@ -12,7 +12,7 @@ pub struct OutboundHttpOpts {
 /// Configuration for client cert auth.
 pub struct ClientCertAuth {
     /// The auth cert chain to use for client-auth
-    pub cert_chain: String,
+    pub cert_chain_file: String,
     /// The private key to use for client-auth
-    pub private_key: String,
+    pub private_key_file: String,
 }
