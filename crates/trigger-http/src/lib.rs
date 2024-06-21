@@ -661,10 +661,6 @@ pub fn dns_error(rcode: String, info_code: u16) -> ErrorCode {
     })
 }
 
-pub(crate) fn internal_error(msg: String) -> ErrorCode {
-    ErrorCode::InternalError(Some(msg))
-}
-
 // default_send_request_handler is copied over from wasmtime_wasi_http crate
 // and modified to support client cert auth
 async fn default_send_request_handler(
