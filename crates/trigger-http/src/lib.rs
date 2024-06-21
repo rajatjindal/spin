@@ -586,7 +586,7 @@ struct ChainedRequestHandler {
 pub struct HttpRuntimeData {
     origin: Option<String>,
     chained_handler: Option<ChainedRequestHandler>,
-    client_tls_opts: HashMap<String, ParsedClientTlsOpts>,
+    client_tls_opts: Option<HashMap<String, ParsedClientTlsOpts>>,
     /// The hosts this app is allowed to make outbound requests to
     allowed_hosts: AllowedHostsConfig,
 }
@@ -869,7 +869,7 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
         if true {
             panic!("is this called")
         }
-        
+
         let this = data.as_mut();
 
         let is_relative_url = request
@@ -957,7 +957,7 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
 
         //TODO(rajatjindal): only pass tls options if component has access to it
         let response_handle = async move {
-            let res = default_send_request_handler(request, config, Some(x.client_tls_opts)).await;
+            let res = default_send_request_handler(request, config, x.client_tls_opts).await;
             if let Ok(res) = &res {
                 tracing::Span::current()
                     .record("http.response.status_code", res.resp.status().as_u16());

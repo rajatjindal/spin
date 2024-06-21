@@ -16,8 +16,8 @@ use spin_core::{
     StoreBuilder, WasiVersion,
 };
 
-pub use crate::runtime_config::RuntimeConfig;
 pub use crate::runtime_config::ParsedClientTlsOpts;
+pub use crate::runtime_config::RuntimeConfig;
 
 #[async_trait]
 pub trait TriggerExecutor: Sized + Send + Sync {
@@ -34,7 +34,7 @@ pub trait TriggerExecutor: Sized + Send + Sync {
     async fn run(self, config: Self::RunConfig) -> Result<()>;
 
     /// Make changes to the ExecutionContext using the given Builder.
-    fn configure_engine(builder: &mut EngineBuilder<Self::RuntimeData>) -> Result<()> {
+    fn configure_engine(_builder: &mut EngineBuilder<Self::RuntimeData>) -> Result<()> {
         Ok(())
     }
 
@@ -291,8 +291,8 @@ pub struct TriggerAppEngine<Executor: TriggerExecutor> {
     component_instance_pres: HashMap<String, Executor::InstancePre>,
     // Resolver for value template expressions
     resolver: std::sync::Arc<spin_expressions::PreparedResolver>,
-    // client tls configs
-    client_tls_configs: HashMap<String, ParsedClientTlsOpts>,
+    // Map of { Component ID -> Map of { Host -> ParsedClientTlsOpts} }
+    client_tls_opts: HashMap<String, HashMap<String, ParsedClientTlsOpts>>,
 }
 
 impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
@@ -304,7 +304,7 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
         app: OwnedApp,
         hooks: Vec<Box<dyn TriggerHooks>>,
         resolver: &std::sync::Arc<spin_expressions::PreparedResolver>,
-        client_tls_configs: HashMap<String, ParsedClientTlsOpts>,
+        client_tls_opts: HashMap<String, HashMap<String, ParsedClientTlsOpts>>,
     ) -> Result<Self>
     where
         <Executor as TriggerExecutor>::TriggerConfig: DeserializeOwned,
@@ -356,7 +356,7 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
             trigger_configs: trigger_configs.into_iter().map(|(_, v)| v).collect(),
             component_instance_pres,
             resolver: resolver.clone(),
-            client_tls_configs,
+            client_tls_opts,
         })
     }
 
@@ -437,8 +437,11 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
         })
     }
 
-    pub fn get_client_tls_opts(&self, component_id: &str) -> HashMap<String, ParsedClientTlsOpts> {
-        self.client_tls_configs.clone()
+    pub fn get_client_tls_opts(
+        &self,
+        component_id: &str,
+    ) -> Option<HashMap<String, ParsedClientTlsOpts>> {
+        self.client_tls_opts.get(component_id).cloned()
     }
 
     pub fn resolve_template(

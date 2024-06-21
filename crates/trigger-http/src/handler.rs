@@ -37,7 +37,7 @@ impl HttpExecutor for HttpHandlerExecutor {
         let component_id = route_match.component_id();
 
         tracing::trace!(
-            "http Executing request using the Spin executor for component {}",
+            "Executing request using the Spin executor for component {}",
             component_id
         );
 
@@ -46,11 +46,14 @@ impl HttpExecutor for HttpHandlerExecutor {
             unreachable!()
         };
 
-        // set the outbound options based on runtime config options
-        store.as_mut().data_mut().as_mut().client_tls_opts = engine.get_client_tls_opts(component_id);
-
-
         set_http_origin_from_request(&mut store, engine.clone(), self, &req);
+
+        // set the client tls options for the current component_id.
+        // The OutboundWasiHttpHandler in this file is only used 
+        // when making http-request from a http-trigger component.
+        // The outbound http requests from other triggers such as Redis
+        // uses OutboundWasiHttpHandler defined in spin_core crate.
+        store.as_mut().data_mut().as_mut().client_tls_opts = engine.get_client_tls_opts(component_id);
 
         let resp = match ty {
             HandlerType::Spin => {
