@@ -45,6 +45,7 @@ use tokio::{
     net::TcpListener,
     task,
 };
+
 use tracing::{field::Empty, log, Instrument};
 use wasmtime_wasi_http::bindings::http::types;
 use wasmtime_wasi_http::{
@@ -676,7 +677,6 @@ async fn default_send_request_handler(
     wasmtime_wasi_http::types::IncomingResponse,
     wasmtime_wasi_http::bindings::http::types::ErrorCode,
 > {
-    println!("inside default send request handler {:?}", client_tls_opts);
     let authority = if let Some(authority) = request.uri().authority() {
         if authority.port().is_some() {
             authority.to_string()
@@ -717,25 +717,10 @@ async fn default_send_request_handler(
 
         #[cfg(not(any(target_arch = "riscv64", target_arch = "s390x")))]
         {
-            use rustls::pki_types::{ServerName, TrustAnchor};
+            use rustls::pki_types::ServerName;
 
-            // derived from https://github.com/tokio-rs/tls/blob/master/tokio-rustls/examples/client/src/main.rs
-            let mut root_cert_store = rustls::RootCertStore::empty();
-            root_cert_store.extend(webpki_roots::TLS_SERVER_ROOTS.iter().map(|ta| TrustAnchor {
-                name_constraints: ta.name_constraints.to_owned(),
-                subject: ta.subject.to_owned(),
-                subject_public_key_info: ta.subject_public_key_info.to_owned(),
-            }));
-            let xx = client_tls_opts.unwrap().get(&authority).unwrap().clone();
-            for cer in xx.custom_root_ca.unwrap().clone() {
-                let _ = root_cert_store.add(cer);
-            }
-
-            let config = rustls::ClientConfig::builder()
-                .with_root_certificates(root_cert_store)
-                .with_client_auth_cert(xx.cert_chain.unwrap(), xx.private_key.unwrap().clone_key())
-                .unwrap();
-            let connector = tokio_rustls::TlsConnector::from(std::sync::Arc::new(config));
+            let tls_config = get_client_tls_config(&authority, client_tls_opts);
+            let connector = tokio_rustls::TlsConnector::from(std::sync::Arc::new(tls_config));
             let mut parts = authority.split(":");
             let host = parts.next().unwrap_or(&authority);
             let domain = ServerName::try_from(host)
@@ -816,6 +801,58 @@ async fn default_send_request_handler(
         worker: Some(worker),
         between_bytes_timeout,
     })
+}
+
+fn get_client_tls_config(
+    authority: &String,
+    client_tls_opts: Option<HashMap<String, ParsedClientTlsOpts>>,
+) -> rustls::ClientConfig {
+    // derived from https://github.com/tokio-rs/tls/blob/master/tokio-rustls/examples/client/src/main.rs
+    let mut root_cert_store = rustls::RootCertStore {
+        roots: webpki_roots::TLS_SERVER_ROOTS.into(),
+    };
+
+    let client_tls_opts = match client_tls_opts {
+        Some(opts) => opts,
+        _ => {
+            return rustls::ClientConfig::builder()
+                .with_root_certificates(root_cert_store)
+                .with_no_client_auth();
+        }
+    };
+
+    let client_tls_opts_for_host = match client_tls_opts.get(authority) {
+        Some(opts) => opts,
+        _ => {
+            return rustls::ClientConfig::builder()
+                .with_root_certificates(root_cert_store)
+                .with_no_client_auth();
+        }
+    };
+
+    if let Some(custom_root_ca) = &client_tls_opts_for_host.custom_root_ca {
+        for cer in custom_root_ca {
+            match root_cert_store.add(cer.to_owned()) {
+                Ok(_) => {}
+                Err(e) => {
+                    tracing::warn!("failed to add custom cert to root_cert_store. error: {}", e)
+                }
+            }
+        }
+    }
+
+    match (
+        &client_tls_opts_for_host.cert_chain,
+        &client_tls_opts_for_host.private_key,
+    ) {
+        (Some(cert_chain), Some(private_key)) => rustls::ClientConfig::builder()
+            .with_root_certificates(root_cert_store)
+            .with_client_auth_cert(cert_chain.to_owned(), private_key.clone_key())
+            .unwrap(),
+        _ => rustls::ClientConfig::builder()
+            .with_root_certificates(root_cert_store)
+            .with_no_client_auth(),
+    }
 }
 
 fn parse_chaining_target(request: &Request<HyperOutgoingBody>) -> Option<String> {
