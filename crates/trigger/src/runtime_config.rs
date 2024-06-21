@@ -4,11 +4,6 @@ pub mod llm;
 pub mod sqlite;
 pub mod variables_provider;
 
-use anyhow::{Context, Result};
-use client_tls::ClientTlsOpts;
-use serde::Deserialize;
-use spin_common::ui::quoted_path;
-use spin_sqlite::Connection;
 use std::{
     collections::HashMap,
     fs,
@@ -16,7 +11,12 @@ use std::{
     sync::Arc,
 };
 
-use crate::runtime_config::client_tls::{load_certs, load_keys};
+use anyhow::{Context, Result};
+use client_tls::{load_certs, load_keys, ClientTlsOpts};
+use serde::Deserialize;
+use spin_common::ui::quoted_path;
+use spin_sqlite::Connection;
+
 use crate::TriggerHooks;
 
 use self::{
@@ -236,9 +236,7 @@ fn parse_client_tls_opts(inp: &ClientTlsOpts) -> Result<ParsedClientTlsOpts, any
     };
 
     let cert_chain = match &inp.cert_chain_file {
-        Some(file) => {
-            Some(load_certs(&file).context("loading client tls certs")?)
-        }
+        Some(file) => Some(load_certs(&file).context("loading client tls certs")?),
         None => None,
     };
 
@@ -302,15 +300,12 @@ impl RuntimeConfigOpts {
                 )
             })
         } else {
-            let x = toml::from_str(&contents).with_context(|| {
+            toml::from_str(&contents).with_context(|| {
                 format!(
                     "Failed to parse runtime config TOML file {}",
                     quoted_path(path)
                 )
-            });
-
-            tracing::info!("runtime config is {:?}", x);
-            x
+            })
         }
     }
 }
