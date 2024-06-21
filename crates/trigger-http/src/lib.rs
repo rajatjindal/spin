@@ -865,6 +865,11 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
         mut request: Request<HyperOutgoingBody>,
         mut config: wasmtime_wasi_http::types::OutgoingRequestConfig,
     ) -> HttpResult<wasmtime_wasi_http::types::HostFutureIncomingResponse> {
+        tracing::trace!("inside send request function");
+        if true {
+            panic!("is this called")
+        }
+        
         let this = data.as_mut();
 
         let is_relative_url = request
@@ -966,6 +971,8 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
         ));
     }
 }
+
+fn get_client_tls_config_2(){}
 
 #[derive(Debug, PartialEq)]
 enum NotFoundRouteKind {

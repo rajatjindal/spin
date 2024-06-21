@@ -34,7 +34,7 @@ pub trait TriggerExecutor: Sized + Send + Sync {
     async fn run(self, config: Self::RunConfig) -> Result<()>;
 
     /// Make changes to the ExecutionContext using the given Builder.
-    fn configure_engine(_builder: &mut EngineBuilder<Self::RuntimeData>) -> Result<()> {
+    fn configure_engine(builder: &mut EngineBuilder<Self::RuntimeData>) -> Result<()> {
         Ok(())
     }
 
@@ -437,7 +437,7 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
         })
     }
 
-    pub fn get_client_tls_opts(&self) -> HashMap<String, ParsedClientTlsOpts> {
+    pub fn get_client_tls_opts(&self, component_id: &str) -> HashMap<String, ParsedClientTlsOpts> {
         self.client_tls_configs.clone()
     }
 

@@ -37,7 +37,7 @@ impl HttpExecutor for HttpHandlerExecutor {
         let component_id = route_match.component_id();
 
         tracing::trace!(
-            "Executing request using the Spin executor for component {}",
+            "http Executing request using the Spin executor for component {}",
             component_id
         );
 
@@ -47,7 +47,7 @@ impl HttpExecutor for HttpHandlerExecutor {
         };
 
         // set the outbound options based on runtime config options
-        store.as_mut().data_mut().as_mut().client_tls_opts = engine.get_client_tls_opts();
+        store.as_mut().data_mut().as_mut().client_tls_opts = engine.get_client_tls_opts(component_id);
 
 
         set_http_origin_from_request(&mut store, engine.clone(), self, &req);

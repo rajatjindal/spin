@@ -43,6 +43,7 @@ impl outbound_http::Host for OutboundHttp {
         fields(otel.kind = "client", url.full = Empty, http.request.method = Empty,
         http.response.status_code = Empty, otel.name = Empty, server.address = Empty, server.port = Empty))]
     async fn send_request(&mut self, req: Request) -> Result<Response, HttpError> {
+        tracing::trace!("inside 'outbound_http::Host for OutboundHttp'");
         let current_span = tracing::Span::current();
         let method = format!("{:?}", req.method)
             .strip_prefix("Method::")

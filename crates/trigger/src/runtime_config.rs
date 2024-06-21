@@ -196,7 +196,6 @@ impl RuntimeConfig {
     }
 
     // TODO(rajatjindal): cleanup comments here
-    // returns component-id -> HashMap<host, opts>
     pub fn client_tls_opts(&self) -> HashMap<String, ParsedClientTlsOpts> {
         let mut componentsmap: HashMap<String, ParsedClientTlsOpts> = HashMap::new();
 

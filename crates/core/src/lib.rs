@@ -298,7 +298,7 @@ pub trait OutboundWasiHttpHandler {
 
 impl OutboundWasiHttpHandler for () {
     fn send_request(
-        _data: &mut Data<Self>,
+        data: &mut Data<Self>,
         request: Request<HyperOutgoingBody>,
         config: wasmtime_wasi_http::types::OutgoingRequestConfig,
     ) -> wasmtime_wasi_http::HttpResult<wasmtime_wasi_http::types::HostFutureIncomingResponse>
