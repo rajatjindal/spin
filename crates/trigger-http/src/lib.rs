@@ -39,7 +39,7 @@ use spin_http::{
 use spin_outbound_networking::{
     is_service_chaining_host, parse_service_chaining_target, AllowedHostsConfig, OutboundUrl,
 };
-use spin_trigger::{ParsedOutboundHttpOpts, TriggerAppEngine, TriggerExecutor, TriggerInstancePre};
+use spin_trigger::{ParsedClientTlsOpts, TriggerAppEngine, TriggerExecutor, TriggerInstancePre};
 use tokio::{
     io::{AsyncRead, AsyncWrite},
     net::TcpListener,
@@ -585,7 +585,7 @@ struct ChainedRequestHandler {
 pub struct HttpRuntimeData {
     origin: Option<String>,
     chained_handler: Option<ChainedRequestHandler>,
-    outbound_http_options: HashMap<String, ParsedOutboundHttpOpts>,
+    client_tls_opts: HashMap<String, ParsedClientTlsOpts>,
     /// The hosts this app is allowed to make outbound requests to
     allowed_hosts: AllowedHostsConfig,
 }
@@ -664,7 +664,6 @@ pub(crate) fn internal_error(msg: String) -> ErrorCode {
 }
 
 async fn default_send_request_handler(
-    data: HttpRuntimeData,
     mut request: Request<HyperOutgoingBody>,
     wasmtime_wasi_http::types::OutgoingRequestConfig {
         use_tls,
@@ -672,14 +671,12 @@ async fn default_send_request_handler(
         first_byte_timeout,
         between_bytes_timeout,
     }: wasmtime_wasi_http::types::OutgoingRequestConfig,
+    client_tls_opts: Option<HashMap<String, ParsedClientTlsOpts>>,
 ) -> Result<
     wasmtime_wasi_http::types::IncomingResponse,
     wasmtime_wasi_http::bindings::http::types::ErrorCode,
 > {
-    println!(
-        "inside default send request handler {:?}",
-        data.outbound_http_options
-    );
+    println!("inside default send request handler {:?}", client_tls_opts);
     let authority = if let Some(authority) = request.uri().authority() {
         if authority.port().is_some() {
             authority.to_string()
@@ -729,15 +726,15 @@ async fn default_send_request_handler(
                 subject: ta.subject.to_owned(),
                 subject_public_key_info: ta.subject_public_key_info.to_owned(),
             }));
-            let xx = data.outbound_http_options.get("https://localhost:6551").unwrap().clone();
+            let xx = client_tls_opts.unwrap().get(&authority).unwrap().clone();
             for cer in xx.custom_root_ca.unwrap().clone() {
                 let _ = root_cert_store.add(cer);
             }
-            
-            let yy = xx.client_cert_auth.unwrap().clone();
+
             let config = rustls::ClientConfig::builder()
                 .with_root_certificates(root_cert_store)
-                .with_client_auth_cert(yy.cert_chain, yy.private_key.clone_key()).unwrap();
+                .with_client_auth_cert(xx.cert_chain.unwrap(), xx.private_key.unwrap().clone_key())
+                .unwrap();
             let connector = tokio_rustls::TlsConnector::from(std::sync::Arc::new(config));
             let mut parts = authority.split(":");
             let host = parts.next().unwrap_or(&authority);
@@ -916,8 +913,9 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
 
         let x = (*data.as_ref()).clone();
 
+        //TODO(rajatjindal): only pass tls options if component has access to it
         let response_handle = async move {
-            let res = default_send_request_handler(x, request, config).await;
+            let res = default_send_request_handler(request, config, Some(x.client_tls_opts)).await;
             if let Ok(res) = &res {
                 tracing::Span::current()
                     .record("http.response.status_code", res.resp.status().as_u16());

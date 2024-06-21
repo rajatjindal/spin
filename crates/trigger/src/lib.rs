@@ -17,8 +17,7 @@ use spin_core::{
 };
 
 pub use crate::runtime_config::RuntimeConfig;
-pub use crate::runtime_config::ParsedClientCertAuth;
-pub use crate::runtime_config::ParsedOutboundHttpOpts;
+pub use crate::runtime_config::ParsedClientTlsOpts;
 
 #[async_trait]
 pub trait TriggerExecutor: Sized + Send + Sync {
@@ -243,7 +242,7 @@ impl<Executor: TriggerExecutor> TriggerExecutorBuilder<Executor> {
                 app,
                 self.hooks,
                 &prepared_resolver,
-                runtime_config.outbound_http_opts(),
+                runtime_config.client_tls_opts(),
             )
             .await?,
         )
@@ -292,8 +291,8 @@ pub struct TriggerAppEngine<Executor: TriggerExecutor> {
     component_instance_pres: HashMap<String, Executor::InstancePre>,
     // Resolver for value template expressions
     resolver: std::sync::Arc<spin_expressions::PreparedResolver>,
-    // config for outbound_http
-    outbound_http_configs: HashMap<String, ParsedOutboundHttpOpts>,
+    // client tls configs
+    client_tls_configs: HashMap<String, ParsedClientTlsOpts>,
 }
 
 impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
@@ -305,7 +304,7 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
         app: OwnedApp,
         hooks: Vec<Box<dyn TriggerHooks>>,
         resolver: &std::sync::Arc<spin_expressions::PreparedResolver>,
-        outbound_http_configs: HashMap<String, ParsedOutboundHttpOpts>,
+        client_tls_configs: HashMap<String, ParsedClientTlsOpts>,
     ) -> Result<Self>
     where
         <Executor as TriggerExecutor>::TriggerConfig: DeserializeOwned,
@@ -357,7 +356,7 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
             trigger_configs: trigger_configs.into_iter().map(|(_, v)| v).collect(),
             component_instance_pres,
             resolver: resolver.clone(),
-            outbound_http_configs,
+            client_tls_configs,
         })
     }
 
@@ -438,8 +437,8 @@ impl<Executor: TriggerExecutor> TriggerAppEngine<Executor> {
         })
     }
 
-    pub fn get_outbound_http_opts(&self) -> HashMap<String, ParsedOutboundHttpOpts> {
-        self.outbound_http_configs.clone()
+    pub fn get_client_tls_opts(&self) -> HashMap<String, ParsedClientTlsOpts> {
+        self.client_tls_configs.clone()
     }
 
     pub fn resolve_template(

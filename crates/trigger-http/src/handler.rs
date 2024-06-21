@@ -47,7 +47,7 @@ impl HttpExecutor for HttpHandlerExecutor {
         };
 
         // set the outbound options based on runtime config options
-        store.as_mut().data_mut().as_mut().outbound_http_options = engine.get_outbound_http_opts();
+        store.as_mut().data_mut().as_mut().client_tls_opts = engine.get_client_tls_opts();
 
 
         set_http_origin_from_request(&mut store, engine.clone(), self, &req);

@@ -1,12 +1,12 @@
+pub mod client_tls;
 pub mod key_value;
 pub mod llm;
-pub mod outbound_http;
 pub mod sqlite;
 pub mod variables_provider;
 
 use anyhow::{Context, Result};
-use outbound_http::OutboundHttpOpts;
-use rustls_pemfile::{certs, private_key};
+use client_tls::ClientTlsOpts;
+use rustls_pemfile::private_key;
 use serde::Deserialize;
 use spin_common::ui::quoted_path;
 use spin_sqlite::Connection;
@@ -41,17 +41,12 @@ pub struct RuntimeConfig {
 
 // parsed outbound http opts
 #[derive(Debug, Clone)]
-pub struct ParsedOutboundHttpOpts {
-    pub host: String,
+pub struct ParsedClientTlsOpts {
+    pub components: Vec<String>,
+    pub hosts: Vec<String>,
     pub custom_root_ca: Option<Vec<rustls_pki_types::CertificateDer<'static>>>,
-    pub client_cert_auth: Option<ParsedClientCertAuth>,
-}
-
-// parsed client cert auth
-#[derive(Debug, Clone)]
-pub struct ParsedClientCertAuth {
-    pub cert_chain: Vec<rustls_pki_types::CertificateDer<'static>>,
-    pub private_key: Arc<rustls_pki_types::PrivateKeyDer<'static>>,
+    pub cert_chain: Option<Vec<rustls_pki_types::CertificateDer<'static>>>,
+    pub private_key: Option<Arc<rustls_pki_types::PrivateKeyDer<'static>>>,
 }
 
 impl RuntimeConfig {
@@ -200,17 +195,23 @@ impl RuntimeConfig {
         }
     }
 
-    pub fn outbound_http_opts(&self) -> HashMap<String, ParsedOutboundHttpOpts> {
-        let mut outbound_http_opts2: HashMap<String, ParsedOutboundHttpOpts> = HashMap::new();
+    // TODO(rajatjindal): cleanup comments here
+    // returns component-id -> HashMap<host, opts>
+    pub fn client_tls_opts(&self) -> HashMap<String, ParsedClientTlsOpts> {
+        let mut componentsmap: HashMap<String, ParsedClientTlsOpts> = HashMap::new();
 
-        for o in self.opts_layers() {
-            let xx = &o.outbound_http_opts;
+        //TODO(rajatjindal): I think just self.find_opt should work here
+        for opt_layer in self.opts_layers() {
+            let xx = &opt_layer.client_tls_opts;
             for oo in xx {
-                outbound_http_opts2.insert(oo.host.clone(), parse_outbound_opts(oo).unwrap());
+                let parsed = parse_client_tls_opts(oo).unwrap();
+                for host in &oo.hosts {
+                    componentsmap.insert(host.to_owned(), parsed.clone());
+                }
             }
         }
 
-        outbound_http_opts2
+        componentsmap
     }
 
     /// Returns an iterator of RuntimeConfigOpts in order of decreasing precedence
@@ -224,29 +225,35 @@ impl RuntimeConfig {
     }
 }
 
-fn parse_outbound_opts(inp: &OutboundHttpOpts) -> Result<ParsedOutboundHttpOpts, io::Error> {
+fn parse_client_tls_opts(inp: &ClientTlsOpts) -> Result<ParsedClientTlsOpts, io::Error> {
     let custom_root_ca = match &inp.custom_root_ca_file {
         Some(path) => Some(load_certs(path.clone()).unwrap()),
         None => None,
     };
 
-    let client_cert_auth = match &inp.client_cert_auth {
-        Some(config) => {
-            let cert_chain = load_certs(&config.cert_chain_file).unwrap();
-            let privatekey = load_keys(&config.private_key_file).unwrap();
-
-            Some(ParsedClientCertAuth {
-                cert_chain: cert_chain,
-                private_key: Arc::from(privatekey),
-            })
+    let cert_chain = match &inp.cert_chain_file {
+        Some(file) => {
+            //TODO(rajatjindal): remove unwrap and handle result
+            Some(load_certs(&file).unwrap())
         }
         None => None,
     };
 
-    Ok(ParsedOutboundHttpOpts {
-        host: inp.host.clone(),
+    let private_key = match &inp.private_key_file {
+        Some(file) => {
+            //TODO(rajatjindal): remove unwrap and handle result
+            let privatekey = load_keys(&file).unwrap();
+            Some(Arc::from(privatekey))
+        }
+        None => None,
+    };
+
+    Ok(ParsedClientTlsOpts {
+        hosts: inp.hosts.clone(),
+        components: inp.component_ids.clone(),
         custom_root_ca,
-        client_cert_auth,
+        cert_chain,
+        private_key,
     })
 }
 
@@ -268,7 +275,7 @@ fn load_certs(path: impl AsRef<Path>) -> Result<Vec<rustls_pki_types::Certificat
 fn load_keys(path: impl AsRef<Path>) -> io::Result<rustls_pki_types::PrivateKeyDer<'static>> {
     let x = private_key(&mut io::BufReader::new(fs::File::open(path)?))
         .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid key"))
-        .map(|mut keys| keys.unwrap());
+        .map(|keys| keys.unwrap());
 
     x
 }
@@ -297,8 +304,8 @@ pub struct RuntimeConfigOpts {
     #[serde(skip)]
     pub file_path: Option<PathBuf>,
 
-    #[serde(rename = "outbound_http", default)]
-    pub outbound_http_opts: Vec<OutboundHttpOpts>,
+    #[serde(rename = "client_tls", default)]
+    pub client_tls_opts: Vec<ClientTlsOpts>,
 }
 
 impl RuntimeConfigOpts {
