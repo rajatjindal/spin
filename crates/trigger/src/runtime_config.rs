@@ -242,8 +242,7 @@ fn parse_client_tls_opts(inp: &ClientTlsOpts) -> Result<ParsedClientTlsOpts, any
 
     let private_key = match &inp.private_key_file {
         Some(file) => {
-            //TODO(rajatjindal): remove unwrap and handle result
-            let privatekey = load_keys(&file).unwrap();
+            let privatekey = load_keys(&file).context("loading private key")?;
             Some(Arc::from(privatekey))
         }
         None => None,
