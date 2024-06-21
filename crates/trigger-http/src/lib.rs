@@ -4,6 +4,7 @@ mod handler;
 mod instrument;
 mod tls;
 mod wagi;
+
 use std::{
     collections::HashMap,
     io::IsTerminal,
