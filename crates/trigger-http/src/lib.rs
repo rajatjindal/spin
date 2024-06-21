@@ -972,8 +972,6 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
     }
 }
 
-fn get_client_tls_config_2(){}
-
 #[derive(Debug, PartialEq)]
 enum NotFoundRouteKind {
     Normal(String),
