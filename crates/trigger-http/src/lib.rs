@@ -966,9 +966,9 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
         }
         .in_current_span();
 
-        return Ok(HostFutureIncomingResponse::Pending(
+        Ok(HostFutureIncomingResponse::Pending(
             wasmtime_wasi::runtime::spawn(response_handle),
-        ));
+        ))
     }
 }
 
