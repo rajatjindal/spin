@@ -194,28 +194,27 @@ impl RuntimeConfig {
         }
     }
 
-    // TODO(rajatjindal): cleanup comments here
-    pub fn client_tls_opts(&self) -> HashMap<String, HashMap<String, ParsedClientTlsOpts>> {
-        let mut componentsmap: HashMap<String, HashMap<String, ParsedClientTlsOpts>> =
+    // returns the client tls options in form of nested map,
+    // first by component-id and then by host
+    pub fn client_tls_opts(&self) -> Result<HashMap<String, HashMap<String, ParsedClientTlsOpts>>> {
+        let mut components_map: HashMap<String, HashMap<String, ParsedClientTlsOpts>> =
             HashMap::new();
 
-        //TODO(rajatjindal): I think just self.find_opt should work here
         for opt_layer in self.opts_layers() {
-            let xx = &opt_layer.client_tls_opts;
-            for oo in xx {
-                let parsed = parse_client_tls_opts(oo).unwrap();
-                for component_id in &oo.component_ids {
+            for opts in &opt_layer.client_tls_opts {
+                let parsed = parse_client_tls_opts(opts).context("parsing client tls options")?;
+                for component_id in &opts.component_ids {
                     let mut hostmap: HashMap<String, ParsedClientTlsOpts> = HashMap::new();
-                    for host in &oo.hosts {
+                    for host in &opts.hosts {
                         hostmap.insert(host.to_owned(), parsed.clone());
                     }
 
-                    componentsmap.insert(component_id.to_owned(), hostmap);
+                    components_map.insert(component_id.to_owned(), hostmap);
                 }
             }
         }
 
-        componentsmap
+        Ok(components_map)
     }
 
     /// Returns an iterator of RuntimeConfigOpts in order of decreasing precedence

@@ -242,7 +242,7 @@ impl<Executor: TriggerExecutor> TriggerExecutorBuilder<Executor> {
                 app,
                 self.hooks,
                 &prepared_resolver,
-                runtime_config.client_tls_opts(),
+                runtime_config.client_tls_opts()?,
             )
             .await?,
         )
