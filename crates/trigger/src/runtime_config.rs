@@ -6,11 +6,9 @@ pub mod variables_provider;
 
 use anyhow::{Context, Result};
 use client_tls::ClientTlsOpts;
-use rustls_pemfile::private_key;
 use serde::Deserialize;
 use spin_common::ui::quoted_path;
 use spin_sqlite::Connection;
-use std::io;
 use std::{
     collections::HashMap,
     fs,
@@ -18,6 +16,7 @@ use std::{
     sync::Arc,
 };
 
+use crate::runtime_config::client_tls::{load_certs, load_keys};
 use crate::TriggerHooks;
 
 use self::{
@@ -230,16 +229,15 @@ impl RuntimeConfig {
     }
 }
 
-fn parse_client_tls_opts(inp: &ClientTlsOpts) -> Result<ParsedClientTlsOpts, io::Error> {
+fn parse_client_tls_opts(inp: &ClientTlsOpts) -> Result<ParsedClientTlsOpts, anyhow::Error> {
     let custom_root_ca = match &inp.custom_root_ca_file {
-        Some(path) => Some(load_certs(path.clone()).unwrap()),
+        Some(path) => Some(load_certs(&path).context("loading custom root ca")?),
         None => None,
     };
 
     let cert_chain = match &inp.cert_chain_file {
         Some(file) => {
-            //TODO(rajatjindal): remove unwrap and handle result
-            Some(load_certs(&file).unwrap())
+            Some(load_certs(&file).context("loading client tls certs")?)
         }
         None => None,
     };
@@ -260,29 +258,6 @@ fn parse_client_tls_opts(inp: &ClientTlsOpts) -> Result<ParsedClientTlsOpts, io:
         cert_chain,
         private_key,
     })
-}
-
-//TODO(rajatjindal): copied over from trigger-http/tls. should move to a common place.
-fn load_certs(path: impl AsRef<Path>) -> Result<Vec<rustls_pki_types::CertificateDer<'static>>> {
-    use std::io::Cursor;
-
-    let contents = fs::read_to_string(path).expect("Should have been able to read the file");
-
-    let mut custom_root_ca_cursor = Cursor::new(contents);
-
-    Ok(rustls_pemfile::certs(&mut custom_root_ca_cursor)
-        .into_iter()
-        .map(|x| x.unwrap())
-        .collect())
-}
-
-// Loads private key from file.
-fn load_keys(path: impl AsRef<Path>) -> io::Result<rustls_pki_types::PrivateKeyDer<'static>> {
-    let x = private_key(&mut io::BufReader::new(fs::File::open(path)?))
-        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid key"))
-        .map(|keys| keys.unwrap());
-
-    x
 }
 
 #[derive(Debug, Default, Deserialize)]
