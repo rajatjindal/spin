@@ -7,6 +7,7 @@ mod wagi;
 
 use std::{
     collections::HashMap,
+    error::Error,
     io::IsTerminal,
     net::{Ipv4Addr, SocketAddr, ToSocketAddrs},
     path::PathBuf,
@@ -640,16 +641,15 @@ impl HttpRuntimeData {
 }
 
 /// Translate a [`hyper::Error`] to a wasi-http `ErrorCode` in the context of a request.
-pub fn hyper_request_error(_err: hyper::Error) -> ErrorCode {
-    // TODO(rajatjindal): fix this
-    // // If there's a source, we might be able to extract a wasi-http error from it.
-    // if let Some(cause) = err.source() {
-    //     if let Some(err) = cause.downcast_ref::<ErrorCode>() {
-    //         return err.clone();
-    //     }
-    // }
+pub fn hyper_request_error(err: hyper::Error) -> ErrorCode {
+    // If there's a source, we might be able to extract a wasi-http error from it.
+    if let Some(cause) = err.source() {
+        if let Some(err) = cause.downcast_ref::<ErrorCode>() {
+            return err.clone();
+        }
+    }
 
-    // tracing::warn!("hyper request error: {err:?}");
+    tracing::warn!("hyper request error: {err:?}");
 
     ErrorCode::HttpProtocolError
 }
@@ -665,6 +665,8 @@ pub(crate) fn internal_error(msg: String) -> ErrorCode {
     ErrorCode::InternalError(Some(msg))
 }
 
+// default_send_request_handler is copied over from wasmtime_wasi_http crate
+// and modified to support client cert auth
 async fn default_send_request_handler(
     mut request: Request<HyperOutgoingBody>,
     wasmtime_wasi_http::types::OutgoingRequestConfig {
@@ -720,8 +722,8 @@ async fn default_send_request_handler(
         {
             use rustls::pki_types::ServerName;
 
-            let tls_config = get_client_tls_config(&authority, client_tls_opts);
-            let connector = tokio_rustls::TlsConnector::from(std::sync::Arc::new(tls_config));
+            let client_tls_config = get_client_tls_config_for_authority(&authority, client_tls_opts);
+            let connector = tokio_rustls::TlsConnector::from(std::sync::Arc::new(client_tls_config));
             let mut parts = authority.split(":");
             let host = parts.next().unwrap_or(&authority);
             let domain = ServerName::try_from(host)
@@ -804,7 +806,7 @@ async fn default_send_request_handler(
     })
 }
 
-fn get_client_tls_config(
+fn get_client_tls_config_for_authority(
     authority: &String,
     client_tls_opts: Option<HashMap<String, ParsedClientTlsOpts>>,
 ) -> rustls::ClientConfig {
@@ -866,11 +868,6 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
         mut request: Request<HyperOutgoingBody>,
         mut config: wasmtime_wasi_http::types::OutgoingRequestConfig,
     ) -> HttpResult<wasmtime_wasi_http::types::HostFutureIncomingResponse> {
-        tracing::trace!("inside send request function");
-        if true {
-            panic!("is this called")
-        }
-
         let this = data.as_mut();
 
         let is_relative_url = request
@@ -954,11 +951,13 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
             }
         }
 
-        let x = (*data.as_ref()).clone();
+        let client_tls_opts = (*data.as_ref()).client_tls_opts.clone();
 
-        //TODO(rajatjindal): only pass tls options if component has access to it
+        // TODO: This is a temporary workaround to make sure that outbound task is instrumented.
+        // Once Wasmtime gives us the ability to do the spawn ourselves we can just call .instrument
+        // and won't have to do this workaround.
         let response_handle = async move {
-            let res = default_send_request_handler(request, config, x.client_tls_opts).await;
+            let res = default_send_request_handler(request, config, client_tls_opts).await;
             if let Ok(res) = &res {
                 tracing::Span::current()
                     .record("http.response.status_code", res.resp.status().as_u16());
