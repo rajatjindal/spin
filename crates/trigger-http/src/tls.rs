@@ -1,6 +1,8 @@
-use rustls_pemfile::{certs, pkcs8_private_keys};
+use anyhow::Context;
+use rustls_pemfile::private_key;
 use std::{
     fs, io,
+    io::Cursor,
     path::{Path, PathBuf},
     sync::Arc,
 };
@@ -18,42 +20,38 @@ pub struct TlsConfig {
 impl TlsConfig {
     // Creates a TLS acceptor from server config.
     pub(super) fn server_config(&self) -> anyhow::Result<TlsAcceptor> {
-        tracing::trace!("cert path is {:?}", &self.cert_path);
         let certs = load_certs(&self.cert_path)?;
-        let key = load_keys(&self.key_path)?;
+        let private_key = load_keys(&self.key_path)?;
 
         let cfg = rustls::ServerConfig::builder()
             .with_no_client_auth()
-            .with_single_cert(certs, key)
+            .with_single_cert(certs, private_key)
             .map_err(|e| anyhow::anyhow!("{}", e))?;
 
         Ok(Arc::new(cfg).into())
     }
 }
 
-// Loads public certificate from file.
-fn load_certs(
+// load_certs parse and return the certs from the provided file
+pub fn load_certs(
     path: impl AsRef<Path>,
-) -> io::Result<Vec<rustls_pki_types::CertificateDer<'static>>> {
-    certs(&mut io::BufReader::new(fs::File::open(path)?))
-        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid cert"))
-        .map(|mut certs| {
-            certs
-                .drain(..)
-                .map(rustls_pki_types::CertificateDer::from)
-                .collect()
-        })
+) -> anyhow::Result<Vec<rustls_pki_types::CertificateDer<'static>>> {
+    let contents = fs::read_to_string(path).expect("Should have been able to read the file");
+    let mut custom_root_ca_cursor = Cursor::new(contents);
+
+    Ok(rustls_pemfile::certs(&mut custom_root_ca_cursor)
+        .into_iter()
+        .map(|certs| certs.unwrap())
+        .collect())
 }
 
-// Loads private key from file.
-fn load_keys(path: impl AsRef<Path>) -> io::Result<rustls_pki_types::PrivateKeyDer<'static>> {
-    let x = pkcs8_private_keys(&mut io::BufReader::new(fs::File::open(path)?))
-        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid key"))
-        .map(|mut keys| {
-            keys.drain(..)
-                .map(rustls_pki_types::PrivateKeyDer::try_from)
-                .last().unwrap().unwrap()
-        });
-
-    x
+// load_keys parse and return the first private key from the provided file
+pub fn load_keys(
+    path: impl AsRef<Path>,
+) -> anyhow::Result<rustls_pki_types::PrivateKeyDer<'static>> {
+    private_key(&mut io::BufReader::new(
+        fs::File::open(path).context("loading private key")?,
+    ))
+    .map_err(|_| anyhow::anyhow!("invalid input"))
+    .map(|keys| keys.unwrap())
 }
