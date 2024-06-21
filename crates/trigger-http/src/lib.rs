@@ -953,6 +953,9 @@ impl OutboundWasiHttpHandler for HttpRuntimeData {
 
         let client_tls_opts = (*data.as_ref()).client_tls_opts.clone();
 
+        // TODO: This is a temporary workaround to make sure that outbound task is instrumented.
+        // Once Wasmtime gives us the ability to do the spawn ourselves we can just call .instrument
+        // and won't have to do this workaround.
         let response_handle = async move {
             let res = default_send_request_handler(request, config, client_tls_opts).await;
             if let Ok(res) = &res {
