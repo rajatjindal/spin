@@ -81,7 +81,6 @@ async fn disallowed_host_fails() -> anyhow::Result<()> {
     Ok(())
 }
 
-#[ignore = "flaky"]
 #[tokio::test(flavor = "multi_thread")]
 async fn disallowed_private_ips_fails() -> anyhow::Result<()> {
     async fn run_test(allow_private_ips: bool) -> anyhow::Result<()> {
@@ -174,8 +173,8 @@ fn test_request_config() -> OutgoingRequestConfig {
     OutgoingRequestConfig {
         use_tls: false,
         connect_timeout: Duration::from_millis(10),
-        first_byte_timeout: Duration::from_millis(0),
-        between_bytes_timeout: Duration::from_millis(0),
+        first_byte_timeout: Duration::from_millis(10),
+        between_bytes_timeout: Duration::from_millis(10),
     }
 }
 
