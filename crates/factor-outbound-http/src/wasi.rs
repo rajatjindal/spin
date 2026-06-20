@@ -35,7 +35,7 @@ use spin_factors::RuntimeFactorsInstanceState;
 use tokio::{
     io::{AsyncRead, AsyncWrite, ReadBuf},
     net::TcpStream,
-    time::timeout,
+    time::{sleep, timeout},
 };
 use tokio_rustls::client::TlsStream;
 use tower_service::Service;
@@ -732,6 +732,12 @@ impl ConnectOptions {
                 } else {
                     format!("{}:{}", authority.as_str(), default_port)
                 };
+
+                if let Ok(delay_ms) = std::env::var("SPIN_TEST_DELAY_HOST_LOOKUP_MS")
+                    && let Ok(delay_ms) = delay_ms.parse()
+                {
+                    sleep(Duration::from_millis(delay_ms)).await;
+                }
 
                 let socket_addrs = tokio::net::lookup_host(&host_and_port)
                     .await
