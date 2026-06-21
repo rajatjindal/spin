@@ -367,6 +367,7 @@ impl HttpTrigger {
             reuse_config,
             output_format,
         )?);
+        server.set_self_reference();
         Ok(server)
     }
 

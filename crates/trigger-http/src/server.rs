@@ -3,7 +3,7 @@ use std::{
     future::Future,
     io::{ErrorKind, IsTerminal},
     net::SocketAddr,
-    sync::{Arc, OnceLock},
+    sync::{Arc, OnceLock, Weak},
     time::Duration,
 };
 
@@ -25,7 +25,7 @@ use rand::Rng;
 use spin_app::{APP_DESCRIPTION_KEY, APP_NAME_KEY};
 use spin_factor_outbound_http::{OutboundHttpFactor, SelfRequestOrigin};
 use spin_factors::RuntimeFactors;
-use spin_factors_executor::InstanceState;
+use spin_factors_executor::{ExecutorHooks, FactorsInstanceBuilder, InstanceState};
 use spin_http::{
     app_info::AppInfo,
     body,
@@ -58,6 +58,45 @@ use crate::{
 
 pub const MAX_RETRIES: u16 = 10;
 
+struct HttpTriggerExecutorHooks<F: RuntimeFactors> {
+    server_ref: Arc<OnceLock<Weak<HttpServer<F>>>>,
+}
+
+impl<F: RuntimeFactors> HttpTriggerExecutorHooks<F> {
+    fn new(server_ref: Arc<OnceLock<Weak<HttpServer<F>>>>) -> Self {
+        Self { server_ref }
+    }
+}
+
+impl<F: RuntimeFactors> ExecutorHooks<F, ()> for HttpTriggerExecutorHooks<F> {
+    fn prepare_instance(&self, builder: &mut FactorsInstanceBuilder<F, ()>) -> anyhow::Result<()> {
+        let server = self
+            .server_ref
+            .get()
+            .and_then(Weak::upgrade)
+            .context("HTTP server not initialized")?;
+
+        // Set up outbound HTTP request origin and service chaining.
+        // The outbound HTTP factor is required since both inbound and outbound wasi HTTP
+        // implementations assume they use the same underlying wasmtime resource storage.
+        // Eventually, we may be able to factor this out to a separate factor.
+        let outbound_http = builder.factor_builder::<OutboundHttpFactor>().context(
+            "The wasi HTTP trigger was configured without the required wasi outbound http support",
+        )?;
+
+        let server_scheme = if server.tls_config.is_some() {
+            Scheme::HTTPS
+        } else {
+            Scheme::HTTP
+        };
+        let self_addr = server.get_local_addr();
+        let origin = SelfRequestOrigin::create(server_scheme, &self_addr.to_string())?;
+        outbound_http.set_self_request_origin(origin);
+        outbound_http.set_request_interceptor(OutboundHttpInterceptor::new(server))?;
+        Ok(())
+    }
+}
+
 /// An HTTP server which runs Spin apps.
 pub struct HttpServer<F: RuntimeFactors> {
     /// The address the server was configured to listen on (the `--listen` value).
@@ -84,6 +123,7 @@ pub struct HttpServer<F: RuntimeFactors> {
     component_trigger_configs: HashMap<spin_http::routes::TriggerLookupKey, HttpTriggerConfig>,
     // Component ID -> handler type
     component_handler_types: HashMap<String, HandlerType<HttpHandlerState<F>>>,
+    server_ref: Arc<OnceLock<Weak<HttpServer<F>>>>,
 }
 
 impl<F: RuntimeFactors> HttpServer<F> {
@@ -92,7 +132,7 @@ impl<F: RuntimeFactors> HttpServer<F> {
         listen_addr: SocketAddr,
         tls_config: Option<TlsConfig>,
         find_free_port: bool,
-        trigger_app: TriggerApp<F>,
+        mut trigger_app: TriggerApp<F>,
         http1_max_buf_size: Option<usize>,
         reuse_config: InstanceReuseConfig,
         output_format: OutputFormat,
@@ -138,6 +178,8 @@ impl<F: RuntimeFactors> HttpServer<F> {
         // Now that router is built we can merge duplicate routes by component
         let component_trigger_configs = HashMap::from_iter(component_trigger_configs);
 
+        let server_ref = Arc::new(OnceLock::new());
+        trigger_app.add_hooks(HttpTriggerExecutorHooks::new(server_ref.clone()))?;
         let trigger_app = Arc::new(trigger_app);
 
         let component_handler_types = component_trigger_configs
@@ -166,6 +208,7 @@ impl<F: RuntimeFactors> HttpServer<F> {
             component_trigger_configs,
             component_handler_types,
             output_format,
+            server_ref,
         })
     }
 
@@ -198,6 +241,10 @@ impl<F: RuntimeFactors> HttpServer<F> {
             }
         };
         Ok(handler_type)
+    }
+
+    pub fn set_self_reference(self: &Arc<Self>) {
+        let _ = self.server_ref.set(Arc::downgrade(self));
     }
 
     /// Serve incoming requests over the provided [`TcpListener`].
@@ -355,7 +402,6 @@ impl<F: RuntimeFactors> HttpServer<F> {
                 self.respond_wasm_component(
                     req,
                     route_match,
-                    server_scheme,
                     client_addr,
                     component,
                     &trigger_config.executor,
@@ -383,27 +429,11 @@ impl<F: RuntimeFactors> HttpServer<F> {
         self: &Arc<Self>,
         req: Request<Body>,
         route_match: RouteMatch<'_, '_>,
-        server_scheme: Scheme,
         client_addr: SocketAddr,
         component_id: &str,
         executor: &Option<HttpExecutorType>,
     ) -> anyhow::Result<Response<Body>> {
-        let mut instance_builder = self.trigger_app.prepare(component_id)?;
-
-        // Set up outbound HTTP request origin and service chaining
-        // The outbound HTTP factor is required since both inbound and outbound wasi HTTP
-        // implementations assume they use the same underlying wasmtime resource storage.
-        // Eventually, we may be able to factor this out to a separate factor.
-        let outbound_http = instance_builder
-            .factor_builder::<OutboundHttpFactor>()
-            .context(
-            "The wasi HTTP trigger was configured without the required wasi outbound http support",
-        )?;
-
-        let self_addr = self.get_local_addr();
-        let origin = SelfRequestOrigin::create(server_scheme, &self_addr.to_string())?;
-        outbound_http.set_self_request_origin(origin);
-        outbound_http.set_request_interceptor(OutboundHttpInterceptor::new(self.clone()))?;
+        let instance_builder = self.trigger_app.prepare(component_id)?;
 
         // Prepare HTTP executor
         let handler_type = self

@@ -144,6 +144,18 @@ pub struct FactorsExecutorApp<T: RuntimeFactors, U: 'static> {
 }
 
 impl<T: RuntimeFactors, U: Send + 'static> FactorsExecutorApp<T, U> {
+    /// Adds the given [`ExecutorHooks`] to this app's executor.
+    ///
+    /// This is intended for trigger-level hooks that are not known when the
+    /// executor is initially built, but must still run for every prepared
+    /// component instance.
+    pub fn add_hooks(&mut self, hooks: impl ExecutorHooks<T, U> + 'static) -> anyhow::Result<()> {
+        Arc::get_mut(&mut self.executor)
+            .context("cannot add hooks after executor app has been cloned")?
+            .add_hooks(hooks);
+        Ok(())
+    }
+
     pub fn engine(&self) -> &spin_core::Engine<InstanceState<T::InstanceState, U>> {
         &self.executor.core_engine
     }
