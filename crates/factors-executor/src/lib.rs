@@ -86,6 +86,7 @@ impl<T: RuntimeFactors, U: Send + 'static> FactorsExecutor<T, U> {
             executor: self.clone(),
             configured_app,
             component_instance_pres,
+            prepare_hooks: Default::default(),
         })
     }
 }
@@ -106,6 +107,14 @@ where
         let _ = builder;
         Ok(())
     }
+}
+
+pub trait PrepareInstanceHooks<T, U>: Send + Sync
+where
+    T: RuntimeFactors,
+{
+    /// Prepare instance hooks run immediately before [`FactorsExecutorApp::prepare`] returns.
+    fn prepare_instance(&self, builder: &mut FactorsInstanceBuilder<T, U>) -> anyhow::Result<()>;
 }
 
 /// A ComponentLoader is responsible for loading Wasmtime [`Component`]s.
@@ -141,19 +150,13 @@ pub struct FactorsExecutorApp<T: RuntimeFactors, U: 'static> {
     configured_app: ConfiguredApp<T>,
     // Maps component IDs -> InstancePres
     component_instance_pres: HashMap<String, InstancePre<T, U>>,
+    prepare_hooks: Vec<Box<dyn PrepareInstanceHooks<T, U>>>,
 }
 
 impl<T: RuntimeFactors, U: Send + 'static> FactorsExecutorApp<T, U> {
-    /// Adds the given [`ExecutorHooks`] to this app's executor.
-    ///
-    /// This is intended for trigger-level hooks that are not known when the
-    /// executor is initially built, but must still run for every prepared
-    /// component instance.
-    pub fn add_hooks(&mut self, hooks: impl ExecutorHooks<T, U> + 'static) -> anyhow::Result<()> {
-        Arc::get_mut(&mut self.executor)
-            .context("cannot add hooks after executor app has been cloned")?
-            .add_hooks(hooks);
-        Ok(())
+    /// Adds a hook that will run for every prepared component instance.
+    pub fn add_prepare_hooks(&mut self, hooks: impl PrepareInstanceHooks<T, U> + 'static) {
+        self.prepare_hooks.push(Box::new(hooks));
     }
 
     pub fn engine(&self) -> &spin_core::Engine<InstanceState<T::InstanceState, U>> {
@@ -204,6 +207,9 @@ impl<T: RuntimeFactors, U: Send + 'static> FactorsExecutorApp<T, U> {
         };
 
         for hooks in &self.executor.hooks {
+            hooks.prepare_instance(&mut builder)?;
+        }
+        for hooks in &self.prepare_hooks {
             hooks.prepare_instance(&mut builder)?;
         }
 

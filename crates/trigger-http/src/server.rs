@@ -25,7 +25,7 @@ use rand::Rng;
 use spin_app::{APP_DESCRIPTION_KEY, APP_NAME_KEY};
 use spin_factor_outbound_http::{OutboundHttpFactor, SelfRequestOrigin};
 use spin_factors::RuntimeFactors;
-use spin_factors_executor::{ExecutorHooks, FactorsInstanceBuilder, InstanceState};
+use spin_factors_executor::{FactorsInstanceBuilder, InstanceState, PrepareInstanceHooks};
 use spin_http::{
     app_info::AppInfo,
     body,
@@ -58,17 +58,17 @@ use crate::{
 
 pub const MAX_RETRIES: u16 = 10;
 
-struct HttpTriggerExecutorHooks<F: RuntimeFactors> {
+struct HttpTriggerPrepareHooks<F: RuntimeFactors> {
     server_ref: Arc<OnceLock<Weak<HttpServer<F>>>>,
 }
 
-impl<F: RuntimeFactors> HttpTriggerExecutorHooks<F> {
+impl<F: RuntimeFactors> HttpTriggerPrepareHooks<F> {
     fn new(server_ref: Arc<OnceLock<Weak<HttpServer<F>>>>) -> Self {
         Self { server_ref }
     }
 }
 
-impl<F: RuntimeFactors> ExecutorHooks<F, ()> for HttpTriggerExecutorHooks<F> {
+impl<F: RuntimeFactors> PrepareInstanceHooks<F, ()> for HttpTriggerPrepareHooks<F> {
     fn prepare_instance(&self, builder: &mut FactorsInstanceBuilder<F, ()>) -> anyhow::Result<()> {
         let server = self
             .server_ref
@@ -123,7 +123,6 @@ pub struct HttpServer<F: RuntimeFactors> {
     component_trigger_configs: HashMap<spin_http::routes::TriggerLookupKey, HttpTriggerConfig>,
     // Component ID -> handler type
     component_handler_types: HashMap<String, HandlerType<HttpHandlerState<F>>>,
-    server_ref: Arc<OnceLock<Weak<HttpServer<F>>>>,
 }
 
 impl<F: RuntimeFactors> HttpServer<F> {
@@ -136,7 +135,7 @@ impl<F: RuntimeFactors> HttpServer<F> {
         http1_max_buf_size: Option<usize>,
         reuse_config: InstanceReuseConfig,
         output_format: OutputFormat,
-    ) -> anyhow::Result<Self> {
+    ) -> anyhow::Result<Arc<Self>> {
         // This needs to be a vec before building the router to handle duplicate routes
         let component_trigger_configs = trigger_app
             .app()
@@ -179,7 +178,7 @@ impl<F: RuntimeFactors> HttpServer<F> {
         let component_trigger_configs = HashMap::from_iter(component_trigger_configs);
 
         let server_ref = Arc::new(OnceLock::new());
-        trigger_app.add_hooks(HttpTriggerExecutorHooks::new(server_ref.clone()))?;
+        trigger_app.add_prepare_hooks(HttpTriggerPrepareHooks::new(server_ref.clone()));
         let trigger_app = Arc::new(trigger_app);
 
         let component_handler_types = component_trigger_configs
@@ -197,7 +196,7 @@ impl<F: RuntimeFactors> HttpServer<F> {
                 spin_http::routes::TriggerLookupKey::Trigger(_) => None,
             })
             .collect::<anyhow::Result<_>>()?;
-        Ok(Self {
+        let server = Arc::new(Self {
             listen_addr,
             local_addr: OnceLock::new(),
             tls_config,
@@ -208,8 +207,11 @@ impl<F: RuntimeFactors> HttpServer<F> {
             component_trigger_configs,
             component_handler_types,
             output_format,
-            server_ref,
-        })
+        });
+        server_ref
+            .set(Arc::downgrade(&server))
+            .map_err(|_| anyhow::anyhow!("HTTP server reference was already initialized"))?;
+        Ok(server)
     }
 
     fn handler_type_for_component(
@@ -241,10 +243,6 @@ impl<F: RuntimeFactors> HttpServer<F> {
             }
         };
         Ok(handler_type)
-    }
-
-    pub fn set_self_reference(self: &Arc<Self>) {
-        let _ = self.server_ref.set(Arc::downgrade(self));
     }
 
     /// Serve incoming requests over the provided [`TcpListener`].

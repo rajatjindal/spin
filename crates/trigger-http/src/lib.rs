@@ -358,7 +358,7 @@ impl HttpTrigger {
             reuse_config,
             output_format,
         } = self;
-        let server = Arc::new(HttpServer::new(
+        let server = HttpServer::new(
             listen_addr,
             tls_config,
             find_free_port,
@@ -366,8 +366,7 @@ impl HttpTrigger {
             http1_max_buf_size,
             reuse_config,
             output_format,
-        )?);
-        server.set_self_reference();
+        )?;
         Ok(server)
     }
 
